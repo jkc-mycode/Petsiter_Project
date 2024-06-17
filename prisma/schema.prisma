@@ -9,6 +9,209 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+// 확인 필요
+model User {
+  userId       Int      @id @default(autoincrement()) @map("user_id")
+  email        String   @unique
+  password     String
+  nickname     String   @unique
+  profileImage String   @map("profile_image")
+  socialId     String   @map("social_id")
+  provider     Provider @default(LOCAL)
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  adminQna          AdminQna[]
+  refreshToken      RefreshToken?
+  emailVerification EmailVerification?
+  reservation       Reservation[]
+  review            Review[]
+  bookmark          Bookmark[]
+
+  @@map("user")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Provider {
+  LOCAL
+  KAKAO
+  NAVER
+  GOOGLE
+}
+
+// 확인 필요
+model Petsitter {
+  petsitterId           Int      @id @default(autoincrement()) @map("petsitter_id")
+  email                 String   @unique
+  password              String
+  petsitterName         String   @map("petsitter_name")
+  petsitterCareer       Int      @map("petsitter_career")
+  petsitterProfileImage String   @map("petsitter_profile_image")
+  title                 String
+  content               String   @db.Text
+  region                String
+  price                 Int
+  totalRate             Int      @map("total_rate")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  reservation      Reservation[]
+  bookmark         Bookmark[]
+  review           Review[]
+  reply            Reply[]
+  certificateImage CertificationImage[]
+  houseImage       HouseImage[]
+
+  @@map("petsitter")
+}
+
+// 확인 필요
+model AdminQna {
+  qnaId     Int         @id @default(autoincrement())
+  userId    Int         @map("user_id")
+  title     String
+  question  String      @db.Text
+  answer    String      @db.Text
+  qnaStatus AdminStatus @default(INCOMPLETE) @map("qna_status")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("admin_qna")
+}
+
+// 확인 필요
+enum AdminStatus {
+  INCOMPLETE
+  COMPLETE
+}
+
+// 확인 필요
+model RefreshToken {
+  tokenId   Int      @id @default(autoincrement()) @map("token_id")
+  userId    Int      @unique @map("user_id")
+  token     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("refresh_token")
+}
+
+// 확인 필요 
+model Bookmark {
+  bookmarkId  Int @id @default(autoincrement()) @map("bookmark_id")
+  userId      Int @map("user_id")
+  petsitterId Int @map("pesitter_id")
+
+  user      User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
+
+  @@map("bookmark")
+}
+
+// 확인 필요
+model Reservation {
+  reservationId     Int              @id @default(autoincrement()) @map("reservation_id")
+  userId            Int              @map("user_id")
+  petsitterId       Int              @map("petsitter_id")
+  reservationDate   DateTime         @map("reservation_date")
+  reservationStatus ResevationStatus @default(AWAIT) @map("reservation_status")
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+
+  review    Review?
+  user      User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
+
+  @@map("reservation")
+}
+
+enum ResevationStatus {
+  AWAIT
+  ACCEPT
+  CANCEL
+}
+
+// 확인 필요
+model EmailVerification {
+  emailVerificationId Int      @id @default(autoincrement()) @map("email_verification_id")
+  email               String   @unique
+  code                String
+  expiredAt           DateTime @map("expired_at")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [email], references: [email], onDelete: Cascade)
+
+  @@map("email_verification")
+}
+
+// 확인 필요
+model Review {
+  reviewId      Int      @id @default(autoincrement()) @map("review_id")
+  reservationId Int      @unique @map("reservation_id")
+  userId        Int      @map("user_id")
+  petsitterId   Int      @map("petsitter_id")
+  review        String   @db.Text
+  rate          Int
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user        User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  petsitter   Petsitter   @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
+  reservation Reservation @relation(fields: [reservationId], references: [reservationId], onDelete: Cascade)
+  reply       Reply?
+
+  @@map("review")
+}
+
+// 확인 필요 
+model Reply {
+  replyId     Int      @id @default(autoincrement()) @map("reply_id")
+  reviewId    Int      @unique @map("review_id")
+  petsitterId Int      @map("petsitter_id")
+  reply       String   @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
+  review    Review    @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
+
+  @@map("reply")
+}
+
+// 확인 필요
+model CertificationImage {
+  certificateImageId Int      @id @default(autoincrement()) @map("certificate_image_id")
+  petsitterId        Int      @map("petsitter_id")
+  imageUrl           String   @map("image_url")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
+
+  @@map("certification_image")
+}
+
+// 확인 필요
+model HouseImage {
+  houseImageId Int      @id @default(autoincrement()) @map("house_image_id")
+  petsitterId  Int      @map("petsitter_id")
+  imageUrl     String   @map("image_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
+
+  @@map("house_image")
 }
