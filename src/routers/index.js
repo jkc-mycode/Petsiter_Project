@@ -14,4 +14,7 @@ apiRouter.use('/petsitter', petsitterRouter);
 // 예약 라우터를 /reservations 경로에 매핑
 apiRouter.use('/reservations', reservationRouter);
 
+
+
+
 export default apiRouter;

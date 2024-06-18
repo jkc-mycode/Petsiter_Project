@@ -12,7 +12,7 @@ const petsitterService = new PetsitterService(petsitterRepository);
 const petsitterController = new PetsitterController(petsitterService);
 
 // 펫시터 회원가입
-petsitterRouter.post('/sign-up', petsitterSignUpValidator, petsitterController.signUp)
+petsitterRouter.post('/', petsitterSignUpValidator, petsitterController.signUp)
 
 // 펫시터 목록 조회 API
 petsitterRouter.get('/', petsitterController.getPetsitterList);
