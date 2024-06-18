@@ -176,4 +176,11 @@ export class PetsitterService {
 
     return updatedReservation;
   };
+
+  // 펫시터 검색 기능
+  searchPetsitter = async (whereCondition) => {
+    const petsitters = await this.petsitterRepository.searchPetsitter(whereCondition);
+
+    return petsitters;
+  };
 }

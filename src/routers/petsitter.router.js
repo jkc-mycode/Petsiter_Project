@@ -33,4 +33,7 @@ petsitterRouter.get('/:petsitterId/reservation', petsitterController.getPetsitte
 // 펫시터 예약 상태 변경 API
 petsitterRouter.patch('/:petsitterId/reservation', petsitterController.updatePetsitterReservation);
 
+// 펫시터 검색 API (이름, 지역, 가격, 경력)
+petsitterRouter.get('/search/type', petsitterController.searchPetsitter);
+
 export default petsitterRouter;

@@ -173,4 +173,34 @@ export class PetsitterController {
       next(err);
     }
   };
+
+  // 펫시터 검색 기능
+  searchPetsitter = async (req, res, next) => {
+    try {
+      // 펫시터를 검색하기 위한 쿼리를 가져옴
+      const { name, region, price, career } = req.query;
+      let petsitters;
+
+      // 각 쿼리로 검색할 때의 where 조건절
+      if (name) {
+        petsitters = await this.petsitterService.searchPetsitter({ petsitterName: name });
+      } else if (region) {
+        petsitters = await this.petsitterService.searchPetsitter({ region });
+      } else if (price) {
+        petsitters = await this.petsitterService.searchPetsitter({ price: { lte: +price } });
+      } else if (career) {
+        petsitters = await this.petsitterService.searchPetsitter({
+          petsitterCareer: { gte: +career },
+        });
+      } else {
+        petsitters = await this.petsitterService.searchPetsitter({});
+      }
+
+      return res
+        .status(200)
+        .json({ status: 200, message: '펫시터 검색에 성공했습니다.', data: { petsitters } });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
