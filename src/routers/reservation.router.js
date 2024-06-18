@@ -6,8 +6,8 @@ const reservationRouter = express.Router();
 // 예약 생성
 reservationRouter.post('/', reservationController.createReservationController);
 
-// // 예약 목록 조회
-// reservationRouter.get('/', reservationController.getreservationsController);
+// 예약 목록 조회
+reservationRouter.get('/', reservationController.getReservationController);
 
 // // 예약 상세 조회
 // reservationRouter.get('/:id', reservationController.getreservationController);
