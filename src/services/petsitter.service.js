@@ -69,9 +69,8 @@ export class PetsitterService {
     return petsitters;
   };
 
-
   // 펫시터 본인정보 조회
-  getPetsitterByEmail = async ( email, password) => {
+  getPetsitterByEmail = async (email, password) => {
     const petsitter = await this.petsitterRepository.findPetsitterByEmail(email);
     if (!petsitter) throw new HttpError.NotFound('펫시터가 존재하지 않습니다.');
 
@@ -93,9 +92,7 @@ export class PetsitterService {
       createdAt: petsitter.createdAt,
       updatedAt: petsitter.updatedAt,
     };
-  } 
-
-
+  };
 
   // 펫시터 상세 조회
   getPetsitterDetail = async (petsitterId) => {
@@ -144,5 +141,23 @@ export class PetsitterService {
     );
 
     return updatedPetsitter;
+  };
+
+  // 펫시터 예약 현황 조회 API
+  getPetsitterReservationList = async (petsitterId) => {
+    let reservations = await this.petsitterRepository.getPetsitterReservationList(petsitterId);
+
+    reservations = reservations.map((reservation) => {
+      return {
+        reservationId: reservation.reservationId,
+        userNickname: reservation.user.nickname,
+        reservationDate: reservation.reservationDate,
+        reservationStatus: reservation.reservationStatus,
+        createdAt: reservation.createdAt,
+        updatedAt: reservation.updatedAt,
+      };
+    });
+
+    return reservations;
   };
 }
