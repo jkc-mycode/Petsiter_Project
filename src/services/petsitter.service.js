@@ -90,4 +90,31 @@ export class PetsitterService {
       review: petsitter.review,
     };
   };
+
+  // 펫시터 정보 수정
+  updatePetsitter = async (
+    petsitterId,
+    petsitterName,
+    petsitterCareer,
+    petsitterProfileImage,
+    title,
+    content,
+    region,
+    price
+  ) => {
+    const petsitter = await this.petsitterRepository.getPetsitterDetail(petsitterId);
+    if (!petsitter) throw new HttpError.NotFound('해당 펫시터가 존재하지 않습니다.');
+    const updatedPetsitter = await this.petsitterRepository.updatePetsitter(
+      petsitterId,
+      petsitterName,
+      petsitterCareer,
+      petsitterProfileImage,
+      title,
+      content,
+      region,
+      price
+    );
+
+    return updatedPetsitter;
+  };
 }

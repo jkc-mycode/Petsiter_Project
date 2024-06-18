@@ -64,4 +64,31 @@ export class PetsitterRepository {
 
     return petsitter;
   };
+
+  // 펫시터 정보 수정
+  updatePetsitter = async (
+    petsitterId,
+    petsitterName,
+    petsitterCareer,
+    petsitterProfileImage,
+    title,
+    content,
+    region,
+    price
+  ) => {
+    const updatedPetsitter = await this.prisma.petsitter.update({
+      where: { petsitterId },
+      data: {
+        ...(petsitterName && { petsitterName }),
+        ...(petsitterCareer && { petsitterCareer }),
+        ...(petsitterProfileImage && { petsitterProfileImage }),
+        ...(title && { title }),
+        ...(content && { content }),
+        ...(region && { region }),
+        ...(price && { price }),
+      },
+    });
+
+    return updatedPetsitter;
+  };
 }
