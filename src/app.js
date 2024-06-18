@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import apiRouter from './routers/index.js';
-
+import authRouter from './routers/auth.router.js';
 import errorHandlingMiddleware from './middlewares/error-handling.middleware.js';
 
 dotenv.config();
@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
   return res.status(200).json({ message: '테스트' });
 });
 
-app.use('/api', [apiRouter]);
+app.use('/api', [apiRouter, authRouter]);
 app.use(errorHandlingMiddleware);
 
 app.listen(SERVER_PORT, () => {
