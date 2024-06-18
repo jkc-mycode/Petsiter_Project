@@ -25,6 +25,10 @@ class reservationService {
   async getReservationByIdService(reservationId, userId) {
     return await reservationRepository.getReservationById(reservationId, userId);
   }
+  // 예약 수정 서비스 함수
+  async updateReservationService(reservationId, userId, data) {
+    return await reservationRepository.updateReservation(reservationId, userId, data);
+  }
 }
 
 export default new reservationService();
