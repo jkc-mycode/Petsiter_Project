@@ -47,11 +47,26 @@ export class PetsitterRepository {
 
   // 이메일을 통해 펫시터 찾기
   findPetsitterByEmail = async (email) => {
-    const data = await this.prisma.petsitter.findUnique({
+    const petsitter = await this.prisma.petsitter.findUnique({
       where: {
         email: email,
       },
+      select:{
+        petsitterId: true,
+        email: true,
+        password: true,
+        petsitterName: true,
+        petsitterCareer: true,
+        petsitterProfileImage: true,
+        content: true,
+        region: true,
+        price: true,
+        totalRate: true,
+        createdAt: true,
+        updatedAt: true,
+      }
     });
-    return data;
+    return petsitter;
   };
 }
+

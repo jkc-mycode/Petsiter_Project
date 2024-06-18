@@ -3,6 +3,7 @@ export class PetsitterController {
     this.petsitterService = petsitterService;
   }
 
+
   // 펫시터 목록 조회
   getPetsitterList = async (req, res, next) => {
     try {
@@ -39,6 +40,7 @@ export class PetsitterController {
     }
   };
 
+  // 펫시터 회원가입
   signUp = async (req, res, next) => {
     const{email, password, petsitterName, petsitterCareer, petsitterProfileImage, title, content, region, price, totalRate} = req.body;
     try {
@@ -48,4 +50,28 @@ export class PetsitterController {
       next(err);
     }
   };
+
+
+
+  // 펫시터 본인정보 조회
+  getPetsitterByEmail = async (req, res, next) => {
+    try {
+
+      // 본인확인을 위해 이메일과 비밀번호를 req.body에 입력
+      const {email, password} = req.body;
+
+  
+      const petsitter = await this.petsitterService.getPetsitterByEmail(email, password);
+      
+      return res.status(200).json({status:200, message:'본인 정보 조회에 성공했습니다.', data: petsitter });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+
+
+
+
+
 }
