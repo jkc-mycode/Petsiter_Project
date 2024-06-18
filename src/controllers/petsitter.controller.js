@@ -151,4 +151,26 @@ export class PetsitterController {
       next(err);
     }
   };
+
+  // 펫시터 예약 상태 변경 API
+  updatePetsitterReservation = async (req, res, next) => {
+    try {
+      const { petsitterId } = req.params;
+      const { reservationId, reservationStatus } = req.body;
+
+      const updatedReservation = await this.petsitterService.updatePetsitterReservation(
+        +petsitterId,
+        reservationId,
+        reservationStatus
+      );
+
+      return res.status(200).json({
+        status: 200,
+        message: '예상 상태 변경에 성공했습니다.',
+        data: { updatedReservation },
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
 }

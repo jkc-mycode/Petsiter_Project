@@ -160,4 +160,20 @@ export class PetsitterService {
 
     return reservations;
   };
+
+  // 펫시터 예약 상태 변경 API
+  updatePetsitterReservation = async (petsitterId, reservationId, reservationStatus) => {
+    // 예약 ID가 유효한지 확인
+    const reservation = await this.petsitterRepository.getPetsitterReservation(reservationId);
+    console.log(reservation);
+    if (!reservation) throw new HttpError.NotFound('해당 예약이 존재하지 않습니다.');
+
+    let updatedReservation = await this.petsitterRepository.updatePetsitterReservation(
+      petsitterId,
+      reservationId,
+      reservationStatus
+    );
+
+    return updatedReservation;
+  };
 }
