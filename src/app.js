@@ -17,6 +17,8 @@ app.get('/', (req, res) => {
   return res.status(200).json({ message: '테스트' });
 });
 
+console.log('hahaha');
+
 app.use('/api', [apiRouter, authRouter]);
 app.use(errorHandlingMiddleware);
 
