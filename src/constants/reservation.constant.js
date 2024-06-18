@@ -1,1 +1,1 @@
-export const MIN_RESERVATION_LENGTH = 150;
+export const MIN_PASSWORD_LENGTH = 5;

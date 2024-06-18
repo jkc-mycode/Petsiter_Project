@@ -29,6 +29,10 @@ class reservationService {
   async updateReservationService(reservationId, userId, data) {
     return await reservationRepository.updateReservation(reservationId, userId, data);
   }
+  //예약 삭제 서비스 함수
+  async deleteReservationService(reservationId, userId) {
+    return await reservationRepository.deleteReservation(reservationId, userId);
+  }
 }
 
 export default new reservationService();
