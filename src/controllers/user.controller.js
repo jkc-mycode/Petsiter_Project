@@ -10,7 +10,14 @@ constructor(userService) {
 
 UpdateUser =  async (req, res, next) => {
 try{
-const { email, password, nickname } = req.body;
+const { email, password, passwordConfirm, nickname } = req.body;
+if (password !== passwordConfirm) {
+  throw new Error('비밀번호가 일치하지 않습니다.');
+}
+
+
+
+
 const updateduser = await this.userService.UpdateUser(
   email, password, nickname 
 );
