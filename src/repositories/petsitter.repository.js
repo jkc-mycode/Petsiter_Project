@@ -39,7 +39,7 @@ export class PetsitterRepository {
       where: {
         email: email,
       },
-      select:{
+      select: {
         petsitterId: true,
         email: true,
         password: true,
@@ -52,7 +52,7 @@ export class PetsitterRepository {
         totalRate: true,
         createdAt: true,
         updatedAt: true,
-      }
+      },
     });
     return petsitter;
   };
@@ -93,6 +93,7 @@ export class PetsitterRepository {
     const updatedPetsitter = await this.prisma.petsitter.update({
       where: { petsitterId },
       data: {
+        // 입력된 데이터가 있으면 수정하고 없으면 생략
         ...(petsitterName && { petsitterName }),
         ...(petsitterCareer && { petsitterCareer }),
         ...(petsitterProfileImage && { petsitterProfileImage }),
@@ -105,5 +106,17 @@ export class PetsitterRepository {
 
     return updatedPetsitter;
   };
-}
 
+  // 펫시터 예약 현황 조회 API
+  getPetsitterReservationList = async (petsitterId) => {
+    const petsitter = await this.prisma.petsitter.findFirst({
+      where: { petsitterId },
+      // 중첩 include를 통해서 사용자 정보를 가져옴
+      include: { reservation: { include: { user: true } } },
+    });
+
+    const reservations = petsitter.reservation;
+
+    return reservations;
+  };
+}

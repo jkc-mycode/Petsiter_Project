@@ -121,27 +121,34 @@ export class PetsitterController {
     }
   };
 
-
-
   // 펫시터 본인정보 조회
   getPetsitterByEmail = async (req, res, next) => {
     try {
-
       // 본인확인을 위해 이메일과 비밀번호를 req.body에 입력
-      const {email, password} = req.body;
+      const { email, password } = req.body;
 
-  
       const petsitter = await this.petsitterService.getPetsitterByEmail(email, password);
-      
-      return res.status(200).json({status:200, message:'본인 정보 조회에 성공했습니다.', data: petsitter });
+
+      return res
+        .status(200)
+        .json({ status: 200, message: '본인 정보 조회에 성공했습니다.', data: petsitter });
     } catch (err) {
       next(err);
     }
   };
 
+  // 펫시터 예약 현황 조회 API
+  getPetsitterReservationList = async (req, res, next) => {
+    try {
+      const { petsitterId } = req.params;
 
+      const reservations = await this.petsitterService.getPetsitterReservationList(+petsitterId);
 
-
-
-
+      return res
+        .status(200)
+        .json({ status: 200, message: '예약 현황 조회에 성공했습니다.', data: { reservations } });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
