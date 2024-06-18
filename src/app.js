@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-
 import apiRouter from './routers/index.js';
 
 // import errorHandlingMiddleware from './middlewares/error-handling.middleware.js';
