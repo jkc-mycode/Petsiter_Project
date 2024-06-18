@@ -26,5 +26,23 @@ class reservationController {
       next(error);
     }
   }
+
+  // 예약 목록 조회 컨트롤러
+  async getReservationController(req, res, next) {
+    try {
+      const userId = 1; // 테스트를 위한 하드코딩
+      const { sort } = req.query;
+
+      const data = await reservationService.getReservationService(userId, sort);
+
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
+        message: MESSAGES.RESERVATION.READ_LIST.SUCCEED,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 export default new reservationController();

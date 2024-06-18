@@ -17,5 +17,10 @@ class reservationService {
 
     return data;
   }
+  // 예약 목록 조회 서비스 함수
+  async getReservationService(userId, sort) {
+    return await reservationRepository.getReservation(userId, sort);
+  }
 }
+
 export default new reservationService();
