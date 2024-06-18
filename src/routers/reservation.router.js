@@ -10,12 +10,12 @@ reservationRouter.post('/', reservationController.createReservationController);
 reservationRouter.get('/', reservationController.getReservationController);
 
 // 예약 상세 조회
-reservationRouter.get('/:id', reservationController.getReservationByIdController);
+reservationRouter.get('/:reservationId', reservationController.getReservationByIdController);
 
-// // 예약 수정
-// reservationRouter.put('/:id', reservationController.updatereservationController);
+// 예약 수정
+reservationRouter.put('/:reservationId', reservationController.updateReservationController);
 
 // // 예약 삭제
-// reservationRouter.delete('/:id', reservationController.deletereservationController);
+// reservationRouter.delete('/:reservationId', reservationController.deletereservationController);
 
 export default reservationRouter;

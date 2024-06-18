@@ -17,11 +17,21 @@ class reservationRepository {
   }
   // 예약 상세 조회
   async getReservationById(reservationId, userId) {
-    return prisma.reservation.findFirst({
+    return prisma.reservation.findUnique({
+      where: {
+        reservationId,
+        userId,
+      },
+    });
+  }
+  // 예약 수정
+  async updateReservation(reservationId, userId, data) {
+    return prisma.reservation.update({
       where: {
         reservationId: reservationId,
         userId: userId,
       },
+      data,
     });
   }
 }
