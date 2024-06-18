@@ -83,5 +83,22 @@ class reservationController {
       next(error);
     }
   }
+  // 예약 삭제 컨트롤러
+  async deleteReservationController(req, res, next) {
+    try {
+      const userId = 1; // 테스트를 위한 하드코딩
+      const reservationId = Number(req.params.reservationId);
+
+      const data = await reservationService.deleteReservationService(reservationId, userId);
+
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
+        message: MESSAGES.RESERVATION.DELETE.SUCCEED,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 export default new reservationController();

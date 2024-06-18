@@ -34,5 +34,14 @@ class reservationRepository {
       data,
     });
   }
+  // 예약 삭제
+  async deleteReservation(reservationId, userId) {
+    return prisma.reservation.delete({
+      where: {
+        reservationId: reservationId,
+        userId: userId,
+      },
+    });
+  }
 }
 export default new reservationRepository();
