@@ -3,6 +3,7 @@ import { prisma } from '../utils/prisma.util.js';
 class reservationRepository {
   // 예약 생성
   async createReservation(data) {
+    console.log('data', data);
     return prisma.reservation.create({ data });
   }
 
