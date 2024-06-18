@@ -1,6 +1,6 @@
 import express from 'express';
 import reservationRouter from './reservation.router.js';
-
+import petsitterRouter from './petsitter.router.js';
 const apiRouter = express.Router();
 
 // 테스트용 라우터 (나중에 지울 예정)
@@ -10,5 +10,9 @@ apiRouter.get('/', (req, res) => {
 
 // 예약 라우터를 /reservations 경로에 매핑
 apiRouter.use('/reservations', reservationRouter);
+apiRouter.use('/petsitter', petsitterRouter);
+
+
+
 
 export default apiRouter;

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { MIN_PASSWORD_LENGTH } from '../constants/auth.constant.js';
+import { MIN_PASSWORD_LENGTH } from '../../constants/petsitter-auth.constant.js'
 
 const petsitterSignupSchema = Joi.object({
   email: Joi.string().email().required().messages({
@@ -20,7 +20,7 @@ const petsitterSignupSchema = Joi.object({
   petsitterCareer: Joi.number().required().messages({
     'any.required': '경력을 입력해 주세요.',
   }),
-  petsitterProfileImage: Joi.number().required().messages({
+  petsitterProfileImage: Joi.string().required().messages({
     'any.required': '프로필 사진을 입력해 주세요.',
   }),
   title:Joi.string().required().messages({

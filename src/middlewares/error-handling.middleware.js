@@ -1,6 +1,6 @@
-// import { ERROR_CONSTANT } from '../constants/error.constant.js';
-// import { HTTP_STATUS } from '../constants/http-status.constant.js';
-// import { MESSAGES } from '../constants/message.constant.js';
+import { ERROR_CONSTANT } from '../constants/error.constant.js';
+import { HTTP_STATUS } from '../constants/http-status.constant.js';
+import { MESSAGES } from '../constants/message.constant.js';
 
 export default (err, req, res, next) => {
   console.error(err);

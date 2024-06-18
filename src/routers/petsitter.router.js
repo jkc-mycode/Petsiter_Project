@@ -14,10 +14,10 @@ const petsitterController = new PetsitterController(petsitterService);
 
 
 
-petsitterRouter.post('/sign-up', petsitterSignUpValidator, petsitterController.signUp);
+petsitterRouter.post('/', petsitterSignUpValidator, petsitterController.signUp);
 
 
 
 
 
-export { petsitterRouter };
+export default petsitterRouter ;

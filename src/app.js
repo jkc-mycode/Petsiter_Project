@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import apiRouter from './routers/index.js';
 
-// import errorHandlingMiddleware from './middlewares/error-handling.middleware.js';
+import errorHandlingMiddleware from './middlewares/error-handling.middleware.js';
 
 dotenv.config();
 const app = express();
@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', [apiRouter]);
-// app.use(errorHandlingMiddleware);
+app.use(errorHandlingMiddleware);
 
 app.listen(SERVER_PORT, () => {
   console.log(SERVER_PORT, '포트로 서버가 열렸어요!');
