@@ -86,4 +86,38 @@ export class PetsitterController {
       next(err);
     }
   };
+
+  // 펫시터 정보 수정
+  updatePetsitter = async (req, res, next) => {
+    try {
+      const {
+        petsitterName,
+        petsitterCareer,
+        petsitterProfileImage,
+        title,
+        content,
+        region,
+        price,
+      } = req.body;
+
+      const { petsitterId } = req.params;
+
+      const updatedPetsitter = await this.petsitterService.updatePetsitter(
+        +petsitterId,
+        petsitterName,
+        petsitterCareer,
+        petsitterProfileImage,
+        title,
+        content,
+        region,
+        price
+      );
+
+      return res
+        .status(200)
+        .json({ status: 200, message: '펫시터 수정에 성공했습니다.', data: { updatedPetsitter } });
+    } catch (err) {
+      next(err);
+    }
+  };
 }

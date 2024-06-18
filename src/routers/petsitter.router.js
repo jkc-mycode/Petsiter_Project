@@ -20,4 +20,7 @@ petsitterRouter.get('/', petsitterController.getPetsitterList);
 // 펫시터 상세 조회 API
 petsitterRouter.get('/:petsitterId', petsitterController.getPetsitterDetail);
 
+// 펫시터 정보 수정 API
+petsitterRouter.patch('/:petsitterId', petsitterController.updatePetsitter);
+
 export default petsitterRouter;
