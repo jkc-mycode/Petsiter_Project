@@ -17,7 +17,7 @@ const petsitterSignupSchema = Joi.object({
   petsitterName: Joi.string().required().messages({
     'any.required': '이름을 입력해 주세요.',
   }),
-  petsitterCareer: Joi.number().required().messages({
+  petsitterCareer: Joi.number().integer().required().messages({
     'any.required': '경력을 입력해 주세요.',
   }),
   petsitterProfileImage: Joi.string().required().messages({
