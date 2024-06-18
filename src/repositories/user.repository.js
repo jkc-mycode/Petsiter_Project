@@ -24,4 +24,39 @@ export class UserRepository {
 
     return foundUser;
   };
+
+
+  // 회원정보 수정
+
+
+  UpdateUser = async (
+   userId,
+    email,
+    password,
+    nickname,
+  ) => {
+    const updatedUser = await prisma.user.update({
+      where: { email },
+      data: {
+        userId,
+        email,
+        password,
+        nickname,
+      },
+    });
+
+    return updatedUser;
+  };
+
+
+
+
+
+
+
+
+
+
+
+
 }
