@@ -3,6 +3,39 @@ export class PetsitterController {
     this.petsitterService = petsitterService;
   }
 
+  // 펫시터 회원가입
+  signUp = async (req, res, next) => {
+    const {
+      email,
+      password,
+      petsitterName,
+      petsitterCareer,
+      petsitterProfileImage,
+      title,
+      content,
+      region,
+      price,
+      totalRate,
+    } = req.body;
+    try {
+      const petsitter = await this.petsitterService.petsitterSignUp({
+        email,
+        password,
+        petsitterName,
+        petsitterCareer,
+        petsitterProfileImage,
+        title,
+        content,
+        region,
+        price,
+        totalRate,
+      });
+      return res.status(201).json({ message: '회원가입이 완료되었습니다.', petsitter });
+    } catch (err) {
+      next(err);
+    }
+  };
+
   // 펫시터 목록 조회
   getPetsitterList = async (req, res, next) => {
     try {
@@ -39,11 +72,16 @@ export class PetsitterController {
     }
   };
 
-  signUp = async (req, res, next) => {
-    const{email, password, petsitterName, petsitterCareer, petsitterProfileImage, title, content, region, price, totalRate} = req.body;
+  // 펫시터 상세 조회
+  getPetsitterDetail = async (req, res, next) => {
     try {
-      const petsitter = await this.petsitterService.petsitterSignUp({email, password, petsitterName, petsitterCareer, petsitterProfileImage, title, content, region, price, totalRate} );
-      return res.status(201).json({ message: '회원가입이 완료되었습니다.', petsitter });
+      const { petsitterId } = req.params;
+
+      const petsitter = await this.petsitterService.getPetsitterDetail(+petsitterId);
+
+      return res
+        .status(200)
+        .json({ status: 200, message: '펫시터 상세 조회에 성공했습니다.', data: { petsitter } });
     } catch (err) {
       next(err);
     }
