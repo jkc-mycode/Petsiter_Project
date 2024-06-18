@@ -19,7 +19,7 @@ petsitterRouter.post('/', petsitterSignUpValidator, petsitterController.signUp);
 petsitterRouter.get('/', petsitterController.getPetsitterList);
 
 // // 펫시터 본인정보조회 API
-// petsitterRouter.get('/mypage', petsitterMypageValidator, petsitterController.getPetsitterByEmail);
+petsitterRouter.get('/mypage',  petsitterController.getPetsitterById);
 
 // 펫시터 상세 조회 API
 petsitterRouter.get('/:petsitterId', petsitterController.getPetsitterDetail);

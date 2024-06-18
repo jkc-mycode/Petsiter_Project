@@ -30,19 +30,17 @@ return res.status(200).json({status: 200, data: updateduser });
 
 
 
-//   // 사용자 본인정보 조회
-//   getUserByNickName = async (req, res, next) => {
-//     try {
-
-    
+  // 사용자 본인정보 조회
+  getUserById = async (req, res, next) => {
+    try {
 
   
-//       const user = await this.userService.getUserByNickName();
+      const user = await this.userService.getUserById();
       
-//       return res.status(200).json({status:200, message:'본인 정보 조회에 성공했습니다.', data: user});
-//     } catch (err) {
-//       next(err);
-//     }
-//   };
+      return res.status(200).json({status:200, message:'본인 정보 조회에 성공했습니다.', data: user});
+    } catch (err) {
+      next(err);
+    }
+  };
 
 }

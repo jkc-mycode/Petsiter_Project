@@ -40,21 +40,26 @@ UpdateUser = async (email, password, nickname) => {
   }
 };
 
-//   //사용자 본인정보 조회
-//   getUserByNickName = async ( email) => {
-//     const user = await this.userRepository.
-//     findUserByEmail (email);
-//     if (!user) throw new user.NotFound('사용자가 존재하지 않습니다.');
+  //사용자 본인정보 조회
+  getUserById = async ( ) => {
+    // 더미데이터
+    const userId =  12
+    const user = await this.userRepository.
+    findUserById (userId);
+    if (!user) throw new user.NotFound('사용자가 존재하지 않습니다.');
 
 
-//     return {
-//         userId: user.userId,
-//       email: user.email,
-//       password: user.password,
-//       nickname: user.nickname,
-//       createdAt: user.createdAt,
-//       updatedAt: user.updatedAt,
+    return {
+        userId: user.userId,
+      email: user.email,
+      nickname: user.nickname,
+      profileImage: user.profileImage,
+      socialId: user.socialId,
+      provider: user.provider,
+      role: user.role,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
 
-//     };
-//   } 
+    };
+  } 
 }
