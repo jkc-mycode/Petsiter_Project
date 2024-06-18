@@ -19,8 +19,8 @@ model User {
   email        String   @unique
   password     String
   nickname     String   @unique
-  profileImage String   @map("profile_image")
-  socialId     String   @map("social_id")
+  profileImage String?  @map("profile_image")
+  socialId     String?  @map("social_id")
   provider     Provider @default(LOCAL)
   role         Role     @default(USER)
   createdAt    DateTime @default(now()) @map("created_at")
@@ -55,7 +55,7 @@ model Petsitter {
   password              String
   petsitterName         String   @map("petsitter_name")
   petsitterCareer       Int      @map("petsitter_career")
-  petsitterProfileImage String   @map("petsitter_profile_image")
+  petsitterProfileImage String?  @map("petsitter_profile_image")
   title                 String
   content               String   @db.Text
   region                String
@@ -64,12 +64,12 @@ model Petsitter {
   createdAt             DateTime @default(now()) @map("created_at")
   updatedAt             DateTime @updatedAt @map("updated_at")
 
-  reservation      Reservation[]
-  bookmark         Bookmark[]
-  review           Review[]
-  reply            Reply[]
-  certificateImage CertificationImage[]
-  houseImage       HouseImage[]
+  reservation Reservation[]
+  bookmark    Bookmark[]
+  review      Review[]
+  reply       Reply[]
+  certificate Certification[]
+  houseImage  HouseImage[]
 
   @@map("petsitter")
 }
@@ -193,15 +193,18 @@ model Reply {
 }
 
 // 확인 필요
-model CertificationImage {
-  certificateImageId Int      @id @default(autoincrement()) @map("certificate_image_id")
-  petsitterId        Int      @map("petsitter_id")
-  imageUrl           String   @map("image_url")
-  createdAt          DateTime @default(now()) @map("created_at")
+model Certification {
+  certificateId     Int      @id @default(autoincrement()) @map("certificate_id")
+  petsitterId       Int      @map("petsitter_id")
+  imageUrl          String   @map("image_url")
+  certificateName   String   @map("certificate_name")
+  certificateIssuer String   @map("certificate_issuer")
+  certificateDate   DateTime @map("certificate_date")
+  createdAt         DateTime @default(now()) @map("created_at")
 
   petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
 
-  @@map("certification_image")
+  @@map("certification")
 }
 
 // 확인 필요
