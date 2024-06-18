@@ -9,8 +9,8 @@ reservationRouter.post('/', reservationController.createReservationController);
 // 예약 목록 조회
 reservationRouter.get('/', reservationController.getReservationController);
 
-// // 예약 상세 조회
-// reservationRouter.get('/:id', reservationController.getreservationController);
+// 예약 상세 조회
+reservationRouter.get('/:id', reservationController.getReservationByIdController);
 
 // // 예약 수정
 // reservationRouter.put('/:id', reservationController.updatereservationController);
