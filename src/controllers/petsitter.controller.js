@@ -10,7 +10,6 @@ export class PetsitterController {
       password,
       petsitterName,
       petsitterCareer,
-      petsitterProfileImage,
       title,
       content,
       region,
@@ -23,14 +22,13 @@ export class PetsitterController {
         password,
         petsitterName,
         petsitterCareer,
-        petsitterProfileImage,
         title,
         content,
         region,
         price,
         totalRate,
       });
-      return res.status(201).json({ message: '회원가입이 완료되었습니다.', petsitter });
+      return res.status(201).json({status: 200, message: '회원가입이 완료되었습니다.', petsitter });
     } catch (err) {
       next(err);
     }

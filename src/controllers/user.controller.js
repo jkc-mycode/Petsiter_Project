@@ -22,7 +22,7 @@ const updateduser = await this.userService.UpdateUser(
   email, password, nickname 
 );
 
-return res.status(200).json({ data: updateduser });
+return res.status(200).json({status: 200, data: updateduser });
     } catch (err) {
       next(err);
     }
