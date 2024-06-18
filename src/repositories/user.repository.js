@@ -30,15 +30,19 @@ export class UserRepository {
 
 
   UpdateUser = async (
-   userId,
+ 
     email,
     password,
-    nickname,
+    nickname
+
+
+
+
   ) => {
     const updatedUser = await prisma.user.update({
       where: { email },
       data: {
-        userId,
+        
         email,
         password,
         nickname,
