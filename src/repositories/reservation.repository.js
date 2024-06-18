@@ -13,8 +13,14 @@ class reservationRepository {
       orderBy: {
         createdAt: sort,
       },
-      include: {
-        user: true, // 사용자의 정보를 포함
+    });
+  }
+  // 예약 상세 조회
+  async getReservationById(reservationId, userId) {
+    return prisma.reservation.findFirst({
+      where: {
+        reservationId: reservationId,
+        userId: userId,
       },
     });
   }

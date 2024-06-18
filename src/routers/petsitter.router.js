@@ -13,7 +13,7 @@ const petsitterService = new PetsitterService(petsitterRepository);
 const petsitterController = new PetsitterController(petsitterService);
 
 // 펫시터 회원가입
-petsitterRouter.post('/', petsitterSignUpValidator, petsitterController.signUp)
+petsitterRouter.post('/', petsitterSignUpValidator, petsitterController.signUp);
 
 // 펫시터 목록 조회 API
 petsitterRouter.get('/', petsitterController.getPetsitterList);
@@ -24,5 +24,10 @@ petsitterRouter.get('/', petsitterController.getPetsitterList);
 petsitterRouter.get('/mypage', petsitterMypageValidator, petsitterController.getPetsitterByEmail);
 
 
+// 펫시터 상세 조회 API
+petsitterRouter.get('/:petsitterId', petsitterController.getPetsitterDetail);
+
+// 펫시터 정보 수정 API
+petsitterRouter.patch('/:petsitterId', petsitterController.updatePetsitter);
 
 export default petsitterRouter;
