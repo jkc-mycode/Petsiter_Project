@@ -1,42 +1,45 @@
 import Joi from 'joi';
 import { MIN_PASSWORD_LENGTH } from '../../constants/petsitter-auth.constant.js'
+import { MAX_RATE_LENGTH} from '../../constants/petsitter-auth.constant.js'
+import { MESSAGES } from '../../constants/message.constant.js';
+import { PETSITTERMESSAGES } from '../../constants/petsitter.message.constant.js';
 
 const petsitterSignupSchema = Joi.object({
   email: Joi.string().email().required().messages({
-    'any.required': '이메일을 입력해 주세요',
-    'string.email': '이메일 형식이 올바르지 않습니다.',
+    'any.required': MESSAGES.AUTH.COMMON.EMAIL.REQUIRED,
+    'string.email': MESSAGES.AUTH.COMMON.EMAIL.INVALID_FORMAT,
   }),
   password: Joi.string().required().min(MIN_PASSWORD_LENGTH).messages({
-    'any.required': '비밀번호를 입력해 주세요',
-    'string.min': '비밀번호는 5자리 이상이어야 합니다.',
+    'any.required': MESSAGES.AUTH.COMMON.PASSWORD.REQUIRED,
+    'string.min': MESSAGES.AUTH.COMMON.PASSWORD.MIN,
   }),
   passwordConfirm: Joi.string().required().valid(Joi.ref('password')).messages({
-    'any.required': '비밀번호 확인이 필요합니다.',
-    'any.only': '비밀번호가 일치하지 않습니다.',
+    'any.required': MESSAGES.AUTH.COMMON.PASSWORD_CONFIRM.REQUIRED,
+    'any.only': MESSAGES.AUTH.COMMON.PASSWORD_CONFIRM.NOT_MATCHED_WITH_PASSWORD,
   }),
   petsitterName: Joi.string().required().messages({
-    'any.required': '이름을 입력해 주세요.',
+    'any.required': MESSAGES.AUTH.COMMON.NAME.REQUIRED,
   }),
   petsitterCareer: Joi.number().integer().required().messages({
-    'any.required': '경력을 입력해 주세요.',
-  }),
-  petsitterProfileImage: Joi.string().required().messages({
-    'any.required': '프로필 사진을 입력해 주세요.',
+    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.CAREER,
   }),
   title:Joi.string().required().messages({
-    'any.required': '제목을 입력해 주세요.',
+    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.TITLE.REQUIRED,
   }),
   content:Joi.string().required().messages({
-    'any.required': '내용을 입력해 주세요.',
+    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.CONTENT.REQUIRED,
   }),
   region:Joi.string().required().messages({
-    'any.required': '지역을 입력해 주세요.',
+    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.REGION.REQUIRED,
   }),
-  price:Joi.number().required().messages({
-    'any.required': '가격을 입력해 주세요.',
+  price:Joi.number().integer().required().messages({
+    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.PRICE.REQUIRED,
+    'number.base': PETSITTERMESSAGES.PETSITTER.COMMON.PRICE.BASE,
   }),
-  totalRate:Joi.number().required().messages({
-    'any.required': '평점을 입력해 주세요.',
+  totalRate :Joi.number().integer().required().max(MAX_RATE_LENGTH).messages({
+    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.RATE.REQUIRED,
+    'number.base':PETSITTERMESSAGES.PETSITTER.COMMON.RATE.BASE,
+    'number.max':PETSITTERMESSAGES.PETSITTER.COMMON.RATE.MAX
   })
 });
 

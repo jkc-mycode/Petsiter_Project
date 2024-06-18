@@ -8,6 +8,7 @@ export const MESSAGES = {
       },
       PASSWORD: {
         REQUIRED: '비밀번호를 입력해 주세요.',
+        MIN: '비밀번호는 5자 이상으로 입력해 주세요'
       },
       PASSWORD_CONFIRM: {
         REQUIRED: '비밀번호 확인을 입력해 주세요.',
@@ -43,7 +44,7 @@ export const MESSAGES = {
         REQUIRED: '제목을 입력해 주세요.',
       },
       CONTENT: {
-        REQUIRED: '자기소개를 입력해 주세요.',
+        REQUIRED: '내용을 입력해 주세요.',
       },
       NOT_FOUND: '예약이 존재하지 않습니다.',
     },
