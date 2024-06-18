@@ -1,5 +1,5 @@
 import express from 'express';
-import reservationController from '../controllers/reservations.controller.js';
+import reservationController from '../controllers/reservation.controller.js';
 
 const reservationRouter = express.Router();
 
@@ -18,4 +18,4 @@ reservationRouter.post('/', reservationController.createReservationController);
 // // 예약 삭제
 // reservationRouter.delete('/:id', reservationController.deletereservationController);
 
-export { reservationRouter };
+export default reservationRouter;

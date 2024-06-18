@@ -1,5 +1,5 @@
-import { MIN_PASSWORD_LENGTH } from './auth.constant.js';
-import { MIN_RESUME_LENGTH } from './resume.constant.js';
+// import { MIN_PASSWORD_LENGTH } from './auth.constant.js';
+// import { MIN_RESUME_LENGTH } from './resume.constant.js';
 
 export const MESSAGES = {
   AUTH: {
@@ -11,7 +11,7 @@ export const MESSAGES = {
       },
       PASSWORD: {
         REQUIRED: '비밀번호를 입력해 주세요.',
-        MIN_LENGTH: `비밀번호는 ${MIN_PASSWORD_LENGTH}자리 이상이어야 합니다.`,
+        // MIN_LENGTH: `비밀번호는 ${MIN_PASSWORD_LENGTH}자리 이상이어야 합니다.`,
       },
       PASSWORD_CONFIRM: {
         REQUIRED: '비밀번호 확인을 입력해 주세요.',
@@ -41,14 +41,14 @@ export const MESSAGES = {
       SUCCEED: '내 정보 조회에 성공했습니다.',
     },
   },
-  RESUMES: {
+  RESERVATION: {
     COMMON: {
       TITLE: {
         REQUIRED: '제목을 입력해 주세요.',
       },
       CONTENT: {
         REQUIRED: '자기소개를 입력해 주세요.',
-        MIN_LENGTH: `자기소개는 ${MIN_RESUME_LENGTH}자 이상 작성해야 합니다.`,
+        // MIN_LENGTH: `자기소개는 ${MIN_RESUME_LENGTH}자 이상 작성해야 합니다.`,
       },
       NOT_FOUND: '예약이 존재하지 않습니다.',
     },
