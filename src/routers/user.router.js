@@ -17,7 +17,7 @@ const userController = new UserController(userService);
 
 
 // 본인 정보 조회 api
-// userRouter.get('/', userController.getUserByNickName);
+userRouter.get('/', userController.getUserById);
 
 // 사용자 정보 수정 api
 userRouter.patch('/', userController.UpdateUser);

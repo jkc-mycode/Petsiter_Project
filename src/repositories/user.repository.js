@@ -18,12 +18,27 @@ export class UserRepository {
   findUserByEmail = async (email) => {
     const foundUser = await prisma.user.findUnique({
       where: {
-        email,
+       email
       },
     });
 
     return foundUser;
   };
+
+
+  // 사용자 본인 정보 조회 
+  findUserById = async (userId) => {
+    const user = await prisma.user.findUnique({
+      where: {
+       userId
+      },
+    });
+
+    return user;
+  };
+
+
+
 
 
   // 회원정보 수정

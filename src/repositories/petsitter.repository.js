@@ -33,11 +33,11 @@ export class PetsitterRepository {
     return data;
   };
 
-  // 이메일을 통해 펫시터 찾기
-  findPetsitterByEmail = async (email) => {
+  // ID를 통해 펫시터 찾기
+  findPetsitterById = async (petsitterId) => {
     const petsitter = await this.prisma.petsitter.findUnique({
       where: {
-        email: email,
+        petsitterId: petsitterId,
       },
       select: {
         petsitterId: true,
