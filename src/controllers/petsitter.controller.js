@@ -10,7 +10,6 @@ export class PetsitterController {
       password,
       petsitterName,
       petsitterCareer,
-      petsitterProfileImage,
       title,
       content,
       region,
@@ -23,14 +22,13 @@ export class PetsitterController {
         password,
         petsitterName,
         petsitterCareer,
-        petsitterProfileImage,
         title,
         content,
         region,
         price,
         totalRate,
       });
-      return res.status(201).json({ message: '회원가입이 완료되었습니다.', petsitter });
+      return res.status(201).json({status: 200, message: '회원가입이 완료되었습니다.', petsitter });
     } catch (err) {
       next(err);
     }
@@ -121,13 +119,13 @@ export class PetsitterController {
     }
   };
 
-  // 펫시터 본인정보 조회
-  getPetsitterByEmail = async (req, res, next) => {
+  // // 펫시터 본인정보 조회
+  getPetsitterById = async (req, res, next) => {
     try {
-      // 본인확인을 위해 이메일과 비밀번호를 req.body에 입력
-      const { email, password } = req.body;
-
-      const petsitter = await this.petsitterService.getPetsitterByEmail(email, password);
+    
+      const petsitterId = 4
+      // 더미데이터
+      const petsitter = await this.petsitterService.getPetsitterById(petsitterId);
 
       return res
         .status(200)
@@ -147,6 +145,58 @@ export class PetsitterController {
       return res
         .status(200)
         .json({ status: 200, message: '예약 현황 조회에 성공했습니다.', data: { reservations } });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  // 펫시터 예약 상태 변경 API
+  updatePetsitterReservation = async (req, res, next) => {
+    try {
+      const { petsitterId } = req.params;
+      const { reservationId, reservationStatus } = req.body;
+
+      const updatedReservation = await this.petsitterService.updatePetsitterReservation(
+        +petsitterId,
+        reservationId,
+        reservationStatus
+      );
+
+      return res.status(200).json({
+        status: 200,
+        message: '예상 상태 변경에 성공했습니다.',
+        data: { updatedReservation },
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  // 펫시터 검색 기능
+  searchPetsitter = async (req, res, next) => {
+    try {
+      // 펫시터를 검색하기 위한 쿼리를 가져옴
+      const { name, region, price, career } = req.query;
+      let petsitters;
+
+      // 각 쿼리로 검색할 때의 where 조건절
+      if (name) {
+        petsitters = await this.petsitterService.searchPetsitter({ petsitterName: name });
+      } else if (region) {
+        petsitters = await this.petsitterService.searchPetsitter({ region });
+      } else if (price) {
+        petsitters = await this.petsitterService.searchPetsitter({ price: { lte: +price } });
+      } else if (career) {
+        petsitters = await this.petsitterService.searchPetsitter({
+          petsitterCareer: { gte: +career },
+        });
+      } else {
+        petsitters = await this.petsitterService.searchPetsitter({});
+      }
+
+      return res
+        .status(200)
+        .json({ status: 200, message: '펫시터 검색에 성공했습니다.', data: { petsitters } });
     } catch (err) {
       next(err);
     }

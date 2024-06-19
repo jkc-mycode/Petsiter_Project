@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -204,7 +205,7 @@ model Certificate {
 
   petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
 
-  @@map("Certificate")
+  @@map("certificate")
 }
 
 // 확인 필요

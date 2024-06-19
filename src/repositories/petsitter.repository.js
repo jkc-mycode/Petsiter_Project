@@ -33,11 +33,11 @@ export class PetsitterRepository {
     return data;
   };
 
-  // 이메일을 통해 펫시터 찾기
-  findPetsitterByEmail = async (email) => {
+  // ID를 통해 펫시터 찾기
+  findPetsitterById = async (petsitterId) => {
     const petsitter = await this.prisma.petsitter.findUnique({
       where: {
-        email: email,
+        petsitterId: petsitterId,
       },
       select: {
         petsitterId: true,
@@ -73,7 +73,7 @@ export class PetsitterRepository {
   getPetsitterDetail = async (petsitterId) => {
     const petsitter = await this.prisma.petsitter.findFirst({
       where: { petsitterId },
-      include: { certificate: true, houseImage: true, review: true },
+      include: { certificate: true, houseImage: true, review: true, reservation: true },
     });
 
     return petsitter;
@@ -118,5 +118,35 @@ export class PetsitterRepository {
     const reservations = petsitter.reservation;
 
     return reservations;
+  };
+
+  // 예약 ID를 통해 예약 정보 조회
+  getPetsitterReservation = async (reservationId) => {
+    const reservation = await this.prisma.reservation.findFirst({
+      where: { reservationId },
+    });
+
+    return reservation;
+  };
+
+  // 펫시터 예약 상태 변경 API
+  updatePetsitterReservation = async (petsitterId, reservationId, reservationStatus) => {
+    const updatedReservation = await this.prisma.reservation.update({
+      where: { petsitterId, reservationId },
+      data: { reservationStatus },
+    });
+
+    return updatedReservation;
+  };
+
+  // 펫시터 검색 기능
+  searchPetsitter = async (whereCondition) => {
+    
+    const petsitters = await this.prisma.petsitter.findMany({
+      where: whereCondition,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return petsitters;
   };
 }

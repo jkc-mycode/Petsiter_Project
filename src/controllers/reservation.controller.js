@@ -9,12 +9,12 @@ class reservationController {
     try {
       //   const user = req.user;   아직 못씀 ㅠ
       const { petsitterId, reservationDate } = req.body;
-      const userId = 1; //user.userId;       테스트를 위한 하드코딩
+      const userId = req.user.userId; //1; //user.userId;       테스트를 위한 하드코딩
 
       const data = await reservationService.createReservationService(
         userId,
-        petsitterId,
-        reservationDate
+        Number(petsitterId),
+        new Date(reservationDate)
       );
 
       return res.status(HTTP_STATUS.CREATED).json({

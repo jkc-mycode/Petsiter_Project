@@ -49,6 +49,7 @@ export class AuthService {
     // 입력한 비밀번호와 암호화된 비밀번호가 같은지 비교한다.
     // bcrypt.compare가 password에 들어올 값을 만약 암호화 한다면 ~ 이라고 가상의 암호를 작성
     // 그 암호와 foundUser.password가 일치하면 isPasswordMatched가 된다. 그리고 그 값은 true
+
     const isPasswordMatched = await bcrypt.compare(password, foundUser.password);
 
     // isPasswordMatched가 존재하지 않다면 즉 true가 아니라면! 에러를 보낸다.

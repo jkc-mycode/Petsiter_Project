@@ -69,16 +69,15 @@ export class PetsitterService {
     return petsitters;
   };
 
-  // 펫시터 본인정보 조회
-  getPetsitterByEmail = async (email, password) => {
-    const petsitter = await this.petsitterRepository.findPetsitterByEmail(email);
+  // // 펫시터 본인정보 조회
+  getPetsitterById = async (petsitterId) => {
+
+
+   
+    const petsitter = await this.petsitterRepository.findPetsitterById(petsitterId);
     if (!petsitter) throw new HttpError.NotFound('펫시터가 존재하지 않습니다.');
 
-    // 비밀번호가 일치하지 않을 경우 경고 메시지 발송
-    const passwordMatch = await bcrypt.compare(password, petsitter.password);
-    if (!passwordMatch) {
-      throw new HttpError.Unauthorized('비밀번호가 일치하지 않습니다.');
-    }
+
 
     return {
       petsitterId: petsitter.petsitterId,
@@ -159,5 +158,28 @@ export class PetsitterService {
     });
 
     return reservations;
+  };
+
+  // 펫시터 예약 상태 변경 API
+  updatePetsitterReservation = async (petsitterId, reservationId, reservationStatus) => {
+    // 예약 ID가 유효한지 확인
+    const reservation = await this.petsitterRepository.getPetsitterReservation(reservationId);
+    console.log(reservation);
+    if (!reservation) throw new HttpError.NotFound('해당 예약이 존재하지 않습니다.');
+
+    let updatedReservation = await this.petsitterRepository.updatePetsitterReservation(
+      petsitterId,
+      reservationId,
+      reservationStatus
+    );
+
+    return updatedReservation;
+  };
+
+  // 펫시터 검색 기능
+  searchPetsitter = async (whereCondition) => {
+    const petsitters = await this.petsitterRepository.searchPetsitter(whereCondition);
+
+    return petsitters;
   };
 }
