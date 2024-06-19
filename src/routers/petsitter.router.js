@@ -5,6 +5,7 @@ import { PetsitterService } from '../services/petsitter.service.js';
 import { PetsitterRepository } from '../repositories/petsitter.repository.js';
 import petsitterAccessToken from '../middlewares/petsitter-access-token-middleware.js';
 import { petsitterUpdateValidator } from '../middlewares/validators/petsitter-update.validator.middleware.js';
+import { petsitterReservationStatusUpdateValidator } from '../middlewares/validators/petsitter-update-reservation-status.validator.middleware.js';
 // import { petsitterMypageValidator } from '../middlewares/validators/petsitter-mypage-middleware.js';
 
 const petsitterRouter = express.Router();
@@ -43,6 +44,7 @@ petsitterRouter.get(
 // 펫시터 본인 예약 상태 변경 API
 petsitterRouter.patch(
   '/reservation/status',
+  petsitterReservationStatusUpdateValidator,
   petsitterAccessToken,
   petsitterController.updatePetsitterReservation
 );
