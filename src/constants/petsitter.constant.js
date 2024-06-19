@@ -8,4 +8,9 @@ export const PETSITTER_CONSTANT = {
     PRICE: 'price',
     CREATED_AT: 'createdAt',
   },
+  RESERVATION_STATUS: {
+    AWAIT: 'AWAIT',
+    ACCEPT: 'ACCEPT',
+    CANCEL: 'CANCEL',
+  },
 };
