@@ -70,7 +70,12 @@ export class PetsitterRepository {
     const petsitter = await this.prisma.petsitter.findFirst({
       where: { petsitterId },
       // 중첩 include를 통해서 사용자 정보를 가져옴
-      include: { reservation: { include: { user: true } } },
+      include: {
+        reservation: {
+          include: { user: true },
+          orderBy: { createdAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
+        },
+      },
     });
 
     const reservations = petsitter.reservation;
