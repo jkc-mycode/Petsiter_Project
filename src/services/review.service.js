@@ -1,4 +1,7 @@
 // src/services/review.service.js
+import { HttpError } from "../errors/http.error.js";
+import { REVIEW_MESSAGE } from "../constants/review.constant.js";
+
 export default class ReviewService {
 
   // 의존성 주입
@@ -7,6 +10,12 @@ export default class ReviewService {
   }
    // 리뷰 생성
   createReview = async ( reservationId, userId, petsitterId, review, rate )=> {
+    // 리뷰가 이미 존재하는지 확인
+    const existingReview = await this.reviewRepository.reviewExists(reservationId, userId);
+    if (existingReview) {
+      throw new HttpError.Conflict(REVIEW_MESSAGE.REVIEW_ALREADY_EXISTS);
+    }
+    // 리뷰 생성
     const newReview = await this.reviewRepository.createReview (
       reservationId,
       userId,
