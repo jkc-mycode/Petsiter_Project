@@ -3,23 +3,15 @@ export class PetsitterRepository {
     this.prisma = prisma;
   }
 
-
-
-
   // ID를 통해 펫시터 찾기(본인정보 조회 및 미들웨어)
   findPetsitterById = async (petsitterId) => {
     const petsitter = await this.prisma.petsitter.findUnique({
       where: {
-        petsitterId: +petsitterId,
+        petsitterId: Number(petsitterId),
       },
     });
     return petsitter;
   };
-
-
-
-
-
 
   // 펫시터 목록 조회
   getPetsitterList = async (orderByCondition) => {

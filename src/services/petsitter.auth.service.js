@@ -99,9 +99,7 @@ export class PetsitterAuthService {
     const signout = await this.petsitterAuthRepository.SignoutPetsitter(petsitterId);
 
     return {
-      status: 200,
-      message: '로그아웃에 성공했습니다.',
-      data: { ID: signout },
+      petsitterId: signout.petsitterId,
     };
   };
 }

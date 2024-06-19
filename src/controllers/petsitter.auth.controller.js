@@ -65,8 +65,12 @@ export class PetsitterAuthController {
   SignOut = async (req, res, next) => {
     const petsitter = req.petsitter;
     try {
-      const result = await this.petsitterAuthService.petsitterSignOut(petsitter);
-      return res.status(result.status).json(result);
+      const result = await this.petsitterAuthService.petsitterSignOut(petsitter.petsitterId);
+      return res.status(200).json({
+        status: 200,
+        message: '로그아웃에 성공했습니다.',
+        data: result,
+      });
     } catch (error) {
       next(error);
     }
