@@ -35,7 +35,6 @@ export class PetsitterRepository {
 
   // ID를 통해 펫시터 찾기(본인정보 조회)
   findPetsitterById = async (petsitterId) => {
-console.log(petsitterId)
     
     const petsitter = await this.prisma.petsitter.findUnique({
       where: {
