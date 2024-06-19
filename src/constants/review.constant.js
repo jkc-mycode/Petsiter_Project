@@ -8,8 +8,10 @@ export const REVIEW_MESSAGE = {
   INVALID_USER_ID: '유효하지 않은 사용자 ID입니다.',
 
   INVALID_REVIEW_ID: '유효하지 않은 리뷰 ID입니다.',
-  REVIEW_NOT_FOUND: '수정하려는 리뷰가 존재하지 않습니다.',
-  UNAUTHORIZED_REVIEW_UPDATE: '다른 사용자가 작성한 리뷰를 수정할 수 없습니다.'
+  REVIEW_NOT_FOUND: '리뷰가 존재하지 않습니다.',
+  UNAUTHORIZED_REVIEW_UPDATE: '다른 사용자가 작성한 리뷰를 수정할 수 없습니다.',
+  REVIEW_UPDATED_SUCCESSFULLY: '리뷰가 성공적으로 수정되었습니다.',
   
-
+  UNAUTHORIZED_REVIEW_DELETE: '다른 사용자가 작성한 리뷰를 삭제할 수 없습니다.',
+  REVIEW_DELETED_SUCCESSFULLY: '리뷰가 성공적으로 삭제되었습니다.'
 }
