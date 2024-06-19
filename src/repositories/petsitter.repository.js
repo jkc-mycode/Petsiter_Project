@@ -1,3 +1,5 @@
+import { PETSITTER_CONSTANT } from '../constants/petsitter.constant.js';
+
 export class PetsitterRepository {
   constructor(prisma) {
     this.prisma = prisma;
@@ -17,7 +19,9 @@ export class PetsitterRepository {
   getPetsitterList = async (orderByCondition) => {
     const petsitters = await this.prisma.petsitter.findMany({
       include: { houseImage: true, review: true },
-      orderBy: orderByCondition ? orderByCondition : { createAt: 'desc' },
+      orderBy: orderByCondition
+        ? orderByCondition
+        : { createAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
     });
 
     return petsitters;
@@ -97,7 +101,7 @@ export class PetsitterRepository {
   searchPetsitter = async (whereCondition) => {
     const petsitters = await this.prisma.petsitter.findMany({
       where: whereCondition,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
     });
 
     return petsitters;
