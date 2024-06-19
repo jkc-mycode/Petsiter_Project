@@ -43,15 +43,6 @@ export class PetsitterAuthRepository {
     return petsitter;
   };
 
-  findPetsitterBySign = async (petsitterId) => {
-    const petsitter = await this.prisma.petsitter.findUnique({
-      where: {
-        petsitterId,
-      },
-    });
-    return petsitter;
-  };
-
   createRefreshToken = async (petsitterId, petsitterRefreshToken) => {
     return this.prisma.petsitterRefreshToken.upsert({
       where: {
