@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { MESSAGES } from '../../constants/message.constant.js';
-
+// 삭제예정
 
 const petsitterMypageSchema = Joi.object({
     email: Joi.string().email().required().messages({

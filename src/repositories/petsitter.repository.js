@@ -33,7 +33,7 @@ export class PetsitterRepository {
     return data;
   };
 
-  // ID를 통해 펫시터 찾기
+  // ID를 통해 펫시터 찾기(본인정보 조회)
   findPetsitterById = async (petsitterId) => {
     const petsitter = await this.prisma.petsitter.findUnique({
       where: {
@@ -56,6 +56,21 @@ export class PetsitterRepository {
     });
     return petsitter;
   };
+
+  // email를 통해 펫시터 찾기(회원가입 시 중복되는 이메일이 있는지 필요함.)
+  findPetsitterByEmail = async (email) => {
+    const petsitter = await this.prisma.petsitter.findUnique({
+      where: {
+        email,
+      },
+    });
+    return petsitter;
+  };
+
+
+
+
+
 
   // 펫시터 목록 조회
   getPetsitterList = async (orderByCondition) => {
