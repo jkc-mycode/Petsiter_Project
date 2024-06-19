@@ -1,10 +1,9 @@
+import { PETSITTER_CONSTANT } from '../constants/petsitter.constant';
+
 export class PetsitterRepository {
   constructor(prisma) {
     this.prisma = prisma;
   }
-
-
-
 
   // ID를 통해 펫시터 찾기(본인정보 조회 및 미들웨어)
   findPetsitterById = async (petsitterId) => {
@@ -16,16 +15,13 @@ export class PetsitterRepository {
     return petsitter;
   };
 
-
-
-
-
-
   // 펫시터 목록 조회
   getPetsitterList = async (orderByCondition) => {
     const petsitters = await this.prisma.petsitter.findMany({
       include: { houseImage: true, review: true },
-      orderBy: orderByCondition ? orderByCondition : { createAt: 'desc' },
+      orderBy: orderByCondition
+        ? orderByCondition
+        : { createAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
     });
 
     return petsitters;
@@ -105,7 +101,7 @@ export class PetsitterRepository {
   searchPetsitter = async (whereCondition) => {
     const petsitters = await this.prisma.petsitter.findMany({
       where: whereCondition,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
     });
 
     return petsitters;

@@ -1,7 +1,5 @@
-import { HttpError } from '../errors/http.error.js';
-
-import { HTTP_STATUS } from '../constants/http-status.constant.js';
-import { PETSITTERMESSAGES } from '../constants/petsitter.auth.message.constant.js';
+import { PETSITTER_CONSTANT } from '../constants/petsitter.constant.js';
+import { PETSITTER_MESSAGE } from '../constants/petsitter.message.constant.js';
 
 export class PetsitterController {
   constructor(petsitterService) {
@@ -19,27 +17,35 @@ export class PetsitterController {
 
       if (rateSort) {
         // 인기 순 쿼리로 들어온 데이터가 desc, asc 둘다 아닐때 고정값 설정
-        if (rateSort !== 'desc' && rateSort !== 'asc') {
-          rateSort = 'desc';
+        if (
+          rateSort !== PETSITTER_CONSTANT.SORT_TYPE.DESC &&
+          rateSort !== PETSITTER_CONSTANT.SORT_TYPE.ASC
+        ) {
+          rateSort = PETSITTER_CONSTANT.SORT_TYPE.DESC;
         }
-        orderByCondition['totalRate'] = rateSort;
+        orderByCondition[PETSITTER_CONSTANT.ORDERBY.TOTAL_RATE] = rateSort;
       } else if (priceSort) {
         // 가격 순 쿼리로 들어온 데이터가 desc, asc 둘다 아닐때 고정값 설정
-        if (priceSort !== 'desc' && priceSort !== 'asc') {
-          priceSort = 'desc';
+        if (
+          priceSort !== PETSITTER_CONSTANT.SORT_TYPE.DESC &&
+          priceSort !== PETSITTER_CONSTANT.SORT_TYPE.ASC
+        ) {
+          priceSort = PETSITTER_CONSTANT.SORT_TYPE.DESC;
         }
-        orderByCondition['price'] = priceSort;
+        orderByCondition[PETSITTER_CONSTANT.ORDERBY.PRICE] = priceSort;
       } else {
         // 인기순, 가격순도 없으면 그냥 시간순으로 내림차순
-        orderByCondition['createdAt'] = 'desc';
+        orderByCondition[PETSITTER_CONSTANT.ORDERBY.CREATED_AT] = PETSITTER_CONSTANT.SORT_TYPE.DESC;
       }
 
       // 펫시터 목록 조회
       const petsitters = await this.petsitterService.getPetsitterList(orderByCondition);
 
-      return res
-        .status(200)
-        .json({ status: 200, message: '펫시터 목록 조회에 성공했습니다.', data: { petsitters } });
+      return res.status(200).json({
+        status: 200,
+        message: PETSITTER_MESSAGE.PETSITTER.LIST.SUCCEED,
+        data: { petsitters },
+      });
     } catch (err) {
       next(err);
     }
@@ -52,9 +58,11 @@ export class PetsitterController {
 
       const petsitter = await this.petsitterService.getPetsitterDetail(+petsitterId);
 
-      return res
-        .status(200)
-        .json({ status: 200, message: '펫시터 상세 조회에 성공했습니다.', data: { petsitter } });
+      return res.status(200).json({
+        status: 200,
+        message: PETSITTER_MESSAGE.PETSITTER.DETAIL.SUCCEED,
+        data: { petsitter },
+      });
     } catch (err) {
       next(err);
     }
@@ -82,9 +90,11 @@ export class PetsitterController {
         petsitters = await this.petsitterService.searchPetsitter({});
       }
 
-      return res
-        .status(200)
-        .json({ status: 200, message: '펫시터 검색에 성공했습니다.', data: { petsitters } });
+      return res.status(200).json({
+        status: 200,
+        message: PETSITTER_MESSAGE.PETSITTER.SEARCH.SUCCEED,
+        data: { petsitters },
+      });
     } catch (err) {
       next(err);
     }
@@ -97,9 +107,11 @@ export class PetsitterController {
 
       const petsitter = await this.petsitterService.getPetsitterById(petsitterId);
 
-      return res
-        .status(200)
-        .json({ status: 200, message: '본인 정보 조회에 성공했습니다.', data: petsitter });
+      return res.status(200).json({
+        status: 200,
+        message: PETSITTER_MESSAGE.PETSITTER.MY_INFO.SUCCEED,
+        data: petsitter,
+      });
     } catch (err) {
       next(err);
     }
@@ -133,9 +145,11 @@ export class PetsitterController {
         price
       );
 
-      return res
-        .status(200)
-        .json({ status: 200, message: '펫시터 수정에 성공했습니다.', data: { updatedPetsitter } });
+      return res.status(200).json({
+        status: 200,
+        message: PETSITTER_MESSAGE.PETSITTER.UPDATE.SUCCEED,
+        data: { updatedPetsitter },
+      });
     } catch (err) {
       next(err);
     }
@@ -148,9 +162,11 @@ export class PetsitterController {
 
       const reservations = await this.petsitterService.getPetsitterReservationList(petsitterId);
 
-      return res
-        .status(200)
-        .json({ status: 200, message: '예약 현황 조회에 성공했습니다.', data: { reservations } });
+      return res.status(200).json({
+        status: 200,
+        message: PETSITTER_MESSAGE.RESERVATION.LIST.SUCCEED,
+        data: { reservations },
+      });
     } catch (err) {
       next(err);
     }
@@ -170,7 +186,7 @@ export class PetsitterController {
 
       return res.status(200).json({
         status: 200,
-        message: '예상 상태 변경에 성공했습니다.',
+        message: PETSITTER_MESSAGE.RESERVATION.UPDATE_STATUS.SUCCEED,
         data: { updatedReservation },
       });
     } catch (err) {
