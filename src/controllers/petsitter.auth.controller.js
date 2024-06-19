@@ -36,4 +36,24 @@
     }
   };
 
+  signIn = async (req, res, next) => {
+    const { email, password } = req.body;
+  
+    try {
+  
+  
+      const { accessToken} = await this.petsitterAuthService.PetsittersignIn(email, password);
+     
+  
+      res.header('authorization', accessToken);
+      return res.status(200).json({status: 200, message:'로그인에 성공하였습니다', accessToken });
+    } catch (err) {
+      // console.error(err);
+      next(err);
+    }
+  };
+
+
+
+
 }

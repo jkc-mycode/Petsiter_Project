@@ -94,8 +94,8 @@ export class PetsitterController {
   getPetsitterById = async (req, res, next) => {
     try {
     
-      const petsitterId = 4
-      // 더미데이터
+      const petsitterId = req.petsitter.petsitterId;
+      
       const petsitter = await this.petsitterService.getPetsitterById(petsitterId);
 
       return res
