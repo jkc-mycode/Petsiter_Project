@@ -1,4 +1,4 @@
-import { PETSITTER_CONSTANT } from '../constants/petsitter.constant';
+import { PETSITTER_CONSTANT } from '../constants/petsitter.constant.js';
 
 export class PetsitterRepository {
   constructor(prisma) {
