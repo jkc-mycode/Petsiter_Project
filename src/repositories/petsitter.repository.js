@@ -11,6 +11,7 @@ export class PetsitterRepository {
       where: {
         petsitterId: Number(petsitterId),
       },
+      include: { certificate: true, houseImage: true },
     });
     return petsitter;
   };
@@ -46,20 +47,43 @@ export class PetsitterRepository {
     title,
     content,
     region,
-    price
+    price,
+    images,
+    petsitter
   ) => {
-    const updatedPetsitter = await this.prisma.petsitter.update({
-      where: { petsitterId },
-      data: {
-        // 입력된 데이터가 있으면 수정하고 없으면 생략
-        ...(petsitterName && { petsitterName }),
-        ...(petsitterCareer && { petsitterCareer }),
-        ...(petsitterProfileImage && { petsitterProfileImage }),
-        ...(title && { title }),
-        ...(content && { content }),
-        ...(region && { region }),
-        ...(price && { price }),
-      },
+    const updatedPetsitter = await this.prisma.$transaction(async (tx) => {
+      const updatedData = await tx.petsitter.update({
+        where: { petsitterId },
+        data: {
+          // 입력된 데이터가 있으면 수정하고 없으면 생략
+          ...(petsitterName && { petsitterName }),
+          ...(petsitterCareer && { petsitterCareer }),
+          ...(petsitterProfileImage && { petsitterProfileImage }),
+          ...(title && { title }),
+          ...(content && { content }),
+          ...(region && { region }),
+          ...(price && { price }),
+        },
+      });
+
+      // 비밀번호는 제외하고 반환
+      updatedData.password = undefined;
+
+      // 사진이 있는 펫시터 정보
+      let houseImage = petsitter.houseImage;
+
+      // 이미지 수정
+      if (images.length !== 0) {
+        await tx.houseImage.deleteMany({ where: { petsitterId: petsitter.petsitterId } });
+        houseImage = await Promise.all(
+          images.map(async (image) => {
+            return await tx.houseImage.create({
+              data: { petsitterId: petsitter.petsitterId, imageUrl: image.location },
+            });
+          })
+        );
+      }
+      return [updatedData, houseImage];
     });
 
     return updatedPetsitter;
@@ -110,5 +134,27 @@ export class PetsitterRepository {
     });
 
     return petsitters;
+  };
+
+  // 펫시터 자격증 추가 API
+  createCertificate = async (
+    petsitterId,
+    certificateName,
+    certificateIssuer,
+    certificateDate,
+    image,
+    petsitter
+  ) => {
+    const certificate = await this.prisma.certificate.create({
+      data: {
+        petsitterId,
+        imageUrl: image.location,
+        certificateName,
+        certificateIssuer,
+        certificateDate,
+      },
+    });
+
+    return certificate;
   };
 }
