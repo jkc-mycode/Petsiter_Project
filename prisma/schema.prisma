@@ -65,12 +65,12 @@ model Petsitter {
   createdAt             DateTime @default(now()) @map("created_at")
   updatedAt             DateTime @updatedAt @map("updated_at")
 
-  reservation Reservation[]
-  bookmark    Bookmark[]
-  review      Review[]
-  reply       Reply[]
-  certificate Certificate[]
-  houseImage  HouseImage[]
+  reservation           Reservation[]
+  bookmark              Bookmark[]
+  review                Review[]
+  reply                 Reply[]
+  certificate           Certificate[]
+  houseImage            HouseImage[]
   petsitterRefreshToken PetsitterRefreshToken?
 
   @@map("petsitter")
@@ -100,33 +100,28 @@ enum AdminStatus {
 
 // 확인 필요
 model RefreshToken {
-  tokenId       Int      @id @default(autoincrement()) @map("token_id")
-  userId        Int      @unique @map("user_id")
-  refreshToken  String?  @map("refresh_token")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  tokenId      Int      @id @default(autoincrement()) @map("token_id")
+  userId       Int      @unique @map("user_id")
+  refreshToken String?  @map("refresh_token")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("refresh_token")
 }
 
-
 model PetsitterRefreshToken {
   petsitterTokenId      Int      @id @default(autoincrement()) @map("petsitter_token_id")
-  petsitterId   Int      @unique @map("petsitter_id")
-  petsitterRefreshToken  String?  @map("petsitter_refresh_token")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  petsitterId           Int      @unique @map("petsitter_id")
+  petsitterRefreshToken String?  @map("petsitter_refresh_token")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
 
   petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
 
   @@map("petsitter_refresh_token")
 }
-
-
-
-
 
 // 확인 필요 
 model Bookmark {
@@ -147,6 +142,9 @@ model Reservation {
   petsitterId       Int              @map("petsitter_id")
   reservationDate   DateTime         @map("reservation_date")
   reservationStatus ResevationStatus @default(AWAIT) @map("reservation_status")
+  animalType        AnimalType       @map("animal_type")
+  hour              Int
+  etc               String?          @db.Text
   createdAt         DateTime         @default(now()) @map("created_at")
   updatedAt         DateTime         @updatedAt @map("updated_at")
 
@@ -161,6 +159,11 @@ enum ResevationStatus {
   AWAIT
   ACCEPT
   CANCEL
+}
+
+enum AnimalType {
+  DOG
+  CAT
 }
 
 // 확인 필요
