@@ -12,27 +12,33 @@ const petsitterRepository = new PetsitterRepository(prisma);
 const petsitterService = new PetsitterService(petsitterRepository);
 const petsitterController = new PetsitterController(petsitterService);
 
-
-
-// 펫시터 목록 조회 API
+// 펫시터 목록 조회 API (사용자 기준)
 petsitterRouter.get('/', petsitterController.getPetsitterList);
 
-// // 펫시터 본인정보조회 API
-petsitterRouter.get('/mypage', petsitterAccessToken, petsitterController.getPetsitterById);
-
-// 펫시터 상세 조회 API
+// 펫시터 상세 조회 API (사용자 기준)
 petsitterRouter.get('/:petsitterId', petsitterController.getPetsitterDetail);
 
-// 펫시터 정보 수정 API
-petsitterRouter.patch('/:petsitterId', petsitterController.updatePetsitter);
-
-// 펫시터 예약 현황 조회 API
-petsitterRouter.get('/:petsitterId/reservation', petsitterController.getPetsitterReservationList);
-
-// 펫시터 예약 상태 변경 API
-petsitterRouter.patch('/:petsitterId/reservation', petsitterController.updatePetsitterReservation);
-
-// 펫시터 검색 API (이름, 지역, 가격, 경력)
+// 펫시터 검색 API (이름, 지역, 가격, 경력) (사용자 기준)
 petsitterRouter.get('/search/type', petsitterController.searchPetsitter);
+
+// 펫시터 본인 정보 조회 API
+petsitterRouter.get('/mypage', petsitterAccessToken, petsitterController.getPetsitterById);
+
+// 펫시터 본인 정보 수정 API
+petsitterRouter.patch('/', petsitterAccessToken, petsitterController.updatePetsitter);
+
+// 펫시터 본인 예약 현황 조회 API
+petsitterRouter.get(
+  '/reservation/info',
+  petsitterAccessToken,
+  petsitterController.getPetsitterReservationList
+);
+
+// 펫시터 본인 예약 상태 변경 API
+petsitterRouter.patch(
+  '/reservation/status',
+  petsitterAccessToken,
+  petsitterController.updatePetsitterReservation
+);
 
 export default petsitterRouter;
