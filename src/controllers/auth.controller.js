@@ -1,5 +1,5 @@
 import { AuthService } from '../services/auth.service.js';
-
+import { AUTH_MESSAGE } from '../constants/auth.message.constant.js';
 export class AuthController {
   // calss AuthService속의 데이터들을 가져 올 것이다.
   authService = new AuthService();
@@ -11,7 +11,9 @@ export class AuthController {
 
       const createUser = await this.authService.signUp(email, password, passwordCheck, nickname);
 
-      return res.status(201).json({ data: createUser });
+      return res
+        .status(201)
+        .json({ message: AUTH_MESSAGE.AUTH.SUCCESS.SIGN_UP_SUCCESS, ...createUser });
     } catch (err) {
       next(err);
     }
@@ -23,7 +25,9 @@ export class AuthController {
 
       const logInAuth = await this.authService.signIn(email, password);
 
-      return res.status(201).json({ data: logInAuth });
+      return res
+        .status(201)
+        .json({ message: AUTH_MESSAGE.AUTH.SUCCESS.SIGN_IN_SUCCESS, ...logInAuth });
     } catch (err) {
       next(err);
     }
@@ -37,7 +41,7 @@ export class AuthController {
       const createToken = await this.authService.createToken(userId);
 
       // json({ createToken })에 access와 refresh가 같이 담겨져 있어야함.
-      res.status(200).json({ message: '토큰 재발급에 성공하였습니다.', createToken });
+      res.status(200).json({ message: AUTH_MESSAGE.AUTH.SUCCESS.TOKEN_SUCCESS, ...createToken });
     } catch (err) {
       next(err);
     }
@@ -54,10 +58,9 @@ export class AuthController {
 
       // findOutUserId 메스드 값이 userId이 존재하면 무조건 null 값으로 변경하는 것이니까 그대로 간다.
 
-      res.status(200).json({ logOut });
+      res.status(200).json({ message: AUTH_MESSAGE.AUTH.SUCCESS.LOGOUT_SUCCESS, ...logOut });
     } catch (err) {
       next(err);
     }
   };
 }
-

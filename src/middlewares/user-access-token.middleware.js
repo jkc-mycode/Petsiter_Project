@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { USER_ACCESS_TOKEN_SECRET_KEY } from '../constants/env.constant.js';
 import { UserRepository } from '../repositories/user.repository.js';
+import { AUTH_MESSAGE } from '../constants/auth.message.constant.js';
 
 export default async (req, res, next) => {
   try {
@@ -8,13 +9,13 @@ export default async (req, res, next) => {
 
     const accessToken = req.headers['authorization'];
     if (!accessToken) {
-      res.status(401).json({ errerMessage: '인증 정보가 없습니다.' });
+      res.status(401).json({ message: AUTH_MESSAGE.AUTH.TOKEN.NOT_FOUND });
       return;
     }
 
     const [tokenType, token] = accessToken.split(' ');
     if (tokenType !== 'Bearer') {
-      res.status(401).json({ errerMessage: '지원하지 않는 인증 방식입니다.' });
+      res.status(401).json({ errerMessage: AUTH_MESSAGE.AUTH.TOKEN.NOT_APPLY });
       return;
     }
 
@@ -24,7 +25,7 @@ export default async (req, res, next) => {
     const user = await userRepository.getAccessToken(decodedToken.id);
 
     if (!user) {
-      res.status(400).json({ errorMessage: '인증 정보와 일치하는 사용자가 없습니다.' });
+      res.status(400).json({ errorMessage: AUTH_MESSAGE.AUTH.TOKEN.NOT_MATCH_USER });
       return;
     }
 
@@ -33,13 +34,11 @@ export default async (req, res, next) => {
   } catch (err) {
     switch (err.name) {
       case 'TokenExpiredError':
-        return res.status(401).json({ message: '인증 정보가 만료되었습니다.' });
+        return res.status(401).json({ message: AUTH_MESSAGE.AUTH.TOKEN.EXPIRED });
       case 'JsonWebTokenError':
-        return res.status(401).json({ message: '인증 정보가 유효하지 않습니다.' });
+        return res.status(401).json({ message: AUTH_MESSAGE.AUTH.TOKEN.NOT_VALID });
       default:
-        return res.status(401).json({ message: err.message ?? '인증 정보가 유효하지 않습니다.' });
+        return res.status(401).json({ message: AUTH_MESSAGE.AUTH.TOKEN.NOT_VALID });
     }
   }
 };
-
-

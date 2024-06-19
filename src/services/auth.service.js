@@ -2,6 +2,8 @@
 import { UserRepository } from '../repositories/user.repository.js';
 import { createAccessToken } from '../utils/auth.util.js';
 import { createRefreshToken } from '../utils/auth.util.js';
+import { HttpError } from '../errors/http.error.js';
+import { AUTH_MESSAGE } from '../constants/auth.message.constant.js';
 import bcrypt from 'bcrypt';
 
 export class AuthService {
@@ -10,17 +12,17 @@ export class AuthService {
   //회원가입
   signUp = async (email, password, passwordCheck, nickname) => {
     if (!email || !password || !passwordCheck || !nickname || password !== passwordCheck) {
-      throw new Error('입력값을 확인해주세요.');
+      throw new HttpError.BadRequest(AUTH_MESSAGE.AUTH.COMMON.NOT_FOUND);
     }
 
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
     if (!emailRegex.test(email)) {
-      throw new Error('이메일 형식이 올바르지 않습니다.');
+      throw new HttpError.BadRequest(AUTH_MESSAGE.AUTH.EMAIL.FOEM);
     }
 
     const foundUser = await this.userRepository.findUserByEmail(email);
     if (foundUser) {
-      throw new Error('이미 존재하는 이메일입니다.');
+      throw new HttpError.Conflict(AUTH_MESSAGE.AUTH.EMAIL.EXISTED);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,20 +31,20 @@ export class AuthService {
 
     user.password = undefined;
 
-    return user;
+    return { user };
   };
 
   //로그인
   signIn = async (email, password) => {
     // 입력을 했는지 안했는지 확인하는 것
     if (!email || !password) {
-      throw new Error('이메일과 비밀번호를 확인해주세요.');
+      throw new HttpError.BadRequest(AUTH_MESSAGE.AUTH.COMMON.NOT_FOUND);
     }
 
     // 입력 했어도 이메일 형식에 맞게 입력했는지 확인
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
     if (!emailRegex.test(email)) {
-      throw new Error('이메일 형식이 올바르지 않습니다.');
+      throw new HttpError.BadRequest(AUTH_MESSAGE.AUTH.EMAIL.FOEM);
     }
 
     // 위의 오류를 통과했으면 그 email이 DB에 존재하는지 확인
@@ -57,12 +59,12 @@ export class AuthService {
     // isPasswordMatched가 존재하지 않다면 즉 true가 아니라면! 에러를 보낸다.
     // true가 아닐 시 즉 일치하지 않다면 비밀번호가 일치하지 않다는 것이다.
     if (!isPasswordMatched) {
-      throw new Error('비밀번호가 일치하지 않습니다.');
+      throw new HttpError.BadRequest(AUTH_MESSAGE.AUTH.PASSWORD.NOT_EXISTED);
     }
 
     // 입력한 email을 기준으로 DB에 없을 때 나오는 값
     if (!foundUser) {
-      throw new Error('유저를 찾을 수 없습니다.');
+      throw new HttpError.NotFound(AUTH_MESSAGE.AUTH.USER.NOT_FOUND);
     }
 
     const accessToken = createAccessToken(foundUser.userId);
@@ -98,12 +100,12 @@ export class AuthService {
   // 로그아웃
   findOutUserId = async (userId) => {
     if (!userId) {
-      throw new Error('유저를 찾을 수 없습니다.');
+      throw new HttpError.NotFound(AUTH_MESSAGE.AUTH.USER.NOT_FOUND);
     }
 
     // 로그 아웃이니까 무조건 nill 값으로 준다?
     const logOut = await this.userRepository.logOut(userId);
 
-    return { message: '로그아웃에 성공했습니다.', logOut };
+    return { logOut };
   };
 }
