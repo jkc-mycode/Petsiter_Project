@@ -6,7 +6,6 @@ export class PetsitterService {
     this.petsitterRepository = petsitterRepository;
   }
 
-
   // 펫시터 목록 조회
   getPetsitterList = async (orderByCondition) => {
     // 펫시터 목록 조회
@@ -19,8 +18,8 @@ export class PetsitterService {
         petsitterId: petsitter.petsitterId,
         title: petsitter.title,
         region: petsitter.region,
-        total_rate: petsitter.total_rate,
-        review_count: petsitter.review.length,
+        totalRate: petsitter.totalRate,
+        reviewCount: petsitter.review.length,
         createdAt: petsitter.createdAt,
         updatedAt: petsitter.updatedAt,
         houseImage: petsitter.houseImage,
@@ -32,7 +31,6 @@ export class PetsitterService {
 
   // // 펫시터 본인정보 조회
   getPetsitterById = async (petsitterId) => {
-
     const petsitter = await this.petsitterRepository.findPetsitterById(petsitterId);
     if (!petsitter) throw new HttpError.NotFound('펫시터가 존재하지 않습니다.');
     return {
@@ -63,7 +61,7 @@ export class PetsitterService {
       title: petsitter.title,
       content: petsitter.content,
       region: petsitter.region,
-      total_rate: petsitter.total_rate,
+      totalRate: petsitter.totalRate,
       createdAt: petsitter.createdAt,
       updatedAt: petsitter.updatedAt,
       certificate: petsitter.certificate,
@@ -83,8 +81,8 @@ export class PetsitterService {
     region,
     price
   ) => {
-    const petsitter = await this.petsitterRepository.getPetsitterDetail(petsitterId);
-    if (!petsitter) throw new HttpError.NotFound('해당 펫시터가 존재하지 않습니다.');
+    // DB에서 실제로 있는지 확인할 필요 X => 인증 미들웨어에서 인증을 마쳤기 때문에
+    // 펫시터 정보 수정
     const updatedPetsitter = await this.petsitterRepository.updatePetsitter(
       petsitterId,
       petsitterName,
@@ -95,6 +93,9 @@ export class PetsitterService {
       region,
       price
     );
+
+    // 비밀번호는 제외하고 반환
+    updatedPetsitter.password = undefined;
 
     return updatedPetsitter;
   };
@@ -121,8 +122,11 @@ export class PetsitterService {
   updatePetsitterReservation = async (petsitterId, reservationId, reservationStatus) => {
     // 예약 ID가 유효한지 확인
     const reservation = await this.petsitterRepository.getPetsitterReservation(reservationId);
-    console.log(reservation);
     if (!reservation) throw new HttpError.NotFound('해당 예약이 존재하지 않습니다.');
+
+    // 예약 데이터의 펫시터와 로그인한 펫시터가 같은지 확인
+    if (reservation.petsitterId !== petsitterId)
+      throw new HttpError.Unauthorized('예약 수정 권한이 없습니다.');
 
     let updatedReservation = await this.petsitterRepository.updatePetsitterReservation(
       petsitterId,

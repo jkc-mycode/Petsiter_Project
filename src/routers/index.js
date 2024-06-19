@@ -12,15 +12,17 @@ apiRouter.get('/', (req, res) => {
   return res.status(200).json({ message: 'index.js 테스트' });
 });
 
-
-
-
 // 펫시터 라우터
 apiRouter.use('/petsitter', petsitterRouter);
+
 // 펫시터 회원가입 라우터
 apiRouter.use('/petsitter/auth', petsitterAuthRouter);
+
 // 예약 라우터를 /reservations 경로에 매핑
 apiRouter.use('/reservations', reservationRouter, reviewRouter);
+
 apiRouter.use('/auth', authRouter);
+
 apiRouter.use('/user', userRouter);
+
 export default apiRouter;

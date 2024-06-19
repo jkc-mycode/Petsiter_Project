@@ -8,7 +8,6 @@ export class PetsitterRepository {
 
   // ID를 통해 펫시터 찾기(본인정보 조회 및 미들웨어)
   findPetsitterById = async (petsitterId) => {
-    
     const petsitter = await this.prisma.petsitter.findUnique({
       where: {
         petsitterId: +petsitterId,
@@ -28,8 +27,6 @@ export class PetsitterRepository {
       include: { houseImage: true, review: true },
       orderBy: orderByCondition ? orderByCondition : { createAt: 'desc' },
     });
-
-    console.log(petsitters);
 
     return petsitters;
   };
@@ -106,7 +103,6 @@ export class PetsitterRepository {
 
   // 펫시터 검색 기능
   searchPetsitter = async (whereCondition) => {
-    
     const petsitters = await this.prisma.petsitter.findMany({
       where: whereCondition,
       orderBy: { createdAt: 'desc' },
