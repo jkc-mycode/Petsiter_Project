@@ -22,7 +22,7 @@ const updateduser = await this.userService.UpdateUser(
   email, password, nickname 
 );
 
-return res.status(200).json({status: 200, data: updateduser });
+return res.status(200).json({status: 200,  message:'수정이 완료되었습니다.', data: updateduser });
     } catch (err) {
       next(err);
     }
@@ -34,8 +34,8 @@ return res.status(200).json({status: 200, data: updateduser });
   getUserById = async (req, res, next) => {
     try {
 
-  
-      const user = await this.userService.getUserById();
+      const userId =  req.user.userId;
+      const user = await this.userService.getUserById(userId);
       
       return res.status(200).json({status:200, message:'본인 정보 조회에 성공했습니다.', data: user});
     } catch (err) {

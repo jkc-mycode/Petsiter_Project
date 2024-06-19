@@ -21,7 +21,7 @@ const petsitterSignupSchema = Joi.object({
     'any.required': MESSAGES.AUTH.COMMON.NAME.REQUIRED,
   }),
   petsitterCareer: Joi.number().integer().required().messages({
-    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.CAREER,
+    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.CAREER.REQUIRED,
   }),
   title:Joi.string().required().messages({
     'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.TITLE.REQUIRED,

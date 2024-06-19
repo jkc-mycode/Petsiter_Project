@@ -1,6 +1,12 @@
 import { prisma } from '../utils/prisma.util.js';
 
 export class UserRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
+
+
+
   //회원가입
   createUser = async (email, password, nickname) => {
     const createdUser = await prisma.user.create({
@@ -25,7 +31,7 @@ export class UserRepository {
     return foundUser;
   };
 
-  //accessToken 확인용
+  //accessToken 확인용 및 본인정보조회
   findUserById = async (userId) => {
     const foundUser = await prisma.user.findUnique({
       where: {
@@ -36,16 +42,8 @@ export class UserRepository {
     return foundUser;
   };
 
-  // 사용자 본인 정보 조회 
-  findUserById = async (userId) => {
-    const user = await prisma.user.findUnique({
-      where: {
-       userId
-      },
-    });
 
-    return user;
-  };
+
 
 
 
