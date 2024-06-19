@@ -31,4 +31,14 @@ export default class ReviewService {
   reservationPetsitterCheck = async (reservationId) => {
     return await this.reviewRepository.isPetsitterOwnerOfReservation(reservationId);
   };
+
+  // 리뷰 조회
+  getReviewsByReservationId = async (reservationId, userId) => {
+    const reviews = await this.reviewRepository.getReviewsByReservationId(reservationId, userId);
+    // 가져온 리뷰가 없거나 빈 배열인 경우
+    if (!reviews || reviews.length === 0) {
+      throw new HttpError.NotFound(REVIEW_MESSAGE.NO_REVIEW_FOUND);
+    }
+    return reviews;
+  };
 }

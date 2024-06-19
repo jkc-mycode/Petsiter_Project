@@ -13,8 +13,8 @@ const reviewController = new ReviewController(reviewService);
 // 리뷰 생성
 reviewRouter.post('/:reservationId/review', reviewController.createReviewController);
 
-// // 리뷰 조회
-// reviewRouter.get('reservation/:reservationId/review', reviewController.getReviewController);
+// 리뷰 조회
+reviewRouter.get('/:reservationId/review', reviewController.getReviewController);
 
 // // 리뷰 수정
 // reviewRouter.patch('/reservation/:reservationId/review/:id', reviewController.updateReviewController);

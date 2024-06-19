@@ -37,4 +37,26 @@ export default class ReviewController {
       next(err);
     }
   }
+
+  // 리뷰 조회
+  getReviewController = async (req, res, next) => {
+    const { reservationId } = req.params;
+    const userId = 1; // req.user.id; 테스트용
+
+    try {
+      // 예약 ID와 사용자 ID로 리뷰를 조회
+      const review = await this.reviewService.getReviewsByReservationId(+reservationId, userId);
+      // 리뷰가 존재하는지 확인
+      if (!review) {
+        throw new HttpError.NotFound(REVIEW_MESSAGE.NO_REVIEW_FOUND);
+      }
+
+      // 성공했을 때 리뷰 데이터 반환
+      return res.status(200).json(review);
+    } catch (err) {
+      // 에러 처리
+      console.error(err);
+      next(err);
+    }
+  }
 } 
