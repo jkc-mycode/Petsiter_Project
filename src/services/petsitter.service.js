@@ -33,15 +33,11 @@ export class PetsitterService {
   // // 펫시터 본인정보 조회
   getPetsitterById = async (petsitterId) => {
 
-
-   
     const petsitter = await this.petsitterRepository.findPetsitterById(petsitterId);
     if (!petsitter) throw new HttpError.NotFound('펫시터가 존재하지 않습니다.');
-
-
-
     return {
       petsitterId: petsitter.petsitterId,
+      email: petsitter.email,
       petsitterName: petsitter.petsitterName,
       petsitterCareer: petsitter.petsitterCareer,
       petsitterProfileImage: petsitter.petsitterProfileImage,

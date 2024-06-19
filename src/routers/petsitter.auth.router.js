@@ -18,6 +18,8 @@ const petsitterAuthController = new PetsitterAuthController(petsitterAuthService
 // 펫시터 회원가입
 petsitterAuthRouter.post('/sign-up', petsitterSignUpValidator, petsitterAuthController.signUp);
 
+// 펫시터 로그인
+petsitterAuthRouter.post('/sign-in', petsitterAuthController.signIn);
 
 
 export default petsitterAuthRouter;

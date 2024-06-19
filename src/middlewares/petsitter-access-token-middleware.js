@@ -20,7 +20,10 @@ export default async function accessToken(req, res, next) {
     }
 
     const decodedToken = jwt.verify(accessToken, process.env.PETSITTER_ACCESS_TOKEN_SECRET_KEY);
-    const petsitterId = decodedToken.petsitterId;
+    if (!decodedToken) {
+      throw new HttpError.Unauthorized('인증 정보가 유효하지 않습니다.');
+    }
+    const petsitterId = decodedToken.petsitter;
 
    
     const petsitter = await petsitterRepository.findPetsitterById(petsitterId);
@@ -30,7 +33,7 @@ export default async function accessToken(req, res, next) {
       throw new HttpError.NotFound('인증 정보와 일치하는 사용자가 없습니다.');
     }
 
-    req.user = petsitter;
+    req.petsitter = petsitter;
 
     next();
   } catch (err) {
