@@ -5,7 +5,7 @@ import { PetsitterAuthController } from '../controllers/petsitter.auth.controlle
 import { PetsitterAuthService } from '../services/petsitter.auth.service.js';
 import { PetsitterRepository } from '../repositories/petsitter.repository.js';
 import { petsitterSignUpValidator } from '../middlewares/validators/petsitter-sign-up-validator.middleware.js';
-// 추후 회원가입 시 사용 import { petsitterMypageValidator } from '../middlewares/validators/petsitter-mypage-middleware.js';
+import { petsitterSignInValidator } from '../middlewares/validators/petsitter-sign-in-validator.middleware.js';
 
 
 
@@ -19,7 +19,7 @@ const petsitterAuthController = new PetsitterAuthController(petsitterAuthService
 petsitterAuthRouter.post('/sign-up', petsitterSignUpValidator, petsitterAuthController.signUp);
 
 // 펫시터 로그인
-petsitterAuthRouter.post('/sign-in', petsitterAuthController.signIn);
+petsitterAuthRouter.post('/sign-in',petsitterSignInValidator, petsitterAuthController.signIn);
 
 
 export default petsitterAuthRouter;

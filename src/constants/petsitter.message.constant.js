@@ -4,6 +4,23 @@ export const PETSITTERMESSAGES = {
 
 PETSITTER: {
     COMMON: {
+      EMAIL: {
+        REQUIRED: '이메일을 입력해 주세요.',
+        INVALID_FORMAT: '이메일 형식이 올바르지 않습니다.',
+        DUPLICATED: '이미 가입 된 사용자입니다.',
+        NOT_FOUND: '사용자가 존재하지 않습니다.',
+      },
+      PASSWORD: {
+        REQUIRED: '비밀번호를 입력해 주세요.',
+        MIN: '비밀번호는 5자 이상으로 입력해 주세요'
+      },
+      ID: {
+        NOT_FOUND: '사용자가 존재하지 않습니다.'
+      },
+      PASSWORD_CONFIRM: {
+        REQUIRED: '비밀번호 확인을 입력해 주세요.',
+        NOT_MATCHED_WITH_PASSWORD: '비밀번호가 일치하지 않습니다.',
+      },
     TITLE: {
       REQUIRED: '제목을 입력해 주세요'
     },
@@ -31,6 +48,9 @@ RATE:{
   MAX: '평점은 5점 이하로 입력해 주세요 '
 }
     
+    },
+    SERVICE:{
+ERROR: '예상치 못한 에러가 발생했습니다. 관리자에게 문의해주세요'
     }
     }
 }

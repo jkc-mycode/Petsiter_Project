@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
-
+import { HttpError } from '../errors/http.error.js';
+import { PETSITTERMESSAGES } from '../constants/petsitter.message.constant.js';
 export class UserService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -36,7 +37,7 @@ UpdateUser = async (email, password, nickname) => {
     };
   } catch (err) {
     console.error(err);
-    throw new Error.InternalServerError('서비스 오류');
+    throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
   }
 };
 
@@ -47,7 +48,7 @@ UpdateUser = async (email, password, nickname) => {
     
     const user = await this.userRepository.
     findUserById (userId);
-    if (!userId) throw new user.NotFound('사용자가 존재하지 않습니다.');
+  
 
 
     return {

@@ -23,6 +23,7 @@ export default async function accessToken(req, res, next) {
     if (!decodedToken) {
       throw new HttpError.Unauthorized('인증 정보가 유효하지 않습니다.');
     }
+ 
     const petsitterId = decodedToken.petsitter;
 
    
@@ -32,7 +33,7 @@ export default async function accessToken(req, res, next) {
       res.clearCookie('authorization');
       throw new HttpError.NotFound('인증 정보와 일치하는 사용자가 없습니다.');
     }
-
+    // req.petsitter에 데이터를 할당합니다.
     req.petsitter = petsitter;
 
     next();

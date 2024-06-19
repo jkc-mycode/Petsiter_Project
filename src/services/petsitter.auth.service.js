@@ -2,6 +2,7 @@
 import { HttpError } from '../errors/http.error.js'; // 필요한 HttpError 모듈 임포트
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { PETSITTERMESSAGES } from '../constants/petsitter.message.constant.js';
 
 export class PetsitterAuthService {
     constructor(petsitterRepository) {
@@ -22,7 +23,7 @@ petsitterSignUp = async ({
   }) => {
     const petsitter = await this.petsitterRepository.findPetsitterByEmail(email);
     if (petsitter) {
-      throw new HttpError.Conflict('이미 존재하는 사용자입니다.');
+      throw new HttpError.Conflict(PETSITTERMESSAGES.PETSITTER.COMMON.EMAIL.DUPLICATED);
     }
 
     // 비밀번호 암호화
@@ -53,14 +54,14 @@ petsitterSignUp = async ({
       // 이메일로 펫시터 조회
       const petsitter = await this.petsitterRepository.findPetsitterByEmail(email);
       if (!petsitter) {
-        throw new HttpError.NotFound('사용자가 존재하지 않습니다.');
+        throw new HttpError.NotFound(PETSITTERMESSAGES.PETSITTER.COMMON.EMAIL.NOT_FOUND);
       }
 
 
-      // 사용자가 존재하지 않거나 비밀번호가 일치하지 않는 경우
+      // 비밀번호가 일치하지 않는 경우
       const passwordMatch = await bcrypt.compare(password, petsitter.password);
       if (!passwordMatch) {
-        throw new HttpError.Unauthorized('비밀번호가 일치하지 않습니다.');
+        throw new HttpError.Unauthorized(PETSITTERMESSAGES.PETSITTER.COMMON.PASSWORD_CONFIRM.NOT_MATCHED_WITH_PASSWORD);
       }
 
       // JWT 토큰 생성
@@ -72,8 +73,7 @@ petsitterSignUp = async ({
   
       return { accessToken};
     } catch (err) {
-      console.error(err);
-      throw new HttpError.InternalServerError('서비스 오류 ');
+      throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
     }
   };
 
