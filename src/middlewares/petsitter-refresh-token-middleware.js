@@ -1,10 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { prisma } from '../utils/prisma.util.js';
 import { PetsitterRepository } from '../repositories/petsitter.repository.js';
+import { PetsitterAuthRepository } from '../repositories/petsitter.auth.repository.js';
 import { HttpError } from '../errors/http.error.js';
 import { MESSAGES } from '../constants/message.constant.js';
+import bcrypt from 'bcrypt';
 const petsitterRepository = new PetsitterRepository(prisma);
-
+const petsitterAuthRepository = new PetsitterAuthRepository(prisma);
 export default async function (req, res, next) {
   try {
     const authorization = req.headers['authorization'];
@@ -19,23 +21,27 @@ export default async function (req, res, next) {
     }
 
     let decodedToken;
-    try {
-      decodedToken = jwt.verify(refreshToken, process.env.PETSITTER_REFRESHTOKEN_SECRET_KEY);
-    } catch (err) {
-      if (err.name === 'TokenExpiredError') {
-        return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.EXPIRED });
-      }
+
+    decodedToken = jwt.verify(refreshToken, process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY);
+
+    // if ('TokenExpiredError') {
+    //   return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.EXPIRED });
+    // }
+
+    const petsitterId = decodedToken.petsitterId;
+
+    const storedRefreshToken = await petsitterAuthRepository.createRefreshToken(petsitterId);
+    const hashedToken = storedRefreshToken.petsitterRefreshToken;
+    //  해싱한 토큰을 비교하는 과정입니다.
+    const isMatch = await bcrypt.compare(refreshToken, hashedToken);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.DISCARD });
     }
-    const petsitterId = decodedToken.petsitter;
 
     const petsitter = await petsitterRepository.findPetsitterById(petsitterId);
     if (!petsitter) {
       throw new HttpError.NotFound(MESSAGES.AUTH.COMMON.JWT.NO_USER);
-    }
-
-    const storedRefreshToken = await petsitterRepository.createToken(petsitterId);
-    if (!storedRefreshToken || storedRefreshToken.token !== refreshToken) {
-      return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.DISCARD });
     }
 
     req.petsitter = petsitter;

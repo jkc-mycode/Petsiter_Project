@@ -9,7 +9,7 @@ export class PetsitterRepository {
   findPetsitterById = async (petsitterId) => {
     const petsitter = await this.prisma.petsitter.findUnique({
       where: {
-        petsitterId: +petsitterId,
+        petsitterId: Number(petsitterId),
       },
     });
     return petsitter;
