@@ -4,6 +4,7 @@ import { USER_REFRESH_TOKEN_SECRET_KEY } from '../constants/env.constant.js';
 
 function createAccessToken(id) {
   // <- 여기 id가 어디서 받는거지?????????? 이거 쓰는 곳의 함수의 id값
+  console.log(USER_ACCESS_TOKEN_SECRET_KEY);
   const accessToken = jwt.sign(
     { id: id }, // JWT 데이터 // 여기가 페이로드 이면서 데이터 넣는 곳.
     // { id(key): foundUser.userId(value)}
