@@ -1,6 +1,27 @@
 export const PETSITTER_MESSAGE = {
   PETSITTER: {
     COMMON: {
+      PETSITTER_NAME: {
+        BASE: '펫시터 이름은 문자열입니다.',
+      },
+      PETSITTER_CAREER: {
+        BASE: '펫시터 경력은 정수입니다.',
+      },
+      PETSITTER_PROFILE_IMAGE: {
+        BASE: '펫시터 프로필 사진은 문자열입니다.',
+      },
+      TITLE: {
+        BASE: '소개 제목은 문자열입니다.',
+      },
+      CONTENT: {
+        BASE: '소개 글은 문자열입니다.',
+      },
+      REGION: {
+        BASE: '지역명은 문자열입니다.',
+      },
+      PRICE: {
+        BASE: '가격은 정수입니다.',
+      },
       NOT_FOUND: '해당 펫시터가 존재하지 않습니다.',
     },
     LIST: {
