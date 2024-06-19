@@ -1,4 +1,7 @@
 // src/controllers/review.controller.js
+import { HttpError } from "../errors/http.error.js";
+import {REVIEW_MESSAGE} from "../constants/review.constant.js";  
+
 export default class ReviewController {
 
   // 의존성 주입
@@ -12,11 +15,10 @@ export default class ReviewController {
     const { review, rate } = req.body;
 
     try {
-      
       // 예약ID에 펫시터ID가 있는지 확인
       const reservationCheck = await this.reviewService.reservationPetsitterCheck(+reservationId);
       if (!reservationCheck) {
-        throw new Error('예약 테이블에 펫시터 id가 없습니다.');
+        throw new HttpError.NotFound(REVIEW_MESSAGE.NO_PETSITTER_ID_IN_RESERVATION);
       }
       // 게시글이 존재하는지 확인하기
       const newReview = await this.reviewService.createReview (

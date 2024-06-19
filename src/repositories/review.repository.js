@@ -23,4 +23,11 @@ export class ReviewRepository {
       where:{reservationId}})
     return reservation;
   }
+  // 리뷰 ID 존재 여부 확인
+  reviewExists = async (reservationId, userId) => {
+    const existingReview = await this.prisma.review.findFirst({
+      where: { reservationId, userId },
+    });
+    return existingReview;
+  }
 }
