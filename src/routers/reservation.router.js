@@ -1,6 +1,6 @@
 import express from 'express';
 import ReservationController from '../controllers/reservation.controller.js';
-import accesstokenmiddleware from '../middlewares/access-token.middleware.js';
+import accesstokenmiddleware from '../middlewares/user-access-token.middleware.js';
 import { prisma } from '../utils/prisma.util.js';
 import ReservationRepository from '../repositories/reservation.repository.js';
 import ReservationService from '../services/reservation.service.js';
