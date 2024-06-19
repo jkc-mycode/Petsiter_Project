@@ -59,4 +59,44 @@ export default class ReviewController {
       next(err);
     }
   }
+
+  // 리뷰 수정
+  updateReviewController = async (req, res, next) => {
+    const { reviewId } = req.params;
+    const userId = 1; // req.user.id; 테스트용
+    const { review, rate } = req.body;
+
+    try {
+      // 리뷰 ID가 유효한지 확인
+      if (!reviewId || isNaN(reviewId)) {
+        throw new HttpError.BadRequest(REVIEW_MESSAGE.INVALID_REVIEW_ID);
+      }
+
+      // 리뷰가 존재하는지 확인
+      const existingReview = await this.reviewService.getReviewsByReservationId(+reviewId);
+      if (!existingReview) {
+        throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
+      }
+
+      // 리뷰 작성자가 현재 로그인한 사용자인지 확인
+      if (existingReview.userId !== userId) {
+        throw new HttpError.Forbidden(REVIEW_MESSAGE.UNAUTHORIZED_REVIEW_UPDATE);
+      }
+
+      // 리뷰 수정
+      const updatedReview = await this.reviewService.updateReview(
+        +reviewId,
+        review,
+        rate
+      );
+
+      // 성공했을 때 수정된 리뷰 데이터 반환
+      return res.status(200).json(updatedReview);
+    } catch (err) {
+      // 에러 처리
+      console.error(err);
+      next(err);
+    }
+  }
+
 } 
