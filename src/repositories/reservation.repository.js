@@ -25,7 +25,6 @@ class ReservationRepository {
         reservationId: Number(reservationId),
         userId: userId,
       },
-      include: { user: true },
     });
   }
 
@@ -49,6 +48,36 @@ class ReservationRepository {
       },
     });
   }
+  // 펫시터 존재 여부 확인
+  findPetsitterById = async (petsitterId) => {
+    const petsitter = await this.prisma.petsitter.findUnique({
+      where: {
+        petsitterId: +petsitterId,
+      },
+    });
+    return petsitter;
+  };
+  // 예약할 수 있는 날짜인지 확인
+  AlreadyReserved = async (petsitterId, reservationDate) => {
+    const reservation = await this.prisma.reservation.findFirst({
+      where: {
+        petsitterId: +petsitterId,
+        reservationDate,
+      },
+    });
+    return reservation;
+  };
+  // 예약상태가 존재하면 예약이 안돼요
+  UnacceptableStatus = async (petsitterId, reservationDate, reservationStatus) => {
+    const reservation = await this.prisma.reservation.findFirst({
+      where: {
+        petsitterId: +petsitterId,
+        reservationDate,
+        reservationStatus,
+      },
+    });
+    return reservation;
+  };
 }
 
 export default ReservationRepository;
