@@ -79,9 +79,12 @@ petsitterSignUp = async ({
         { expiresIn: process.env.PETSITTER_REFRESH_TOKEN_EXPIRES_IN }
       );
 
-      // Refresh 토큰을 db에 저장
-      await this.petsitterAuthRepository.createRefreshToken(petsitter.petsitterId, refreshToken);
 
+      const hashedRefreshToken = bcrypt.hashSync(refreshToken, 10);
+
+      // Refresh 토큰을 db에 저장
+      await this.petsitterAuthRepository.createRefreshToken(petsitter.petsitterId, hashedRefreshToken);
+      
 
 
       return { accessToken, refreshToken};

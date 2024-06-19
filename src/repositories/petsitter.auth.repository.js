@@ -54,8 +54,17 @@ this.prisma = prisma;
 
 
   createRefreshToken =  async(petsitterId,  petsitterRefreshToken ) => {
-    return this.prisma.petsitterRefreshToken.create({
-      data: { petsitterId, petsitterRefreshToken },
+    return this.prisma.petsitterRefreshToken.upsert({
+      where: {
+        petsitterId: petsitterId,
+      },
+      update: {
+        petsitterRefreshToken: petsitterRefreshToken,
+      },
+      create: {
+        petsitterId: petsitterId,
+        petsitterRefreshToken: petsitterRefreshToken,
+      },
     });
   }
 }
