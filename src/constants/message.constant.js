@@ -8,7 +8,7 @@ export const MESSAGES = {
       },
       PASSWORD: {
         REQUIRED: '비밀번호를 입력해 주세요.',
-        MIN: '비밀번호는 5자 이상으로 입력해 주세요'
+        MIN: '비밀번호는 5자 이상으로 입력해 주세요',
       },
       PASSWORD_CONFIRM: {
         REQUIRED: '비밀번호 확인을 입력해 주세요.',
@@ -25,9 +25,9 @@ export const MESSAGES = {
         NO_USER: '인증 정보와 일치하는 사용자가 없습니다.',
         INVALID: '인증 정보가 유효하지 않습니다.',
         MANIPULATED: '토큰이 조작되었습니다.',
-        DISCARD: '폐기 된 인증 정보입니다.'
+        DISCARD: '폐기 된 인증 정보입니다.',
       },
-      
+      INTERNAL_SERVER_ERROR: '예상치 못한 에러가 발생했습니다. 관리자에게 문의해 주세요.',
     },
     SIGN_UP: {
       SUCCEED: '회원가입에 성공했습니다.',
@@ -41,10 +41,8 @@ export const MESSAGES = {
       SUCCEED: '본인 정보 조회에 성공했습니다.',
     },
     UPDATE: {
-     
-        SUCCEED: '본인정보 수정이 완료되었습니다.',
-      
-    }
+      SUCCEED: '본인정보 수정이 완료되었습니다.',
+    },
   },
   RESERVATION: {
     COMMON: {
@@ -73,7 +71,7 @@ export const MESSAGES = {
       SUCCEED: '예약 삭제에 성공했습니다.',
     },
   },
-  SERVER:{
-    ERROR: '예상치 못한 에러가 발생했습니다. 관리자에게 문의해주세요'
-        }
-        };
+  SERVER: {
+    ERROR: '예상치 못한 에러가 발생했습니다. 관리자에게 문의해주세요',
+  },
+};
