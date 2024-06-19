@@ -1,8 +1,8 @@
 import Joi from 'joi';
-import { MIN_PASSWORD_LENGTH } from '../../constants/petsitter-auth.constant.js'
-import { MAX_RATE_LENGTH} from '../../constants/petsitter-auth.constant.js'
+import { MIN_PASSWORD_LENGTH } from '../../constants/petsitter-auth.constant.js';
+import { MAX_RATE_LENGTH } from '../../constants/petsitter-auth.constant.js';
 import { MESSAGES } from '../../constants/message.constant.js';
-import { PETSITTERMESSAGES } from '../../constants/petsitter.message.constant.js';
+import { PETSITTERMESSAGES } from '../../constants/petsitter.auth.message.constant.js';
 
 const petsitterSignupSchema = Joi.object({
   email: Joi.string().email().required().messages({
@@ -23,24 +23,24 @@ const petsitterSignupSchema = Joi.object({
   petsitterCareer: Joi.number().integer().required().messages({
     'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.CAREER.REQUIRED,
   }),
-  title:Joi.string().required().messages({
+  title: Joi.string().required().messages({
     'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.TITLE.REQUIRED,
   }),
-  content:Joi.string().required().messages({
+  content: Joi.string().required().messages({
     'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.CONTENT.REQUIRED,
   }),
-  region:Joi.string().required().messages({
+  region: Joi.string().required().messages({
     'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.REGION.REQUIRED,
   }),
-  price:Joi.number().integer().required().messages({
+  price: Joi.number().integer().required().messages({
     'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.PRICE.REQUIRED,
     'number.base': PETSITTERMESSAGES.PETSITTER.COMMON.PRICE.BASE,
   }),
-  totalRate :Joi.number().integer().required().max(MAX_RATE_LENGTH).messages({
+  totalRate: Joi.number().integer().required().max(MAX_RATE_LENGTH).messages({
     'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.RATE.REQUIRED,
-    'number.base':PETSITTERMESSAGES.PETSITTER.COMMON.RATE.BASE,
-    'number.max':PETSITTERMESSAGES.PETSITTER.COMMON.RATE.MAX
-  })
+    'number.base': PETSITTERMESSAGES.PETSITTER.COMMON.RATE.BASE,
+    'number.max': PETSITTERMESSAGES.PETSITTER.COMMON.RATE.MAX,
+  }),
 });
 
 export const petsitterSignUpValidator = async (req, res, next) => {
