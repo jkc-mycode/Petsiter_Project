@@ -57,23 +57,25 @@ class ReservationRepository {
     });
     return petsitter;
   };
-  // 예약할 수 있는 날짜인지 확인
-  AlreadyReserved = async (petsitterId, reservationDate) => {
+
+  // 예약상태 엑셉트면 예약이 안돼요
+  acceptStatus = async (petsitterId, reservationDate) => {
     const reservation = await this.prisma.reservation.findFirst({
       where: {
         petsitterId: +petsitterId,
         reservationDate,
+        reservationStatus: 'ACCEPT',
       },
     });
     return reservation;
   };
-  // 예약상태가 존재하면 예약이 안돼요
-  UnacceptableStatus = async (petsitterId, reservationDate, reservationStatus) => {
+  // 예약상태 대기중아니면 수정이 안돼요
+  awaitStatus = async (reservationId, userId) => {
     const reservation = await this.prisma.reservation.findFirst({
       where: {
-        petsitterId: +petsitterId,
-        reservationDate,
-        reservationStatus,
+        reservationId,
+        userId,
+        reservationStatus: 'AWAIT',
       },
     });
     return reservation;
