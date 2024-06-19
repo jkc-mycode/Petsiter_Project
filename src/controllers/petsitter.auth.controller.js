@@ -1,6 +1,7 @@
   // 펫시터 회원가입
   
-  
+  import { HTTP_STATUS } from "../constants/http-status.constant.js";
+import { PETSITTERMESSAGES } from "../constants/petsitter.message.constant.js";
   export class PetsitterAuthController {
     constructor(petsitterAuthService) {
       this.petsitterAuthService = petsitterAuthService;
@@ -30,7 +31,7 @@
         price,
         totalRate,
       });
-      return res.status(201).json({status: 200, message: '회원가입이 완료되었습니다.', petsitter });
+      return res.status(201).json({status: HTTP_STATUS.CREATED, message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_UP.SUCCEED, petsitter });
     } catch (err) {
       next(err);
     }
@@ -42,13 +43,13 @@
     try {
   
   
-      const { accessToken} = await this.petsitterAuthService.PetsittersignIn(email, password);
+      const { accessToken, refreshToken} = await this.petsitterAuthService.PetsitterSignIn(email, password);
      
   
-      res.header('authorization', accessToken);
-      return res.status(200).json({status: 200, message:'로그인에 성공하였습니다', accessToken });
+      res.header('authorization', accessToken, refreshToken);
+      return res.status(200).json({status: HTTP_STATUS.OK, message:PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_IN.SUCCEED, accessToken, refreshToken });
     } catch (err) {
-      // console.error(err);
+      
       next(err);
     }
   };

@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+
 import { HttpError } from '../errors/http.error.js'; // 필요한 HttpError 모듈 임포트
 
 export class PetsitterService {

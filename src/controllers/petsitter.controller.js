@@ -1,3 +1,8 @@
+
+import { HTTP_STATUS } from "../constants/http-status.constant.js";
+import { PETSITTERMESSAGES } from "../constants/petsitter.message.constant.js";
+
+
 export class PetsitterController {
   constructor(petsitterService) {
     this.petsitterService = petsitterService;
@@ -100,7 +105,7 @@ export class PetsitterController {
 
       return res
         .status(200)
-        .json({ status: 200, message: '본인 정보 조회에 성공했습니다.', data: petsitter });
+        .json({ status: HTTP_STATUS.OK, message: PETSITTERMESSAGES.PETSITTER.COMMON.READ_ME.SUCCEED, data: petsitter });
     } catch (err) {
       next(err);
     }

@@ -3,7 +3,7 @@ import express from 'express';
 import { prisma } from '../utils/prisma.util.js';
 import { PetsitterAuthController } from '../controllers/petsitter.auth.controller.js';
 import { PetsitterAuthService } from '../services/petsitter.auth.service.js';
-import { PetsitterRepository } from '../repositories/petsitter.repository.js';
+import {PetsitterAuthRepository } from '../repositories/petsitter.auth.repository.js'
 import { petsitterSignUpValidator } from '../middlewares/validators/petsitter-sign-up-validator.middleware.js';
 import { petsitterSignInValidator } from '../middlewares/validators/petsitter-sign-in-validator.middleware.js';
 
@@ -11,8 +11,8 @@ import { petsitterSignInValidator } from '../middlewares/validators/petsitter-si
 
 const petsitterAuthRouter = express.Router();
 
-const petsitterRepository = new PetsitterRepository(prisma);
-const petsitterAuthService = new PetsitterAuthService(petsitterRepository);
+const petsitterAuthRepository = new PetsitterAuthRepository(prisma);
+const petsitterAuthService = new PetsitterAuthService(petsitterAuthRepository);
 const petsitterAuthController = new PetsitterAuthController(petsitterAuthService);
 
 // 펫시터 회원가입
