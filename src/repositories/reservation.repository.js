@@ -1,8 +1,6 @@
-import { prisma } from '../utils/prisma.util.js';
-
 class ReservationRepository {
-  constructor(prismaClient) {
-    this.prisma = prismaClient;
+  constructor(prisma) {
+    this.prisma = prisma;
   }
 
   // 예약 생성
@@ -53,4 +51,4 @@ class ReservationRepository {
   }
 }
 
-export default new ReservationRepository(prisma);
+export default ReservationRepository;

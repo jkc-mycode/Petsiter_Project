@@ -1,6 +1,10 @@
 import { prisma } from '../utils/prisma.util.js';
 
 export class UserRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
+
   //회원가입
   createUser = async (email, password, nickname) => {
     const createdUser = await prisma.user.create({
@@ -85,8 +89,6 @@ export class UserRepository {
         userId,
       },
     });
-
-    return user;
   };
 
   // 회원정보 수정

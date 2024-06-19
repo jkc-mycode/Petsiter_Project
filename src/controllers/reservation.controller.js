@@ -1,20 +1,23 @@
-import reservationService from '../services/reservation.service.js';
 import { HTTP_STATUS } from '../constants/http-status.constant.js';
 import { MESSAGES } from '../constants/message.constant.js';
-// import { HttpError } from '../errors/http.error.js';
 
-class reservationController {
-  // 예약 생성 컨트롤러
-  async createReservationController(req, res, next) {
+class ReservationController {
+  constructor(reservationService) {
+    this.reservationService = reservationService; // 인스턴스화
+  }
+
+  createReservation = async (req, res, next) => {
     try {
-      //   const user = req.user;   아직 못씀 ㅠ
-      const { petsitterId, reservationDate } = req.body;
-      const userId = req.user.userId; //1; //user.userId;       테스트를 위한 하드코딩
+      if (!req.user) {
+        return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
+      }
 
-      const data = await reservationService.createReservationService(
+      const { petsitterId, reservationDate } = req.body;
+      const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
+      const data = await this.reservationService.createReservationService(
         userId,
-        Number(petsitterId),
-        new Date(reservationDate)
+        petsitterId,
+        reservationDate
       );
 
       return res.status(HTTP_STATUS.CREATED).json({
@@ -25,15 +28,19 @@ class reservationController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   // 예약 목록 조회 컨트롤러
-  async getReservationController(req, res, next) {
+  getReservation = async (req, res, next) => {
     try {
-      const userId = 1; // 테스트를 위한 하드코딩
+      if (!req.user) {
+        return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
+      }
+
+      const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
       const { sort } = req.query;
 
-      const data = await reservationService.getReservationService(userId, sort);
+      const data = await this.reservationService.getReservationService(userId, sort);
 
       return res.status(HTTP_STATUS.OK).json({
         status: HTTP_STATUS.OK,
@@ -43,14 +50,19 @@ class reservationController {
     } catch (error) {
       next(error);
     }
-  }
+  };
+
   // 예약 상세 조회 컨트롤러
-  async getReservationByIdController(req, res, next) {
+  getReservationById = async (req, res, next) => {
     try {
-      const userId = 1; // 테스트를 위한 하드코딩
+      if (!req.user) {
+        return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
+      }
+
+      const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
       const reservationId = Number(req.params.reservationId); // 문자열을 정수로 변환
 
-      const data = await reservationService.getReservationByIdService(reservationId, userId);
+      const data = await this.reservationService.getReservationByIdService(reservationId, userId);
 
       return res.status(HTTP_STATUS.OK).json({
         status: HTTP_STATUS.OK,
@@ -60,15 +72,20 @@ class reservationController {
     } catch (error) {
       next(error);
     }
-  }
+  };
+
   // 예약 수정 컨트롤러
-  async updateReservationController(req, res, next) {
+  updateReservation = async (req, res, next) => {
     try {
-      const userId = 1; // 테스트를 위한 하드코딩
+      if (!req.user) {
+        return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
+      }
+
+      const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
       const reservationId = Number(req.params.reservationId); // 문자열을 정수로 변환
       const data = req.body;
 
-      const updatedReservation = await reservationService.updateReservationService(
+      const updatedReservation = await this.reservationService.updateReservationService(
         reservationId,
         userId,
         data
@@ -82,23 +99,32 @@ class reservationController {
     } catch (error) {
       next(error);
     }
-  }
-  // 예약 삭제 컨트롤러
-  async deleteReservationController(req, res, next) {
-    try {
-      const userId = 1; // 테스트를 위한 하드코딩
-      const reservationId = Number(req.params.reservationId);
+  };
 
-      const data = await reservationService.deleteReservationService(reservationId, userId);
+  // 예약 삭제 컨트롤러
+  deleteReservation = async (req, res, next) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
+      }
+
+      const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
+      const reservationId = Number(req.params.reservationId); // 문자열을 정수로 변환
+
+      const deletedReservation = await this.reservationService.deleteReservationService(
+        reservationId,
+        userId
+      );
 
       return res.status(HTTP_STATUS.OK).json({
         status: HTTP_STATUS.OK,
         message: MESSAGES.RESERVATION.DELETE.SUCCEED,
-        data,
+        data: deletedReservation,
       });
     } catch (error) {
       next(error);
     }
-  }
+  };
 }
-export default new reservationController();
+
+export default ReservationController;

@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { MESSAGES } from '../../constants/message.constant.js';
 
 
-const petsitterMypageSchema = Joi.object({
+const petsitterSignInSchema = Joi.object({
     email: Joi.string().email().required().messages({
         'any.required':  MESSAGES.AUTH.COMMON.EMAIL.REQUIRED,
       }),
@@ -11,9 +11,9 @@ const petsitterMypageSchema = Joi.object({
   }),
 });
 
-export const petsitterMypageValidator = async (req, res, next) => {
+export const petsitterSignInValidator = async (req, res, next) => {
   try {
-    await petsitterMypageSchema.validateAsync(req.body);
+    await petsitterSignInSchema.validateAsync(req.body);
     next();
   } catch (error) {
     next(error);

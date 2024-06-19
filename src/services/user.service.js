@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
-
+import { HttpError } from '../errors/http.error.js';
+import { PETSITTERMESSAGES } from '../constants/petsitter.message.constant.js';
 export class UserService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -36,17 +37,18 @@ UpdateUser = async (email, password, nickname) => {
     };
   } catch (err) {
     console.error(err);
-    throw new Error.InternalServerError('서비스 오류');
+    throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
   }
 };
 
   //사용자 본인정보 조회
-  getUserById = async ( ) => {
-    // 더미데이터
-    const userId =  12
+  getUserById = async (userId ) => {
+    
+    // userId 통한 본인정보 검색
+    
     const user = await this.userRepository.
     findUserById (userId);
-    if (!user) throw new user.NotFound('사용자가 존재하지 않습니다.');
+  
 
 
     return {

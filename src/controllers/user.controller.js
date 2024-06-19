@@ -1,5 +1,6 @@
-
-
+import { MESSAGES } from "../constants/message.constant.js";
+import { HTTP_STATUS } from "../constants/http-status.constant.js";
+import { HttpError } from '../errors/http.error.js'; 
 export class UserController {
 constructor(userService) {
     this.userService = userService;
@@ -12,7 +13,7 @@ UpdateUser =  async (req, res, next) => {
 try{
 const { email, password, passwordConfirm, nickname } = req.body;
 if (password !== passwordConfirm) {
-  throw new Error('비밀번호가 일치하지 않습니다.');
+  throw HttpError.Conflict('비밀번호가 일치하지 않습니다.');
 }
 
 
@@ -22,7 +23,7 @@ const updateduser = await this.userService.UpdateUser(
   email, password, nickname 
 );
 
-return res.status(200).json({status: 200, data: updateduser });
+return res.status(200).json({status:HTTP_STATUS.OK,  message:'수정이 완료되었습니다.', data: updateduser });
     } catch (err) {
       next(err);
     }
@@ -34,8 +35,8 @@ return res.status(200).json({status: 200, data: updateduser });
   getUserById = async (req, res, next) => {
     try {
 
-  
-      const user = await this.userService.getUserById();
+      const userId =  req.user.userId;
+      const user = await this.userService.getUserById(userId);
       
       return res.status(200).json({status:200, message:'본인 정보 조회에 성공했습니다.', data: user});
     } catch (err) {

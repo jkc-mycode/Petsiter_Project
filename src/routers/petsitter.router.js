@@ -3,7 +3,7 @@ import { prisma } from '../utils/prisma.util.js';
 import { PetsitterController } from '../controllers/petsitter.controller.js';
 import { PetsitterService } from '../services/petsitter.service.js';
 import { PetsitterRepository } from '../repositories/petsitter.repository.js';
-import { petsitterSignUpValidator } from '../middlewares/validators/petsitter-sign-up-validator.middleware.js';
+import petsitterAccessToken from '../middlewares/petsitter-access-token-middleware.js';
 // import { petsitterMypageValidator } from '../middlewares/validators/petsitter-mypage-middleware.js';
 
 const petsitterRouter = express.Router();
@@ -12,14 +12,13 @@ const petsitterRepository = new PetsitterRepository(prisma);
 const petsitterService = new PetsitterService(petsitterRepository);
 const petsitterController = new PetsitterController(petsitterService);
 
-// 펫시터 회원가입
-petsitterRouter.post('/', petsitterSignUpValidator, petsitterController.signUp);
+
 
 // 펫시터 목록 조회 API
 petsitterRouter.get('/', petsitterController.getPetsitterList);
 
 // // 펫시터 본인정보조회 API
-petsitterRouter.get('/mypage',  petsitterController.getPetsitterById);
+petsitterRouter.get('/mypage', petsitterAccessToken, petsitterController.getPetsitterById);
 
 // 펫시터 상세 조회 API
 petsitterRouter.get('/:petsitterId', petsitterController.getPetsitterDetail);
