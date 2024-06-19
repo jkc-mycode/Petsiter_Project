@@ -6,7 +6,7 @@ class ReservationService {
   }
 
   // 예약 생성 서비스 함수
-  async createReservationService(userId, petsitterId, reservationDate) {
+  async createReservationService(userId, petsitterId, reservationDate, animalType, hour, etc) {
     // 펫시터가 존재하는지 확인
     const petsitter = await this.reservationRepository.findPetsitterById(petsitterId);
     if (!petsitter) {
@@ -25,6 +25,9 @@ class ReservationService {
       userId,
       petsitterId,
       reservationDate,
+      animalType,
+      hour,
+      etc,
     };
     return await this.reservationRepository.createReservation(reservationData);
   }
@@ -72,11 +75,15 @@ class ReservationService {
       throw new HttpError.Conflict('예약상태가 AWAIT가 아니면 수정이 불가합니다.');
     }
 
-    return await this.reservationRepository.updateReservation(
-      Number(reservationId),
-      userId,
-      updateData
+    // 예약을 수정합니다.
+    await this.reservationRepository.updateReservation(reservationId, userId, updateData);
+
+    // 수정된 예약 내역을 다시 조회하여 반환합니다.
+    const updatedReservation = await this.reservationRepository.getReservationById(
+      reservationId,
+      userId
     );
+    return updatedReservation;
   }
 
   // 예약 삭제 서비스 함수
