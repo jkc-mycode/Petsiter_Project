@@ -5,7 +5,7 @@ class ReservationController {
   constructor(reservationService) {
     this.reservationService = reservationService; // 인스턴스화
   }
-
+  // 예약 생성
   createReservation = async (req, res, next) => {
     try {
       if (!req.user) {
