@@ -33,27 +33,13 @@ export class PetsitterRepository {
     return data;
   };
 
-  // ID를 통해 펫시터 찾기(본인정보 조회)
+  // ID를 통해 펫시터 찾기(본인정보 조회 및 미들웨어)
   findPetsitterById = async (petsitterId) => {
     
     const petsitter = await this.prisma.petsitter.findUnique({
       where: {
         petsitterId: +petsitterId,
       },
-      // select: {
-      //   petsitterId: true,
-      //   email: true,
-      //   password: true,
-      //   petsitterName: true,
-      //   petsitterCareer: true,
-      //   petsitterProfileImage: true,
-      //   content: true,
-      //   region: true,
-      //   price: true,
-      //   totalRate: true,
-      //   createdAt: true,
-      //   updatedAt: true,
-      // },
     });
     return petsitter;
   };
