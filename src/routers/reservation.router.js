@@ -1,13 +1,13 @@
 import express from 'express';
 import reservationController from '../controllers/reservation.controller.js';
-import accesstokenmiddleware from '../middlewares/access-token.middleware.js';
+import userAccessTokenMiddleware from '../middlewares/user-access-token.middleware.js';
 
 const reservationRouter = express.Router();
 
 // 예약 생성
 reservationRouter.post(
   '/',
-  accesstokenmiddleware,
+  userAccessTokenMiddleware,
   reservationController.createReservationController
 );
 

@@ -14,11 +14,11 @@ export class UserRepository {
     return createdUser;
   };
 
-  로그인;
+  //로그인;
   findUserByEmail = async (email) => {
     const foundUser = await prisma.user.findUnique({
       where: {
-       email
+        email,
       },
     });
 
@@ -26,7 +26,7 @@ export class UserRepository {
   };
 
   //accessToken 확인용
-  findUserById = async (userId) => {
+  getAccessToken = async (userId) => {
     const foundUser = await prisma.user.findUnique({
       where: {
         userId,
@@ -36,20 +36,58 @@ export class UserRepository {
     return foundUser;
   };
 
-  // 사용자 본인 정보 조회 
+  getRefreshToken = async (userId) => {
+    const refreshToken = await prisma.refreshToken.findFirst({
+      where: {
+        userId,
+      },
+    });
+
+    return refreshToken;
+  };
+
+  //리프레쉬 토큰
+  createRefreshToken = async (userId, hashedRefreshToken) => {
+    const refreshTokenUser = await prisma.refreshToken.upsert({
+      where: {
+        userId: userId,
+      },
+      update: {
+        refreshToken: hashedRefreshToken,
+      },
+      create: {
+        userId: userId,
+        refreshToken: hashedRefreshToken,
+      },
+    });
+
+    return refreshTokenUser;
+  };
+
+  // 로그아웃
+  logOut = async (userId) => {
+    const logOutUser = await prisma.refreshToken.update({
+      where: {
+        userId,
+      },
+      data: {
+        refreshToken: null,
+      },
+    });
+
+    return logOutUser;
+  };
+
+  // 사용자 본인 정보 조회
   findUserById = async (userId) => {
     const user = await prisma.user.findUnique({
       where: {
-       userId
+        userId,
       },
     });
 
     return user;
   };
-
-
-
-
 
   // 회원정보 수정
 
