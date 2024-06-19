@@ -48,5 +48,18 @@ export class ReviewRepository {
     return reviews;
   }
 
+  // 리뷰 수정
+  updateReview = async (reservationId, userId, review, rate) => {
+    const existingReview = await this.reviewExists(reservationId, userId);
+    if (!existingReview) {
+      throw new Error('수정하려는 리뷰가 존재하지 않습니다.');
+
+    }
+    const updatedReview = await this.prisma.review.update({
+      where: { reservationId, userId },
+      data: { review, rate },
+    });
+    return updatedReview;
+  }
 
 }

@@ -5,8 +5,11 @@ export const REVIEW_MESSAGE = {
 
   NO_REVIEW_FOUND: '사용자가 작성한 리뷰가 존재하지 않습니다.',
   USER_NOT_LOGGED_IN: '사용자가 로그인하지 않았습니다.',
-  INVALID_USER_ID: '유효하지 않은 사용자 ID입니다.'
+  INVALID_USER_ID: '유효하지 않은 사용자 ID입니다.',
 
-
+  INVALID_REVIEW_ID: '유효하지 않은 리뷰 ID입니다.',
+  REVIEW_NOT_FOUND: '수정하려는 리뷰가 존재하지 않습니다.',
+  UNAUTHORIZED_REVIEW_UPDATE: '다른 사용자가 작성한 리뷰를 수정할 수 없습니다.'
+  
 
 }

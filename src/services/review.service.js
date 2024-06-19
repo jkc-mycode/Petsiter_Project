@@ -41,4 +41,22 @@ export default class ReviewService {
     }
     return reviews;
   };
+
+  // 리뷰 수정
+  updateReview = async (reviewId, userId, review, rate) => {
+    // 리뷰가 존재하는지 확인
+    const existingReview = await this.reviewRepository.getReviewsByReservationId(reviewId);
+    if (!existingReview) {
+      throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
+    }
+    // 리뷰 작성자와 현재 로그인한 사용자인지 확인
+    if (existingReview.userId !== userId) {
+      throw new HttpError.Forbidden(REVIEW_MESSAGE.UNAUTHORIZED_REVIEW_UPDATE);
+    }
+    // 리뷰 수정
+    const updatedReview = await this.reviewRepository.updateReview(reviewId, review, rate);
+    // 수정된 리뷰 객체 반환
+    return updatedReview;
+  }
+
 }

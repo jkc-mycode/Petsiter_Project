@@ -1,5 +1,6 @@
 import express from 'express';
 import { prisma } from '../utils/prisma.util.js';
+// import accesstokenmiddleware from '../middlewares/user-access-token.middleware.js';
 import ReviewController from '../controllers/review.controller.js';
 import ReviewService from '../services/review.service.js';
 import { ReviewRepository } from '../repositories/review.repository.js';
@@ -16,10 +17,10 @@ reviewRouter.post('/:reservationId/review', reviewController.createReviewControl
 // 리뷰 조회
 reviewRouter.get('/:reservationId/review', reviewController.getReviewController);
 
-// // 리뷰 수정
-// reviewRouter.patch('/reservation/:reservationId/review/:id', reviewController.updateReviewController);
+// 리뷰 수정
+reviewRouter.patch('/:reservationId/review/:reviewId', reviewController.updateReviewController);
 
 // // 리뷰 삭제
-// reviewRouter.delete('/reservation/:reservationId/review/:id', reviewController.deleteReviewController);
+// reviewRouter.delete('/:reservationId/review/:reviewId', accesstokenmiddleware, reviewController.deleteReviewController);
 
 export default reviewRouter;
