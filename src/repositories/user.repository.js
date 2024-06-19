@@ -89,6 +89,7 @@ export class UserRepository {
         userId,
       },
     });
+    return user;
   };
 
   // 회원정보 수정

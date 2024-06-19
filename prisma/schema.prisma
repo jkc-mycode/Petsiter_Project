@@ -71,6 +71,7 @@ model Petsitter {
   reply       Reply[]
   certificate Certificate[]
   houseImage  HouseImage[]
+  petsitterRefreshToken PetsitterRefreshToken?
 
   @@map("petsitter")
 }
@@ -109,6 +110,23 @@ model RefreshToken {
 
   @@map("refresh_token")
 }
+
+
+model PetsitterRefreshToken {
+  petsitterTokenId      Int      @id @default(autoincrement()) @map("petsitter_token_id")
+  petsitterId   Int      @unique @map("petsitter_id")
+  petsitterRefreshToken  String?  @map("petsitter_refresh_token")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  petsitter Petsitter @relation(fields: [petsitterId], references: [petsitterId], onDelete: Cascade)
+
+  @@map("petsitter_refresh_token")
+}
+
+
+
+
 
 // 확인 필요 
 model Bookmark {

@@ -3,35 +3,8 @@ export class PetsitterRepository {
     this.prisma = prisma;
   }
 
-  // 펫시터 생성
-  createPetsitter = async ({
-    email,
-    password,
-    petsitterName,
-    petsitterCareer,
-    petsitterProfileImage,
-    title,
-    content,
-    region,
-    price,
-    totalRate,
-  }) => {
-    const data = await this.prisma.petsitter.create({
-      data: {
-        email,
-        password,
-        petsitterName,
-        petsitterCareer,
-        petsitterProfileImage,
-        title,
-        content,
-        region,
-        price,
-        totalRate,
-      },
-    });
-    return data;
-  };
+
+
 
   // ID를 통해 펫시터 찾기(본인정보 조회 및 미들웨어)
   findPetsitterById = async (petsitterId) => {
@@ -43,15 +16,10 @@ export class PetsitterRepository {
     return petsitter;
   };
 
-  // email를 통해 펫시터 찾기(회원가입 시 중복되는 이메일이 있는지 필요함.)
-  findPetsitterByEmail = async (email) => {
-    const petsitter = await this.prisma.petsitter.findUnique({
-      where: {
-        email,
-      },
-    });
-    return petsitter;
-  };
+
+
+
+
 
   // 펫시터 목록 조회
   getPetsitterList = async (orderByCondition) => {

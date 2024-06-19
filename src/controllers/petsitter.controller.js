@@ -1,5 +1,9 @@
 import { HttpError } from '../errors/http.error.js';
 
+import { HTTP_STATUS } from "../constants/http-status.constant.js";
+import { PETSITTERMESSAGES } from "../constants/petsitter.message.constant.js";
+
+
 export class PetsitterController {
   constructor(petsitterService) {
     this.petsitterService = petsitterService;
