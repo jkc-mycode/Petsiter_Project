@@ -12,8 +12,10 @@ constructor(userService) {
 UpdateUser =  async (req, res, next) => {
 try{
 const { email, password, passwordConfirm, nickname } = req.body;
+
+// 수정 시에 비밀번호를 한번 더 입력받는 과정이 필요합니다. 만약 두 비밀번호가 다르면 에러 메시지를 전송합니다.
 if (password !== passwordConfirm) {
-  throw HttpError.Conflict('비밀번호가 일치하지 않습니다.');
+  throw HttpError.Conflict(MESSAGES.AUTH.COMMON.PASSWORD_CONFIRM.NOT_MATCHED_WITH_PASSWORD);
 }
 
 
@@ -23,7 +25,7 @@ const updateduser = await this.userService.UpdateUser(
   email, password, nickname 
 );
 
-return res.status(200).json({status:HTTP_STATUS.OK,  message:'수정이 완료되었습니다.', data: updateduser });
+return res.status(200).json({status:HTTP_STATUS.OK,  message:MESSAGES.USERS.UPDATE.SUCCEED, data: updateduser });
     } catch (err) {
       next(err);
     }
@@ -38,7 +40,7 @@ return res.status(200).json({status:HTTP_STATUS.OK,  message:'수정이 완료�
       const userId =  req.user.userId;
       const user = await this.userService.getUserById(userId);
       
-      return res.status(200).json({status:200, message:'본인 정보 조회에 성공했습니다.', data: user});
+      return res.status(200).json({status:HTTP_STATUS.OK, message:MESSAGES.USERS.READ_ME.SUCCEED, data: user});
     } catch (err) {
       next(err);
     }

@@ -3,7 +3,7 @@ import { UserService } from '../services/user.service.js'
 import { UserController } from '../controllers/user.controller.js'
 import { UserRepository } from '../repositories/user.repository.js'
 import { prisma } from '../utils/prisma.util.js';
-import accessToken from '../middlewares/access-token.middleware.js';
+import accessToken from '../middlewares/user-access-token.middleware.js';
 
 const userRouter = express.Router();
 

@@ -9,6 +9,8 @@ export class PetsitterAuthService {
       this.petsitterRepository = petsitterRepository;
     }
 
+
+    // 펫시터 회원가입
 petsitterSignUp = async ({
     email,
     password,
@@ -49,7 +51,7 @@ petsitterSignUp = async ({
   };
 
 
-  PetsittersignIn = async (email, password) => {
+  PetsitterSignIn = async (email, password) => {
     try {
       // 이메일로 펫시터 조회
       const petsitter = await this.petsitterRepository.findPetsitterByEmail(email);
@@ -68,10 +70,18 @@ petsitterSignUp = async ({
       const accessToken = jwt.sign(
         { petsitter: petsitter.petsitterId },
         process.env.PETSITTER_ACCESS_TOKEN_SECRET_KEY,
-        { expiresIn: '12h' }
+        { expiresIn: process.env.PETSITTER_ACCESS_TOKEN_EXPIRES_IN }
       );
   
-      return { accessToken};
+      const refreshToken = jwt.sign(
+        { petsitter: petsitter.petsitterId },
+        process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY,
+        { expiresIn: '7d' }
+      );
+
+
+
+      return { accessToken, refreshToken};
     } catch (err) {
       throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
     }

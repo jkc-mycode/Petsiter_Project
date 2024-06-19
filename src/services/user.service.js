@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { HttpError } from '../errors/http.error.js';
-import { PETSITTERMESSAGES } from '../constants/petsitter.message.constant.js';
+import { MESSAGES } from '../constants/message.constant.js';
 export class UserService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -37,7 +37,7 @@ UpdateUser = async (email, password, nickname) => {
     };
   } catch (err) {
     console.error(err);
-    throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
+    throw new HttpError.InternalServerError(MESSAGES.SERVER.ERROR);
   }
 };
 
@@ -47,7 +47,7 @@ UpdateUser = async (email, password, nickname) => {
     // userId 통한 본인정보 검색
     
     const user = await this.userRepository.
-    findUserById (userId);
+    findUserById(userId);
   
 
 
