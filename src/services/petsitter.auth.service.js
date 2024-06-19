@@ -5,8 +5,8 @@ import jwt from 'jsonwebtoken';
 import { PETSITTERMESSAGES } from '../constants/petsitter.message.constant.js';
 
 export class PetsitterAuthService {
-    constructor(petsitterRepository) {
-      this.petsitterRepository = petsitterRepository;
+    constructor(petsitterAuthRepository) {
+      this.petsitterAuthRepository = petsitterAuthRepository;
     }
 
 
@@ -23,7 +23,7 @@ petsitterSignUp = async ({
     price,
     totalRate,
   }) => {
-    const petsitter = await this.petsitterRepository.findPetsitterByEmail(email);
+    const petsitter = await this.petsitterAuthRepository.findPetsitterByEmail(email);
     if (petsitter) {
       throw new HttpError.Conflict(PETSITTERMESSAGES.PETSITTER.COMMON.EMAIL.DUPLICATED);
     }
@@ -31,7 +31,7 @@ petsitterSignUp = async ({
     // 비밀번호 암호화
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const petsitterInfo = await this.petsitterRepository.createPetsitter({
+    const petsitterInfo = await this.petsitterAuthRepository.createPetsitter({
       email,
       password: hashedPassword,
       petsitterName,
@@ -54,7 +54,7 @@ petsitterSignUp = async ({
   PetsitterSignIn = async (email, password) => {
     try {
       // 이메일로 펫시터 조회
-      const petsitter = await this.petsitterRepository.findPetsitterByEmail(email);
+      const petsitter = await this.petsitterAuthRepository.findPetsitterByEmail(email);
       if (!petsitter) {
         throw new HttpError.NotFound(PETSITTERMESSAGES.PETSITTER.COMMON.EMAIL.NOT_FOUND);
       }
@@ -74,10 +74,13 @@ petsitterSignUp = async ({
       );
   
       const refreshToken = jwt.sign(
-        { petsitter: petsitter.petsitterId },
+        { petsitterId: petsitter.petsitterId },
         process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY,
-        { expiresIn: '7d' }
+        { expiresIn: process.env.PETSITTER_REFRESH_TOKEN_EXPIRES_IN }
       );
+
+      // Refresh 토큰을 db에 저장
+      await this.petsitterAuthRepository.createRefreshToken(petsitter.petsitterId, refreshToken);
 
 
 

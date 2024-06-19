@@ -53,23 +53,13 @@ this.prisma = prisma;
 
 
 
-createToken = async (  petsitterId,
-    petsitterRefreshToken,
-    createdAt,
-    updatedAt ) => {
-    const refreshToken = await this.prisma.PetsitterRefreshToken.create({
-    data: {
-        petsitterId,
-        petsitterRefreshToken,
-        createdAt,
-        updatedAt   
-    
-    },
+  createRefreshToken =  async(petsitterId,  petsitterRefreshToken ) => {
+    return this.prisma.petsitterRefreshToken.create({
+      data: { petsitterId, petsitterRefreshToken },
     });
-    return refreshToken;
-    };
+  }
+}
     
 
 
 
-}
