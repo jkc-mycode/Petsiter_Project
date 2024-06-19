@@ -62,4 +62,14 @@ export class ReviewRepository {
     return updatedReview;
   }
 
+  // 리뷰 삭제
+  deleteReview = async (reservationId, userId) => {
+    const existingReview = await this.reviewExists(reservationId, userId);
+    if (!existingReview) {
+      throw new Error('삭제하려는 리뷰가 존재하지 않습니다.');
+    }
+    await this.prisma.review.delete({
+      where: { reservationId, userId },
+    });
+  }
 }

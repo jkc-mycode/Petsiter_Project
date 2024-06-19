@@ -20,7 +20,7 @@ reviewRouter.get('/:reservationId/review', reviewController.getReviewController)
 // 리뷰 수정
 reviewRouter.patch('/:reservationId/review/:reviewId', reviewController.updateReviewController);
 
-// // 리뷰 삭제
-// reviewRouter.delete('/:reservationId/review/:reviewId', accesstokenmiddleware, reviewController.deleteReviewController);
+// 리뷰 삭제
+reviewRouter.delete('/:reservationId/review/:reviewId', reviewController.deleteReviewController);
 
 export default reviewRouter;
