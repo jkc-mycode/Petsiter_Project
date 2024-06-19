@@ -12,12 +12,15 @@ class ReservationController {
         return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
       }
 
-      const { petsitterId, reservationDate } = req.body;
+      const { petsitterId, reservationDate, animalType, hour, etc } = req.body;
       const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
       const data = await this.reservationService.createReservationService(
         userId,
         petsitterId,
-        reservationDate
+        reservationDate,
+        animalType,
+        hour,
+        etc
       );
 
       return res.status(HTTP_STATUS.CREATED).json({
@@ -59,8 +62,8 @@ class ReservationController {
         return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
       }
 
-      const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
-      const reservationId = Number(req.params.reservationId); // 문자열을 정수로 변환
+      const userId = req.user.userId;
+      const reservationId = Number(req.params.reservationId);
 
       const data = await this.reservationService.getReservationByIdService(reservationId, userId);
 
@@ -81,8 +84,8 @@ class ReservationController {
         return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
       }
 
-      const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
-      const reservationId = Number(req.params.reservationId); // 문자열을 정수로 변환
+      const userId = req.user.userId;
+      const reservationId = Number(req.params.reservationId);
       const data = req.body;
 
       const updatedReservation = await this.reservationService.updateReservationService(
@@ -108,8 +111,8 @@ class ReservationController {
         return res.status(401).json({ errorMessage: '사용자 정보가 없습니다.' });
       }
 
-      const userId = req.user.userId; // 미들웨어에서 설정된 사용자 ID
-      const reservationId = Number(req.params.reservationId); // 문자열을 정수로 변환
+      const userId = req.user.userId;
+      const reservationId = Number(req.params.reservationId);
 
       const deletedReservation = await this.reservationService.deleteReservationService(
         reservationId,
