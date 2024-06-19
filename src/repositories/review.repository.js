@@ -30,4 +30,23 @@ export class ReviewRepository {
     });
     return existingReview;
   }
+
+  // 리뷰 조회
+  getReviewsByReservationId = async (reservationId, userId) => {
+    // 예약 ID와 사용자 ID로 내가 작성한 리뷰만 가져오기
+    const reviews = await this.prisma.review.findMany({
+      where: { 
+        reservationId,
+        userId
+      },
+      include: {
+        user: true,
+        petsitter: true,
+        reservation: true
+      }
+    });
+    return reviews;
+  }
+
+
 }
