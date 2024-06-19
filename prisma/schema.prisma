@@ -99,11 +99,11 @@ enum AdminStatus {
 
 // 확인 필요
 model RefreshToken {
-  tokenId   Int      @id @default(autoincrement()) @map("token_id")
-  userId    Int      @unique @map("user_id")
-  token     String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  tokenId       Int      @id @default(autoincrement()) @map("token_id")
+  userId        Int      @unique @map("user_id")
+  refreshToken  String?  @map("refresh_token")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { ACCESS_TOKEN_SECRET_KEY } from '../constants/env.constant.js';
+import { USER_ACCESS_TOKEN_SECRET_KEY } from '../constants/env.constant.js';
 import { UserRepository } from '../repositories/user.repository.js';
 
 export default async (req, res, next) => {
@@ -18,13 +18,14 @@ export default async (req, res, next) => {
       return;
     }
 
-    const decodedToken = jwt.verify(token, ACCESS_TOKEN_SECRET_KEY);
+    const decodedToken = jwt.verify(token, USER_ACCESS_TOKEN_SECRET_KEY);
 
-    // const user = await userRepository.findUserById(decodedToken.id);
-    const user = await userRepository.findUserById(decodedToken.id);
+    // const user = await userRepository.findUserByIdMadeToken(decodedToken.id);
+    const user = await userRepository.getAccessToken(decodedToken.id);
 
     if (!user) {
       res.status(400).json({ errorMessage: '인증 정보와 일치하는 사용자가 없습니다.' });
+      return;
     }
 
     req.user = user;

@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { UserRepository } from '../repositories/user.repository.js';
 import { createAccessToken } from '../utils/auth.util.js';
+import { createRefreshToken } from '../utils/auth.util.js';
 import bcrypt from 'bcrypt';
 
 export class AuthService {
@@ -53,6 +55,7 @@ export class AuthService {
     const isPasswordMatched = await bcrypt.compare(password, foundUser.password);
 
     // isPasswordMatched가 존재하지 않다면 즉 true가 아니라면! 에러를 보낸다.
+    // true가 아닐 시 즉 일치하지 않다면 비밀번호가 일치하지 않다는 것이다.
     if (!isPasswordMatched) {
       throw new Error('비밀번호가 일치하지 않습니다.');
     }
@@ -62,9 +65,45 @@ export class AuthService {
       throw new Error('유저를 찾을 수 없습니다.');
     }
 
-    const accesstoken = createAccessToken(foundUser.userId);
+    const accessToken = createAccessToken(foundUser.userId);
+    const refreshToken = createRefreshToken(foundUser.userId);
+
+    //찾은 refreshToken을 암호화 시킴.
+    const hashedRefreshToken = bcrypt.hashSync(refreshToken, 10);
+
+    // 암호화 된 토큰을 다시
+    await this.userRepository.createRefreshToken(foundUser.userId, hashedRefreshToken);
 
     const { password: _, ...restfoundUser } = foundUser;
-    return { ...restfoundUser, accesstoken: `Bearer ${accesstoken}` };
+    return {
+      ...restfoundUser,
+      accesstoken: `Bearer ${accessToken}`,
+      refreshToken: `Bearer ${refreshToken}`,
+    };
+  };
+
+  //토큰 재 발급
+  createToken = async (userId) => {
+    const accessToken = createAccessToken(userId);
+    const refreshToken = createRefreshToken(userId);
+
+    //찾은 refreshToken을 암호화 시킴.
+    const hashedRefreshToken = bcrypt.hashSync(refreshToken, 10);
+
+    await this.userRepository.createRefreshToken(userId, hashedRefreshToken);
+
+    return { accessToken, refreshToken };
+  };
+
+  // 로그아웃
+  findOutUserId = async (userId) => {
+    if (!userId) {
+      throw new Error('유저를 찾을 수 없습니다.');
+    }
+
+    // 로그 아웃이니까 무조건 nill 값으로 준다?
+    const logOut = await this.userRepository.logOut(userId);
+
+    return { message: '로그아웃에 성공했습니다.', logOut };
   };
 }
