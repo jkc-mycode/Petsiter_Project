@@ -75,4 +75,8 @@ export class PetsitterAuthController {
       next(error);
     }
   };
+
+  ReToken = async (req, res, next) => {
+    const petsitter = req.petsitter;
+  };
 }

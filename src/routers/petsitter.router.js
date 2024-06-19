@@ -4,6 +4,7 @@ import { PetsitterController } from '../controllers/petsitter.controller.js';
 import { PetsitterService } from '../services/petsitter.service.js';
 import { PetsitterRepository } from '../repositories/petsitter.repository.js';
 import petsitterAccessToken from '../middlewares/petsitter-access-token-middleware.js';
+import { petsitterUpdateValidator } from '../middlewares/validators/petsitter-update.validator.middleware.js';
 // import { petsitterMypageValidator } from '../middlewares/validators/petsitter-mypage-middleware.js';
 
 const petsitterRouter = express.Router();
@@ -25,7 +26,12 @@ petsitterRouter.get('/search/type', petsitterController.searchPetsitter);
 petsitterRouter.get('/mypage', petsitterAccessToken, petsitterController.getPetsitterById);
 
 // 펫시터 본인 정보 수정 API
-petsitterRouter.patch('/', petsitterAccessToken, petsitterController.updatePetsitter);
+petsitterRouter.patch(
+  '/',
+  petsitterUpdateValidator,
+  petsitterAccessToken,
+  petsitterController.updatePetsitter
+);
 
 // 펫시터 본인 예약 현황 조회 API
 petsitterRouter.get(

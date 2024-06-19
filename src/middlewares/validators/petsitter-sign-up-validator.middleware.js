@@ -36,11 +36,6 @@ const petsitterSignupSchema = Joi.object({
     'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.PRICE.REQUIRED,
     'number.base': PETSITTERMESSAGES.PETSITTER.COMMON.PRICE.BASE,
   }),
-  totalRate: Joi.number().integer().required().max(MAX_RATE_LENGTH).messages({
-    'any.required': PETSITTERMESSAGES.PETSITTER.COMMON.RATE.REQUIRED,
-    'number.base': PETSITTERMESSAGES.PETSITTER.COMMON.RATE.BASE,
-    'number.max': PETSITTERMESSAGES.PETSITTER.COMMON.RATE.MAX,
-  }),
 });
 
 export const petsitterSignUpValidator = async (req, res, next) => {

@@ -102,4 +102,30 @@ export class PetsitterAuthService {
       petsitterId: signout.petsitterId,
     };
   };
+
+  petsitterReToken = async (petsitterId) => {
+    try {
+      const refreshToken = await this.petsitterAuthRepository.createRefreshToken(petsitterId);
+      const accessToken = jwt.sign(
+        { petsitter: +petsitterId },
+        process.env.PETSITTER_ACCESS_TOKEN_SECRET_KEY,
+        { expiresIn: process.env.PETSITTER_ACCESS_TOKEN_EXPIRES_IN }
+      );
+
+      const newrefreshToken = jwt.sign(
+        { petsitterId: +petsitterId },
+        process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY,
+        { expiresIn: process.env.PETSITTER_REFRESH_TOKEN_EXPIRES_IN }
+      );
+
+      const hashedRefreshToken = bcrypt.hashSync(newrefreshToken, 10);
+
+      // Refresh 토큰을 db에 저장
+      await this.petsitterAuthRepository.createRefreshToken(petsitterId, hashedRefreshToken);
+
+      return { accessToken, refreshToken };
+    } catch (err) {
+      throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
+    }
+  };
 }
