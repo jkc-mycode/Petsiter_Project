@@ -30,7 +30,7 @@ class ReservationController {
     }
   };
 
-  // 예약 목록 조회 컨트롤러
+  // 나의 예약 목록 조회 컨트롤러
   getReservation = async (req, res, next) => {
     try {
       if (!req.user) {
