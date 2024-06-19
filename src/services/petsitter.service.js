@@ -79,7 +79,9 @@ export class PetsitterService {
     title,
     content,
     region,
-    price
+    price,
+    images,
+    petsitter
   ) => {
     // DB에서 실제로 있는지 확인할 필요 X => 인증 미들웨어에서 인증을 마쳤기 때문에
     // 펫시터 정보 수정
@@ -91,11 +93,10 @@ export class PetsitterService {
       title,
       content,
       region,
-      price
+      price,
+      images,
+      petsitter
     );
-
-    // 비밀번호는 제외하고 반환
-    updatedPetsitter.password = undefined;
 
     return updatedPetsitter;
   };
@@ -142,5 +143,26 @@ export class PetsitterService {
     const petsitters = await this.petsitterRepository.searchPetsitter(whereCondition);
 
     return petsitters;
+  };
+
+  // 펫시터 자격증 추가 API
+  createCertificate = async (
+    petsitterId,
+    certificateName,
+    certificateIssuer,
+    certificateDate,
+    image,
+    petsitter
+  ) => {
+    const certificate = await this.petsitterRepository.createCertificate(
+      petsitterId,
+      certificateName,
+      certificateIssuer,
+      certificateDate,
+      image,
+      petsitter
+    );
+
+    return certificate;
   };
 }
