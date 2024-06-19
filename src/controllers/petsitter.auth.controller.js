@@ -1,12 +1,12 @@
-  // 펫시터 회원가입
-  
-  import { HTTP_STATUS } from "../constants/http-status.constant.js";
-import { PETSITTERMESSAGES } from "../constants/petsitter.message.constant.js";
-  export class PetsitterAuthController {
-    constructor(petsitterAuthService) {
-      this.petsitterAuthService = petsitterAuthService;
-    }
-  
+// 펫시터 회원가입
+
+import { HTTP_STATUS } from '../constants/http-status.constant.js';
+import { PETSITTERMESSAGES } from '../constants/petsitter.auth.message.constant.js';
+export class PetsitterAuthController {
+  constructor(petsitterAuthService) {
+    this.petsitterAuthService = petsitterAuthService;
+  }
+
   signUp = async (req, res, next) => {
     const {
       email,
@@ -31,7 +31,11 @@ import { PETSITTERMESSAGES } from "../constants/petsitter.message.constant.js";
         price,
         totalRate,
       });
-      return res.status(201).json({status: HTTP_STATUS.CREATED, message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_UP.SUCCEED, petsitter });
+      return res.status(201).json({
+        status: HTTP_STATUS.CREATED,
+        message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_UP.SUCCEED,
+        petsitter,
+      });
     } catch (err) {
       next(err);
     }
@@ -39,22 +43,32 @@ import { PETSITTERMESSAGES } from "../constants/petsitter.message.constant.js";
 
   signIn = async (req, res, next) => {
     const { email, password } = req.body;
-  
+
     try {
-  
-  
-      const { accessToken, refreshToken} = await this.petsitterAuthService.PetsitterSignIn(email, password);
-     
-  
+      const { accessToken, refreshToken } = await this.petsitterAuthService.PetsitterSignIn(
+        email,
+        password
+      );
+
       res.header('authorization', accessToken, refreshToken);
-      return res.status(200).json({status: HTTP_STATUS.OK, message:PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_IN.SUCCEED, accessToken, refreshToken });
+      return res.status(200).json({
+        status: HTTP_STATUS.OK,
+        message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_IN.SUCCEED,
+        accessToken,
+        refreshToken,
+      });
     } catch (err) {
-      
       next(err);
     }
   };
 
-
-
-
+  SignOut = async (req, res, next) => {
+    const petsitter = req.petsitter;
+    try {
+      const result = await this.petsitterAuthService.petsitterSignOut(petsitter);
+      return res.status(result.status).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
 }

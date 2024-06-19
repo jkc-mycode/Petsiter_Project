@@ -1,9 +1,7 @@
 export class PetsitterAuthRepository {
-constructor(prisma){
-this.prisma = prisma;
-}
-
-
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
 
   // 펫시터 생성
   createPetsitter = async ({
@@ -35,8 +33,6 @@ this.prisma = prisma;
     return data;
   };
 
-
-
   // email를 통해 펫시터 찾기(회원가입 시 중복되는 이메일이 있는지 필요함.)
   findPetsitterByEmail = async (email) => {
     const petsitter = await this.prisma.petsitter.findUnique({
@@ -47,13 +43,16 @@ this.prisma = prisma;
     return petsitter;
   };
 
+  findPetsitterBySign = async (petsitterId) => {
+    const petsitter = await this.prisma.petsitter.findUnique({
+      where: {
+        petsitterId,
+      },
+    });
+    return petsitter;
+  };
 
-
-
-
-
-
-  createRefreshToken =  async(petsitterId,  petsitterRefreshToken ) => {
+  createRefreshToken = async (petsitterId, petsitterRefreshToken) => {
     return this.prisma.petsitterRefreshToken.upsert({
       where: {
         petsitterId: petsitterId,
@@ -66,9 +65,14 @@ this.prisma = prisma;
         petsitterRefreshToken: petsitterRefreshToken,
       },
     });
-  }
+  };
+
+  SignoutPetsitter = async (petsitterId) => {
+    return this.prisma.petsitterRefreshToken.update({
+      where: { petsitterId },
+      data: {
+        petsitterRefreshToken: null,
+      },
+    });
+  };
 }
-    
-
-
-
