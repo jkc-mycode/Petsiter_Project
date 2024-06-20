@@ -191,4 +191,14 @@ export class PetsitterRepository {
 
     return certificate;
   };
+
+  // 펫시터 자격증 삭제
+  deleteCertificate = async (petsitterId, certificateId) => {
+    const deletedCertificateId = await this.prisma.certificate.delete({
+      where: { petsitterId, certificateId },
+      select: { certificateId: true },
+    });
+
+    return deletedCertificateId;
+  };
 }
