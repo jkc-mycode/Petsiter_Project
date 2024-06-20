@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 /**
  * https://www.npmjs.com/package/bcrypt#security-issues-and-concerns
@@ -78,5 +79,41 @@ describe('Check bcrypt compare logic', () => {
     expect(bcrypt.compareSync(newRefreshToken, newHashedRefreshToken)).toBe(true);
     expect(bcrypt.compareSync(oldRefreshToken, newHashedRefreshToken)).toBe(true);
     expect(bcrypt.compareSync(newRefreshToken, oldHashedRefreshToken)).toBe(true);
+  });
+
+  describe('Solution for comparing two jwts', () => {
+    const oldRefreshToken =
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MTg4NTUwMTQsImV4cCI6MTcxODg1NjIxNCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsInVzZXJJZCI6IjEyMyJ9.owI558wwcHYSCaVjgbNAt4rlPFjifUQKapNLogtgtpk';
+    const newRefreshToken =
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MTg4NTQ5ODIsImV4cCI6MTcxODg1NjE4MywiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsInVzZXJJZCI6IjEyMyJ9.AsCmU-xgWpti1AlpME7NSPZXscoKjlFFLtwB2UvJeHg';
+
+    test('1: ignore header', () => {
+      const parsedOldToken = oldRefreshToken.split('.').slice(1).join('.');
+      const parsedNewToken = newRefreshToken.split('.').slice(1).join('.');
+      expect(parsedOldToken).not.toBe(parsedNewToken);
+
+      const oldHashedParsedToken = bcrypt.hashSync(parsedOldToken, 10);
+      const newHashedParsedToken = bcrypt.hashSync(parsedNewToken, 10);
+      expect(oldHashedParsedToken).not.toBe(newHashedParsedToken);
+
+      expect(bcrypt.compareSync(parsedOldToken, oldHashedParsedToken)).toBe(true);
+      expect(bcrypt.compareSync(parsedNewToken, newHashedParsedToken)).toBe(true);
+      expect(bcrypt.compareSync(parsedOldToken, newHashedParsedToken)).toBe(false);
+      expect(bcrypt.compareSync(parsedNewToken, oldHashedParsedToken)).toBe(false);
+    });
+
+    test('2: create fixed length hash', () => {
+      const oldHashedToken = crypto.createHash('sha512').update(oldRefreshToken).digest('hex');
+      const newHashedToken = crypto.createHash('sha512').update(newRefreshToken).digest('hex');
+      expect(oldHashedToken).not.toBe(newHashedToken);
+
+      // To test multiple generated hash
+      const oldHashedToken2 = crypto.createHash('sha512').update(oldRefreshToken).digest('hex');
+      const newHashedToken2 = crypto.createHash('sha512').update(newRefreshToken).digest('hex');
+      expect(oldHashedToken2).not.toBe(newHashedToken2);
+      expect(oldHashedToken2).not.toBe(newHashedToken);
+      expect(newHashedToken2).not.toBe(oldHashedToken2);
+      expect(newHashedToken2).not.toBe(oldHashedToken);
+    });
   });
 });
