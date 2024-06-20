@@ -5,7 +5,7 @@ import { AdminService } from '../services/admin.service.js';
 import { AdminRepository } from '../repositories/admin.repository.js';
 // import { petsitterSignUpValidator } from '../middlewares/validators/petsitter-sign-up-validator.middleware.js';
 // import { petsitterSignInValidator } from '../middlewares/validators/petsitter-sign-in-validator.middleware.js';
-import userAccessTokenMiddleware from '../middlewares/user-access-token.middleware.js';
+import userAccessTokenMiddleware from '../middlewares/auth-access-token.middleware.js';
 const adminRouter = express.Router();
 
 const adminRepository = new AdminRepository(prisma);

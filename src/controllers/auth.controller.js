@@ -25,9 +25,19 @@ export class AuthController {
 
       const logInAuth = await this.authService.signIn(email, password);
 
-      return res
-        .status(201)
-        .json({ message: AUTH_MESSAGE.AUTH.SUCCESS.SIGN_IN_SUCCESS, ...logInAuth });
+      const logInAuthData = {
+        email: logInAuth.email,
+        nickname: logInAuth.nickname,
+        createdAt: logInAuth.createdAt,
+        updatedAt: logInAuth.updatedAt,
+        accesstoken: logInAuth.accesstoken,
+        refreshToken: logInAuth.refreshToken,
+      };
+
+      return res.status(201).json({
+        message: AUTH_MESSAGE.AUTH.SUCCESS.SIGN_IN_SUCCESS,
+        data: logInAuthData,
+      });
     } catch (err) {
       next(err);
     }
