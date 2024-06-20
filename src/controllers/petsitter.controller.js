@@ -198,15 +198,16 @@ export class PetsitterController {
     }
   };
 
-  // 펫시터 자격증 추가 API
+  // 펫시터 자격증 추가
   createCertificate = async (req, res, next) => {
     try {
       const { certificateName, certificateIssuer, certificateDate } = req.body;
-      const image = req.file;
+      const image = req.file; // multer를 통해 이미지 데이터를 가져옴
       const { petsitterId } = req.petsitter;
 
+      // 펫시터 자격증 추가
       const certificate = await this.petsitterService.createCertificate(
-        +petsitterId,
+        petsitterId,
         certificateName,
         certificateIssuer,
         certificateDate,
@@ -243,9 +244,10 @@ export class PetsitterController {
   updateCertificate = async (req, res, next) => {
     try {
       const { certificateName, certificateIssuer, certificateDate } = req.body;
-      const image = req.file;
+      const image = req.file; // multer를 통해 이미지 데이터를 가져옴
       const { certificateId } = req.params;
-      
+
+      // 펫시터 자격증 수정
       const updatedCertificate = await this.petsitterService.updateCertificate(
         +certificateId,
         certificateName,
@@ -267,7 +269,20 @@ export class PetsitterController {
   // 펫시터 자격증 삭제
   deleteCertificate = async (req, res, next) => {
     try {
-      console.log();
+      const { petsitterId } = req.petsitter;
+      const { certificateId } = req.params;
+
+      // 펫시터 ID와 자격증 ID가 일치하는 자격증 삭제
+      const deletedCertificateId = await this.petsitterService.deleteCertificate(
+        petsitterId,
+        +certificateId
+      );
+
+      return res.status(200).json({
+        status: 200,
+        message: '자격증 삭제에 성공했습니다.',
+        data: { deletedCertificateId },
+      });
     } catch (err) {
       next(err);
     }

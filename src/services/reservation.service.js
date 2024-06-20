@@ -1,5 +1,5 @@
 import { HttpError } from '../errors/http.error.js';
-import { AnimalType } from '@prisma/client';
+//import { AnimalType } from '@prisma/client';
 
 class ReservationService {
   constructor(reservationRepository) {

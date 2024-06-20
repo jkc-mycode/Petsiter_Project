@@ -189,4 +189,14 @@ export class PetsitterService {
 
     return updatedCertificate;
   };
+
+  // 펫시터 자격증 삭제
+  deleteCertificate = async (petsitterId, certificateId) => {
+    const deletedCertificateId = await this.petsitterRepository.deleteCertificate(
+      petsitterId,
+      certificateId
+    );
+
+    return deletedCertificateId;
+  };
 }
