@@ -10,10 +10,6 @@ const adminCreateSchema = Joi.object({
     'any.required': ADMIN.COMMON.QUESTION.REQUIRED,
     'string.base': ADMIN.COMMON.QUESTION.BASE,
   }),
-  // answer: Joi.string().required().messages({
-  //   'string.base': ADMIN.COMMON.ANSWER.BASE,
-  //   'any.required': ADMIN.COMMON.ANSWER.REQUIRED,
-  // }),
 });
 
 export const adminCreateValidator = async (req, res, next) => {

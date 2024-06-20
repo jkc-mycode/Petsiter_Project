@@ -10,8 +10,8 @@ export class AdminController {
     try {
       const { title, question } = req.body;
       const user = req.user;
-      const USER = req.user.role;
-      if (user.role !== USER) {
+
+      if (user.role === 'ADMIN') {
         throw new Error('사용자만 이용 가능합니다');
       }
       const qna = await this.adminService.createQna(user, title, question);
@@ -49,14 +49,17 @@ export class AdminController {
   // qna 수정하기
   updateQna = async (req, res, next) => {
     try {
-      const user = req.user;
+      const role = req.user.role;
+
       const { qnaId } = req.params;
-      const { title, question, answer } = req.body;
-      const ADMIN = req.user.role;
-      if (user.role !== ADMIN) {
-        throw new Error('사용자만 이용 가능합니다');
+      const { title, question, answer, qnaStatus } = req.body;
+      let updatedQna;
+      if (role === 'ADMIN') {
+        updatedQna = await this.adminService.updateQna(qnaId, title, question, answer, qnaStatus);
       }
-      const updatedQna = await this.adminService.updateQna(qnaId, title, question, answer);
+      if (role === 'USER') {
+        updatedQna = await this.adminService.updateQna(qnaId, title, question, answer);
+      }
 
       return res.status(200).json({ status: HTTP_STATUS.OK, data: updatedQna });
     } catch (err) {

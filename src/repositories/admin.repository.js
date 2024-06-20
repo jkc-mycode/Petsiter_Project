@@ -50,16 +50,16 @@ export class AdminRepository {
   };
 
   // Qna 수정
-  updateQna = async (qnaId, title, question, answer, qnaStatus) => {
+  updateQna = async (qnaId, title, question, answer, qnaStatus = false) => {
     const Updateqna = await this.prisma.adminQna.update({
       where: {
         qnaId: +qnaId,
       },
       data: {
-        title,
-        question,
-        answer,
-        qnaStatus,
+        ...(title && { title }),
+        ...(question && { question }),
+        ...(answer && { answer }),
+        ...(qnaStatus && { qnaStatus }),
       },
     });
 

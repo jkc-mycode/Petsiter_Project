@@ -60,14 +60,14 @@ export class AdminService {
   };
 
   // Qna 수정
-  updateQna = async (qnaId, title, question, answer) => {
+  updateQna = async (qnaId, title, question, answer, qnaStatus) => {
     try {
       const qnas = await this.adminRepository.findQnaById(qnaId);
       if (!qnas) {
         throw new HttpError.NotFound(ADMIN.ERROR.NOT_FOUND);
       }
 
-      await this.adminRepository.updateQna(qnaId, title, question, answer);
+      await this.adminRepository.updateQna(qnaId, title, question, answer, qnaStatus);
 
       const qna = await this.adminRepository.updateQna(qnaId);
 
