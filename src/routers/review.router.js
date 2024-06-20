@@ -21,7 +21,7 @@ reviewRouter.post(
 // 리뷰 조회
 reviewRouter.get(
   '/:reservationId/review',
-  accesstokenmiddleware,
+
   reviewController.getReviewController
 );
 
