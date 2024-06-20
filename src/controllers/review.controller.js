@@ -63,28 +63,18 @@ export default class ReviewController {
   // 리뷰 수정
   updateReviewController = async (req, res, next) => {
     const { reviewId } = req.params;
-    const userId = req.user.userId;     const { review, rate } = req.body;
+    const userId = req.user.userId;
+    const { review, rate } = req.body;
 
     try {
       // 리뷰 ID가 유효한지 확인
       if (!reviewId || isNaN(reviewId)) {
         throw new HttpError.BadRequest(REVIEW_MESSAGE.INVALID_REVIEW_ID);
       }
-
-      // 리뷰가 존재하는지 확인
-      const existingReview = await this.reviewService.getReviewsByReservationId(+reviewId);
-      if (!existingReview) {
-        throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
-      }
-
-      // 리뷰 작성자가 현재 로그인한 사용자인지 확인
-      if (existingReview.userId !== userId) {
-        throw new HttpError.Forbidden(REVIEW_MESSAGE.UNAUTHORIZED_REVIEW_UPDATE);
-      }
-
       // 리뷰 수정
       const updatedReview = await this.reviewService.updateReview(
         +reviewId,
+        userId,
         review,
         rate
       );
@@ -93,7 +83,6 @@ export default class ReviewController {
       return res.status(200).json(updatedReview);
     } catch (err) {
       // 에러 처리
-      console.error(err);
       next(err);
     }
   }
@@ -108,25 +97,13 @@ export default class ReviewController {
         throw new HttpError.BadRequest(REVIEW_MESSAGE.INVALID_REVIEW_ID);
       }
 
-      // 리뷰가 존재하는지 확인
-      const existingReview = await this.reviewService.getReviewsByReservationId(+reviewId);
-      if (!existingReview) {
-        throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
-      }
-
-      // 리뷰 작성자가 현재 로그인한 사용자인지 확인
-      if (existingReview.userId !== userId) {
-        throw new HttpError.Forbidden(REVIEW_MESSAGE.UNAUTHORIZED_REVIEW_DELETE);
-      }
-
       // 리뷰 삭제
-      await this.reviewService.deleteReview(+reviewId);
+      await this.reviewService.deleteReview(+reviewId, userId);
 
       // 성공했을 때 성공 메시지 반환
       return res.status(200).json({ message: REVIEW_MESSAGE.REVIEW_DELETED_SUCCESSFULLY });
     } catch (err) {
       // 에러 처리
-      console.error(err);
       next(err);
     }
   }

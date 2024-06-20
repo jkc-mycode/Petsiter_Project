@@ -42,19 +42,26 @@ export default class ReviewService {
     return reviews;
   };
 
+  // 리뷰 ID로 리뷰테이블에 리뷰가 존재하는지 확인한다.
+  reviewExistsById = async (reviewId) => {
+    const reviewExists = await this.reviewRepository.reviewExistsById(reviewId);
+    return reviewExists; 
+  };
+
   // 리뷰 수정
   updateReview = async (reviewId, userId, review, rate) => {
     // 리뷰가 존재하는지 확인
-    const existingReview = await this.reviewRepository.getReviewsByReservationId(reviewId);
+    const existingReview = await this.reviewRepository.reviewExistsById(reviewId);
     if (!existingReview) {
       throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
     }
+    console.log(existingReview, userId, review);
     // 리뷰 작성자와 현재 로그인한 사용자인지 확인
     if (existingReview.userId !== userId) {
       throw new HttpError.Forbidden(REVIEW_MESSAGE.UNAUTHORIZED_REVIEW_UPDATE);
     }
     // 리뷰 수정
-    const updatedReview = await this.reviewRepository.updateReview(reviewId, review, rate);
+    const updatedReview = await this.reviewRepository.updateReview(reviewId, userId, review, rate);
     // 수정된 리뷰 객체 반환
     return updatedReview;
   }
@@ -71,6 +78,6 @@ export default class ReviewService {
       throw new HttpError.Forbidden(REVIEW_MESSAGE.UNAUTHORIZED_REVIEW_DELETE);
     }
     // 리뷰 삭제
-    await this.reviewRepository.deleteReview(reviewId);
+    await this.reviewRepository.deleteReview(reviewId, userId);
   }
 }
