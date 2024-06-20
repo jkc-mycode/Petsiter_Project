@@ -42,6 +42,15 @@ export const PETSITTER_MESSAGE = {
   },
   RESERVATION: {
     COMMON: {
+      RESERVATION_ID: {
+        BASE: '예약 ID는 정수입니다.',
+        REQUIRED: '예약 ID를 입력해 주세요.',
+      },
+      RESERVATION_STATUS: {
+        BASE: '예약 상테는 문자열입니다.',
+        REQUIRED: '예약 상태를 입력해 주세요.',
+        ONLY: '예약 상태는 [AWAIT, ACCEPT, CANCEL] 중 하나여야 합니다.',
+      },
       NOT_FOUND: '해당 예약이 존재하지 않습니다.',
       UNAUTHORIZED: '예약 수정 권한이 없습니다.',
     },
