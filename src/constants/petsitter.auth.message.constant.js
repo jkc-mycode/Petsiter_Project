@@ -29,6 +29,7 @@ export const PETSITTERMESSAGES = {
       },
       CAREER: {
         REQUIRED: '경력을 입력해 주세요',
+        BASE: '경력은 숫자로 입력해 주세요',
       },
       PRICE: {
         REQUIRED: '경력을 입력해 주세요',
@@ -46,6 +47,10 @@ export const PETSITTERMESSAGES = {
       SIGN_IN: {
         SUCCEED: '로그인에 성공했습니다.',
       },
+      SIGN_OUT: {
+        SUCCEED: '로그아웃에 성공했습니다.',
+      },
+
       READ_ME: {
         SUCCEED: '본인 정보 조회에 성공했습니다.',
       },

@@ -42,20 +42,15 @@ export class PetsitterAuthController {
   };
 
   signIn = async (req, res, next) => {
-    const { email, password } = req.body;
-
     try {
-      const { accessToken, refreshToken } = await this.petsitterAuthService.PetsitterSignIn(
-        email,
-        password
-      );
+      const { email, password } = req.body;
 
-      res.header('authorization', accessToken, refreshToken);
+      const logIn = await this.petsitterAuthService.PetsitterSignIn(email, password);
+
       return res.status(200).json({
         status: HTTP_STATUS.OK,
         message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_IN.SUCCEED,
-        accessToken,
-        refreshToken,
+        logIn,
       });
     } catch (err) {
       next(err);
@@ -68,7 +63,7 @@ export class PetsitterAuthController {
       const result = await this.petsitterAuthService.petsitterSignOut(petsitter.petsitterId);
       return res.status(200).json({
         status: 200,
-        message: '로그아웃에 성공했습니다.',
+        message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_OUT.SUCCEED,
         data: result,
       });
     } catch (error) {
