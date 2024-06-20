@@ -153,6 +153,10 @@ export class PetsitterService {
     certificateDate,
     image
   ) => {
+    // 이미지 데이터가 없는 경우
+    console.log(image);
+    if (image === undefined) throw new HttpError.BadRequest('이미지를 넣어주세요.');
+
     const certificate = await this.petsitterRepository.createCertificate(
       petsitterId,
       certificateName,

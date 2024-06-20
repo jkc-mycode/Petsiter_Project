@@ -61,4 +61,32 @@ export const PETSITTER_MESSAGE = {
       SUCCEED: '예상 상태 변경에 성공했습니다.',
     },
   },
+  CERTIFICATE: {
+    COMMON: {
+      CERTIFICATE_NAME: {
+        BASE: '자격증 이름은 문자열입니다.',
+        REQUIRED: '자격증 이름을 입력해 주세요.',
+      },
+      CERTIFICATE_ISSUER: {
+        BASE: '자격증 발행처는 문자열입니다.',
+        REQUIRED: '자격증 발행처를 입력해 주세요.',
+      },
+      CERTIFICATE_DATE: {
+        BASE: '자격증 발행일은 문자열입니다.',
+        REQUIRED: '자격증 발행일을 입력해 주세요.',
+      },
+    },
+    CREATE: {
+      SUCCEED: '자격증 등록에 성공했습니다.',
+    },
+    READ: {
+      SUCCEED: '자격증 조회에 성공했습니다.',
+    },
+    UPDATE: {
+      SUCCEED: '자격증 수정에 성공했습니다.',
+    },
+    DELETE: {
+      SUCCEED: '자격증 삭제에 성공했습니다.',
+    },
+  },
 };
