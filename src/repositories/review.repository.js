@@ -47,8 +47,6 @@ export class ReviewRepository {
         userId
       },
       include: {
-        user: true,
-        petsitter: true,
         reservation: true
       }
     });
@@ -65,8 +63,9 @@ export class ReviewRepository {
   }
   // 리뷰 삭제
   deleteReview = async (reviewId, userId) => {
-    await this.prisma.review.delete({
-      where: { reviewId,userId },
+    const deleteReview = await this.prisma.review.delete({
+      where: { reviewId, userId },
     });
+    return deleteReview;
   }
 }
