@@ -7,6 +7,8 @@ import petsitterAccessToken from '../middlewares/petsitter-access-token-middlewa
 import { petsitterUpdateValidator } from '../middlewares/validators/petsitter-update.validator.middleware.js';
 import { petsitterReservationStatusUpdateValidator } from '../middlewares/validators/petsitter-update-reservation-status.validator.middleware.js';
 import { uploadImage } from '../middlewares/multer-image-upload.middleware.js';
+import { petsitterCertificateCreateValidator } from '../middlewares/validators/petsitter-certificate-create.validator.middleware.js';
+import { petsitterCertificateUpdateValidator } from '../middlewares/validators/petsitter-certificate-update.validator.middleware.js';
 // import { petsitterMypageValidator } from '../middlewares/validators/petsitter-mypage-middleware.js';
 
 const petsitterRouter = express.Router();
@@ -38,6 +40,7 @@ petsitterRouter.post(
   '/certificate',
   petsitterAccessToken,
   uploadImage.single('image'),
+  petsitterCertificateCreateValidator,
   petsitterController.createCertificate
 );
 
@@ -49,6 +52,7 @@ petsitterRouter.patch(
   '/certificate/:certificateId',
   petsitterAccessToken,
   uploadImage.single('image'),
+  petsitterCertificateUpdateValidator,
   petsitterController.updateCertificate
 );
 
