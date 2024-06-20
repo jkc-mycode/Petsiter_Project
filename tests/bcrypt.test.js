@@ -61,9 +61,9 @@ describe('Check bcrypt compare logic', () => {
 
   test('In case when comparing two jwts which are identical within 72 length', () => {
     const oldRefreshToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXRzaXR0ZXJJZCI6NCwiaWF0IjoxNzE4ODUzMzQ1LCJleHAiOjE3MTk0NTgxNDV9.pzXaZ-9G5i6dFo7yhZy_3qJdmeHJod8XEbLAGnm6ik4';
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MTg4NTUwMTQsImV4cCI6MTcxODg1NjIxNCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsInVzZXJJZCI6IjEyMyJ9.owI558wwcHYSCaVjgbNAt4rlPFjifUQKapNLogtgtpk';
     const newRefreshToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXRzaXR0ZXIiOjQsImlhdCI6MTcxODg1MzM3MywiZXhwIjoxNzE5NDU4MTczfQ.6X-ZgJCxmA-vX-NyuFwfdBwdqmXt1wuTMHzd3Wn8AGo';
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MTg4NTQ5ODIsImV4cCI6MTcxODg1NjE4MywiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsInVzZXJJZCI6IjEyMyJ9.AsCmU-xgWpti1AlpME7NSPZXscoKjlFFLtwB2UvJeHg';
 
     // hash logic from auth.service.js
     const oldHashedRefreshToken = bcrypt.hashSync(oldRefreshToken, 10);
@@ -72,11 +72,11 @@ describe('Check bcrypt compare logic', () => {
     // parse string less than 72 bytes
     const parsedOldRefreshToken = oldRefreshToken.substring(0, targetLength - 1);
     const parsedNewRefreshToken = newRefreshToken.substring(0, targetLength - 1);
-    expect(parsedOldRefreshToken).not.toBe(parsedNewRefreshToken);
+    expect(parsedOldRefreshToken).toBe(parsedNewRefreshToken);
 
     expect(bcrypt.compareSync(oldRefreshToken, oldHashedRefreshToken)).toBe(true);
     expect(bcrypt.compareSync(newRefreshToken, newHashedRefreshToken)).toBe(true);
-    expect(bcrypt.compareSync(oldRefreshToken, newHashedRefreshToken)).toBe(false);
-    expect(bcrypt.compareSync(newRefreshToken, oldHashedRefreshToken)).toBe(false);
+    expect(bcrypt.compareSync(oldRefreshToken, newHashedRefreshToken)).toBe(true);
+    expect(bcrypt.compareSync(newRefreshToken, oldHashedRefreshToken)).toBe(true);
   });
 });
