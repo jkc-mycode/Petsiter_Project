@@ -1,5 +1,5 @@
 import { HttpError } from '../errors/http.error.js';
-//import { AnimalType } from '@prisma/client';
+import { RESERVATION_CONSTANT } from '../constants/reservation.constant.js';
 
 class ReservationService {
   constructor(reservationRepository) {
@@ -19,7 +19,7 @@ class ReservationService {
     }
     // 동물타입이 유효한지 확인
     const upperCaseAnimalType = animalType.toUpperCase();
-    if (!Object.values(AnimalType).includes(upperCaseAnimalType)) {
+    if (!Object.values(RESERVATION_CONSTANT.ANIMALTYPE).includes(upperCaseAnimalType)) {
       throw new HttpError.BadRequest('유효한 동물타입이 아닙니다. 유효한 값: "CAT", "DOG".');
     }
     // 예약 시간이 존재하는지
@@ -77,7 +77,6 @@ class ReservationService {
   }
 
   // 예약 수정 서비스 함수
-  // 예약 수정 서비스 함수
   async updateReservationService(reservationId, userId, data = {}) {
     // reservationStatus 필드를 제거합니다.
     // eslint-disable-next-line no-unused-vars
@@ -90,7 +89,7 @@ class ReservationService {
     }
 
     // 동물타입이 유효한지 확인
-    if (animalType && !Object.values(AnimalType).includes(animalType.toUpperCase())) {
+    if (animalType && !Object.values(RESERVATION_CONSTANT.ANIMALTYPE).includes(animalType)) {
       throw new HttpError.BadRequest('유효한 동물타입이 아닙니다. 유효한 값: "CAT", "DOG".');
     }
 
@@ -115,6 +114,16 @@ class ReservationService {
       throw new HttpError.Conflict('예약상태가 AWAIT가 아니면 수정이 불가합니다.');
     }
 
+    // animalType hour etc를 updateData에 다시 추가
+    if (animalType !== undefined) {
+      updateData.animalType = animalType;
+    }
+    if (hour !== undefined) {
+      updateData.hour = hour;
+    }
+    if (etc !== undefined) {
+      updateData.etc = etc;
+    }
     // 예약을 수정합니다.
     await this.reservationRepository.updateReservation(reservationId, userId, updateData);
 

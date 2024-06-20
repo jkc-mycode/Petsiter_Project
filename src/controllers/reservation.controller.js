@@ -1,10 +1,11 @@
 import { HTTP_STATUS } from '../constants/http-status.constant.js';
-import { MESSAGES } from '../constants/message.constant.js';
+import { RESERVATION_MESSAGES } from '../constants/reservation.message.constant.js';
 
 class ReservationController {
   constructor(reservationService) {
     this.reservationService = reservationService; // 인스턴스화
   }
+
   // 예약 생성
   createReservation = async (req, res, next) => {
     try {
@@ -25,7 +26,7 @@ class ReservationController {
 
       return res.status(HTTP_STATUS.CREATED).json({
         status: HTTP_STATUS.CREATED,
-        message: MESSAGES.RESERVATION.CREATE.SUCCEED,
+        message: RESERVATION_MESSAGES.RESERVATION.COMMON.CREATE_SUCCEED,
         data,
       });
     } catch (error) {
@@ -47,7 +48,7 @@ class ReservationController {
 
       return res.status(HTTP_STATUS.OK).json({
         status: HTTP_STATUS.OK,
-        message: MESSAGES.RESERVATION.READ_LIST.SUCCEED,
+        message: RESERVATION_MESSAGES.RESERVATION.LIST.SUCCEED,
         data,
       });
     } catch (error) {
@@ -69,7 +70,7 @@ class ReservationController {
 
       return res.status(HTTP_STATUS.OK).json({
         status: HTTP_STATUS.OK,
-        message: MESSAGES.RESERVATION.READ_LIST.SUCCEED,
+        message: RESERVATION_MESSAGES.RESERVATION.OK,
         data,
       });
     } catch (error) {
@@ -96,7 +97,7 @@ class ReservationController {
 
       return res.status(HTTP_STATUS.OK).json({
         status: HTTP_STATUS.OK,
-        message: MESSAGES.RESERVATION.UPDATE.SUCCEED,
+        message: RESERVATION_MESSAGES.RESERVATION.UPDATE_STATUS.SUCCEED,
         data: updatedReservation,
       });
     } catch (error) {
@@ -121,7 +122,7 @@ class ReservationController {
 
       return res.status(HTTP_STATUS.OK).json({
         status: HTTP_STATUS.OK,
-        message: MESSAGES.RESERVATION.DELETE.SUCCEED,
+        message: RESERVATION_MESSAGES.RESERVATION.COMMON.DELETE_SUCCEED,
         data: deletedReservation,
       });
     } catch (error) {
