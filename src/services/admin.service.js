@@ -1,4 +1,5 @@
 import { HttpError } from '../errors/http.error.js';
+import { ADMIN } from '../constants/admin.message.constant.js';
 
 export class AdminService {
   constructor(adminRepository) {
@@ -19,39 +20,36 @@ export class AdminService {
     };
   };
 
-  getAllQna = async (user) => {
+  getAllQna = async () => {
     const qnas = await this.adminRepository.findAllQnas();
 
     qnas.sort((a, b) => {
       return b.createdAt - a.createdAt;
     });
 
-    // 비즈니스 로직을 수행한 후 사용자에게 보여줄 데이터를 가공합니다.
-    return qnas.map((qnas) => ({
-      qnaId: qnas.qnaId,
-      userId: qnas.userId,
-      title: qnas.title,
-      nickname: qnas.nickname, // 닉네임만 선택
-      qnaStatus: qnas.qnaStatus,
-      question: qnas.question,
-      answer: qnas.answer,
-      createdAt: qnas.createdAt,
-      updatedAt: qnas.updatedAt,
+    return qnas.map((qna) => ({
+      qnaId: qna.qnaId,
+      userId: qna.userId,
+      title: qna.title,
+      nickname: qna.user.nickname,
+      qnaStatus: qna.qnaStatus,
+      question: qna.question,
+      answer: qna.answer,
+      createdAt: qna.createdAt,
+      updatedAt: qna.updatedAt,
     }));
   };
 
+  // Qna 수정
   updateQna = async (qnaId, title, question, answer) => {
-    // 저장소(Repository)에게 특정 게시글 하나를 요청합니다.
     try {
       const resumes = await this.adminRepository.findQnaById(qnaId);
       if (!resumes) {
-        throw new HttpError.NotFound('존재하지 않는 게시글입니다.');
+        throw new HttpError.NotFound(ADMIN.ERROR.NOT_FOUND);
       }
 
-      // 저장소(Repository)에게 데이터 수정을 요청합니다.
       await this.adminRepository.updateQna(qnaId, title, question, answer);
 
-      // 변경된 데이터를 조회합니다.
       const qna = await this.adminRepository.updateQna(qnaId);
 
       return {
@@ -66,20 +64,18 @@ export class AdminService {
       };
     } catch (err) {
       console.error(err);
-      throw new HttpError.InternalServerError('서비스 오류');
+      throw new HttpError.InternalServerError(ADMIN.ERROR.SERVER);
     }
   };
 
   deleteQna = async (qnaId) => {
     try {
-      // 저장소(Repository)에게 특정 게시글 하나를 요청합니다.
       const qna = await this.adminRepository.findQnaById(qnaId);
 
       if (!qna) {
-        throw new HttpError.NotFound('존재하지 않는 게시글입니다.');
+        throw new HttpError.NotFound(ADMIN.ERROR.NOT_FOUND);
       }
 
-      // 이력서 삭제 요청
       await this.adminRepository.deleteQna(qnaId);
 
       return {
@@ -87,7 +83,7 @@ export class AdminService {
       };
     } catch (err) {
       console.error(err);
-      throw new HttpError.InternalServerError('서비스 오류');
+      throw new HttpError.InternalServerError(ADMIN.ERROR.SERVER);
     }
   };
 }

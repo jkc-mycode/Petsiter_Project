@@ -1,8 +1,9 @@
 export class AdminController {
   constructor(adminService) {
-    // 생성자에서 전달받은 PostsService의 의존성을 주입합니다.
     this.adminService = adminService;
   }
+
+  // Qna 생성하기
   createQna = async (req, res, next) => {
     try {
       const { title, question, answer } = req.body;
@@ -14,7 +15,7 @@ export class AdminController {
       next(err);
     }
   };
-
+  // Qna 목록조회 하기
   getAllQna = async (req, res, next) => {
     try {
       const qnas = await this.adminService.getAllQna();
@@ -39,6 +40,7 @@ export class AdminController {
     }
   };
 
+  // Qna 삭제 하기
   deleteQna = async (req, res, next) => {
     try {
       const { qnaId } = req.params;

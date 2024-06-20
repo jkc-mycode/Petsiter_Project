@@ -61,9 +61,12 @@ export class PetsitterAuthRepository {
 
   getRefreshToken = async (petsitterId) => {
     try {
-      const refreshToken = await this.prisma.petsitterRefreshToken.findFirst({
+      const refreshToken = await this.prisma.petsitterRefreshToken.findUnique({
         where: {
           petsitterId: parseInt(petsitterId),
+        },
+        select: {
+          petsitterRefreshToken: true,
         },
       });
       return refreshToken;
