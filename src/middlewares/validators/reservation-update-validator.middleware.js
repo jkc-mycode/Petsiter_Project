@@ -6,11 +6,20 @@ const updateReservationSchema = Joi.object({
   reservationDate: Joi.date().iso().optional().messages({
     'date.base': RESERVATION_MESSAGES.RESERVATION.COMMON.RESERVATION_DATE.BASE,
   }),
-  animalType: Joi.string().valid('CAT', 'DOG').optional().messages({
-    'string.base': RESERVATION_MESSAGES.RESERVATION.COMMON.ANIMAL_TYPE.BASE,
-    'any.only': RESERVATION_MESSAGES.RESERVATION.COMMON.ANIMAL_TYPE.ONLY,
-  }),
-  hour: Joi.number().integer().optional().messages({
+  animalType: Joi.string()
+    .optional()
+    .custom((value, helpers) => {
+      const validTypes = ['CAT', 'DOG'];
+      if (!validTypes.includes(value.toUpperCase())) {
+        return helpers.message(RESERVATION_MESSAGES.RESERVATION.COMMON.ANIMAL_TYPE.ONLY);
+      }
+      return value;
+    })
+    .messages({
+      'string.base': RESERVATION_MESSAGES.RESERVATION.COMMON.ANIMAL_TYPE.BASE,
+      'any.required': RESERVATION_MESSAGES.RESERVATION.COMMON.ANIMAL_TYPE.REQUIRED,
+    }),
+  hour: Joi.number().integer().options({ convert: false }).messages({
     'number.base': RESERVATION_MESSAGES.RESERVATION.COMMON.HOUR.BASE,
   }),
   etc: Joi.string().optional().messages({

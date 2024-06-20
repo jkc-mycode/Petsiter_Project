@@ -20,7 +20,7 @@ export const RESERVATION_MESSAGES = {
       },
       ANIMAL_TYPE: {
         BASE: '동물 타입은 문자열이어야 합니다.',
-        ONLY: '동물 타입은 "CAT" 또는 "DOG"여야 합니다.',
+        ONLY: '동물 타입은 CAT 또는 DOG여야 합니다.',
         REQUIRED: '동물 타입은 필수값입니다.',
       },
       HOUR: {

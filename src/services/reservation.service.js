@@ -1,5 +1,4 @@
 import { HttpError } from '../errors/http.error.js';
-import { RESERVATION_CONSTANT } from '../constants/reservation.constant.js';
 
 class ReservationService {
   constructor(reservationRepository) {
@@ -8,32 +7,6 @@ class ReservationService {
 
   // 예약 생성 서비스 함수
   async createReservationService(userId, petsitterId, reservationDate, animalType, hour, etc) {
-    // 펫시터가 존재하는지 확인
-    const petsitter = await this.reservationRepository.findPetsitterById(petsitterId);
-    if (!petsitter) {
-      throw new HttpError.NotFound('해당 펫시터는 존재하지 않습니다.');
-    }
-    // 동물타입이 존재하는지 확인
-    if (!animalType) {
-      throw new HttpError.NotFound('동물타입은 필수값입니다.');
-    }
-    // 동물타입이 유효한지 확인
-    const upperCaseAnimalType = animalType.toUpperCase();
-    if (!Object.values(RESERVATION_CONSTANT.ANIMALTYPE).includes(upperCaseAnimalType)) {
-      throw new HttpError.BadRequest('유효한 동물타입이 아닙니다. 유효한 값: "CAT", "DOG".');
-    }
-    // 예약 시간이 존재하는지
-    if (!hour) {
-      throw new HttpError.NotFound('맡기실 시간은 필수값입니다.');
-    }
-    // 예약 시간의 타입이 숫자인지
-    if (typeof hour !== 'number' || isNaN(hour)) {
-      throw new HttpError.NotFound('맡기실 시간을 올바르게 기입해주세요. INT.');
-    }
-    // 전달사항의 타입이 텍스트인지
-    if (typeof etc !== 'string' || !etc.trim()) {
-      throw new HttpError.NotFound('전달사항을 올바르게 기입해주세요. TEXT.');
-    }
     // 예약상태가 ACCEPT면 예약생성이 불가합니다.
     const alreadyAcceptStatus = await this.reservationRepository.acceptStatus(
       petsitterId,
@@ -47,7 +20,7 @@ class ReservationService {
       userId,
       petsitterId,
       reservationDate,
-      animalType: upperCaseAnimalType, // 대문자로 변환하여 저장
+      animalType, // 대문자로 변환하여 저장
       hour,
       etc,
     };
@@ -86,26 +59,6 @@ class ReservationService {
     const reservation = await this.reservationRepository.getReservationById(reservationId, userId);
     if (!reservation || reservation.userId !== userId) {
       throw new HttpError.NotFound('본인의 예약 내역만 수정이 가능합니다.');
-    }
-
-    // 동물타입이 유효한지 확인
-    if (animalType && !Object.values(RESERVATION_CONSTANT.ANIMALTYPE).includes(animalType)) {
-      throw new HttpError.BadRequest('유효한 동물타입이 아닙니다. 유효한 값: "CAT", "DOG".');
-    }
-
-    // 예약 시간의 타입이 숫자인지 확인
-    if (hour !== undefined && (typeof hour !== 'number' || isNaN(hour))) {
-      throw new HttpError.BadRequest('맡기실 시간을 올바르게 기입해주세요. INT.');
-    }
-
-    // 전달사항의 타입이 텍스트인지 확인
-    if (etc !== undefined && (typeof etc !== 'string' || !etc.trim())) {
-      throw new HttpError.BadRequest('전달사항을 올바르게 기입해주세요. TEXT.');
-    }
-
-    // 예약 날짜가 제공되지 않은 경우 또는 유효하지 않은 경우 오류를 던집니다.
-    if (!updateData.reservationDate || isNaN(new Date(updateData.reservationDate).getTime())) {
-      throw new HttpError.BadRequest('유효한 예약 날짜가 제공되지 않았습니다.');
     }
 
     // 예약상태가 AWAIT가 아니면 수정이 불가합니다.
