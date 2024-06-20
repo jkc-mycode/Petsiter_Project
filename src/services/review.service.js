@@ -62,7 +62,7 @@ export default class ReviewService {
   // 리뷰 삭제
   deleteReview = async (reviewId, userId) => {
     // 리뷰가 존재하는지 확인
-    const existingReview = await this.reviewRepository.getReviewsByReservationId(reviewId);
+    const existingReview = await this.reviewRepository.getReviewsByReservationId(reviewId, userId);
     if (!existingReview) {
       throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
     }
