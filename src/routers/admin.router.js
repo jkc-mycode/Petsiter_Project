@@ -5,7 +5,7 @@ import { AdminService } from '../services/admin.service.js';
 import { AdminRepository } from '../repositories/admin.repository.js';
 import { adminCreateValidator } from '../middlewares/validators/admin-create-validator.middleware.js';
 import { adminUpdateValidator } from '../middlewares/validators/admin-update-validator.middleware.js';
-import userAccessTokenMiddleware from '../middlewares/user-access-token.middleware.js';
+import userAccessTokenMiddleware from '../middlewares/auth-access-token.middleware.js';
 const adminRouter = express.Router();
 
 const adminRepository = new AdminRepository(prisma);

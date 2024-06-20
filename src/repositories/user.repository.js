@@ -88,6 +88,7 @@ export class UserRepository {
       where: {
         userId,
       },
+      include: { reservation: true, refreshToken: true },
     });
     return user;
   };
