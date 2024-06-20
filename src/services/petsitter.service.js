@@ -151,16 +151,14 @@ export class PetsitterService {
     certificateName,
     certificateIssuer,
     certificateDate,
-    image,
-    petsitter
+    image
   ) => {
     const certificate = await this.petsitterRepository.createCertificate(
       petsitterId,
       certificateName,
       certificateIssuer,
       certificateDate,
-      image,
-      petsitter
+      image
     );
 
     return certificate;
@@ -171,5 +169,24 @@ export class PetsitterService {
     const certificates = await this.petsitterRepository.getCertificates(petsitterId);
 
     return certificates;
+  };
+
+  // 펫시터 자격증 수정
+  updateCertificate = async (
+    certificateId,
+    certificateName,
+    certificateIssuer,
+    certificateDate,
+    image
+  ) => {
+    const updatedCertificate = await this.petsitterRepository.updateCertificate(
+      certificateId,
+      certificateName,
+      certificateIssuer,
+      certificateDate,
+      image
+    );
+
+    return updatedCertificate;
   };
 }

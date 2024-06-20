@@ -210,8 +210,7 @@ export class PetsitterController {
         certificateName,
         certificateIssuer,
         certificateDate,
-        image,
-        req.petsitter
+        image
       );
 
       return res.status(200).json({
@@ -243,7 +242,23 @@ export class PetsitterController {
   // 펫시터 자격증 수정
   updateCertificate = async (req, res, next) => {
     try {
-      console.log();
+      const { certificateName, certificateIssuer, certificateDate } = req.body;
+      const image = req.file;
+      const { certificateId } = req.params;
+      
+      const updatedCertificate = await this.petsitterService.updateCertificate(
+        +certificateId,
+        certificateName,
+        certificateIssuer,
+        certificateDate,
+        image
+      );
+
+      return res.status(200).json({
+        status: 200,
+        message: '자격증 수정에 성공했습니다.',
+        data: { updatedCertificate },
+      });
     } catch (err) {
       next(err);
     }
