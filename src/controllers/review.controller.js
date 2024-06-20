@@ -11,7 +11,7 @@ export default class ReviewController {
   // 리뷰 생성
   createReviewController = async (req, res, next) => {
     const { reservationId } = req.params;
-    const userId = req.user.id; 
+    const userId = req.user.userId; 
     const { review, rate } = req.body;
 
     try {
@@ -41,7 +41,7 @@ export default class ReviewController {
   // 리뷰 조회
   getReviewController = async (req, res, next) => {
     const { reservationId } = req.params;
-    const userId = req.user.id; 
+    const userId = req.user.userId; 
 
     try {
       // 예약 ID와 사용자 ID로 리뷰를 조회
@@ -63,7 +63,7 @@ export default class ReviewController {
   // 리뷰 수정
   updateReviewController = async (req, res, next) => {
     const { reviewId } = req.params;
-    const userId = req.user.id;     const { review, rate } = req.body;
+    const userId = req.user.userId;     const { review, rate } = req.body;
 
     try {
       // 리뷰 ID가 유효한지 확인
@@ -100,7 +100,7 @@ export default class ReviewController {
   // 리뷰 삭제
   deleteReviewController = async (req, res, next) => {
     const { reviewId } = req.params;
-    const userId = req.user.id; 
+    const userId = req.user.userId; 
     
     try {
       // 리뷰 ID가 유효한지 확인
