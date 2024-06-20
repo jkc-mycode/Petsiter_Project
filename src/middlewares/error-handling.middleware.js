@@ -1,9 +1,17 @@
 import { ERROR_CONSTANT } from '../constants/error.constant.js';
 import { HTTP_STATUS } from '../constants/http-status.constant.js';
 import { MESSAGES } from '../constants/message.constant.js';
+import { multerErrorMessages } from '../constants/multer-error.constant.js';
 
 export default (err, req, res, next) => {
   console.error(err);
+
+  // multer에서 발생생한 에러 처리
+  if (err.name === 'MulterError') {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ status: HTTP_STATUS.BAD_REQUEST, message: multerErrorMessages[err.code] });
+  }
 
   // joi에서 발생한 에러 처리
   if (err.isJoi) {
