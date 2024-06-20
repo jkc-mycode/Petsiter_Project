@@ -5,6 +5,8 @@ export class PetsitterRepository {
     this.prisma = prisma;
   }
 
+  // decoded 부분에서 디코디드가 있는지 없는지만 확인하고 파인드유니크로 넘어온다.
+
   // ID를 통해 펫시터 찾기(본인정보 조회 및 미들웨어)
   findPetsitterById = async (petsitterId) => {
     const petsitter = await this.prisma.petsitter.findUnique({
@@ -136,14 +138,13 @@ export class PetsitterRepository {
     return petsitters;
   };
 
-  // 펫시터 자격증 추가 API
+  // 펫시터 자격증 추가
   createCertificate = async (
     petsitterId,
     certificateName,
     certificateIssuer,
     certificateDate,
-    image,
-    petsitter
+    image
   ) => {
     const certificate = await this.prisma.certificate.create({
       data: {
@@ -156,5 +157,48 @@ export class PetsitterRepository {
     });
 
     return certificate;
+  };
+
+  // 펫시터 자격증 조회
+  getCertificates = async (petsitterId) => {
+    const certificates = await this.prisma.certificate.findMany({
+      where: { petsitterId },
+      orderBy: { createdAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
+    });
+
+    return certificates;
+  };
+
+  // 펫시터 자격증 수정
+  updateCertificate = async (
+    certificateId,
+    certificateName,
+    certificateIssuer,
+    certificateDate,
+    image
+  ) => {
+    const imageUrl = image.location;
+    const certificate = await this.prisma.certificate.update({
+      where: { certificateId },
+      data: {
+        // 입력된 데이터가 있으면 수정하고 없으면 생략
+        ...(certificateName && { certificateName }),
+        ...(certificateIssuer && { certificateIssuer }),
+        ...(certificateDate && { certificateDate }),
+        ...(imageUrl && { imageUrl }),
+      },
+    });
+
+    return certificate;
+  };
+
+  // 펫시터 자격증 삭제
+  deleteCertificate = async (petsitterId, certificateId) => {
+    const deletedCertificateId = await this.prisma.certificate.delete({
+      where: { petsitterId, certificateId },
+      select: { certificateId: true },
+    });
+
+    return deletedCertificateId;
   };
 }

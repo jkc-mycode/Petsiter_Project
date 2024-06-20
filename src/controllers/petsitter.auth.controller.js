@@ -42,20 +42,15 @@ export class PetsitterAuthController {
   };
 
   signIn = async (req, res, next) => {
-    const { email, password } = req.body;
-
     try {
-      const { accessToken, refreshToken } = await this.petsitterAuthService.PetsitterSignIn(
-        email,
-        password
-      );
+      const { email, password } = req.body;
 
-      res.header('authorization', accessToken, refreshToken);
+      const logIn = await this.petsitterAuthService.PetsitterSignIn(email, password);
+
       return res.status(200).json({
         status: HTTP_STATUS.OK,
         message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_IN.SUCCEED,
-        accessToken,
-        refreshToken,
+        logIn,
       });
     } catch (err) {
       next(err);
@@ -67,8 +62,8 @@ export class PetsitterAuthController {
     try {
       const result = await this.petsitterAuthService.petsitterSignOut(petsitter.petsitterId);
       return res.status(200).json({
-        status: 200,
-        message: '로그아웃에 성공했습니다.',
+        status: HTTP_STATUS.OK,
+        message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_OUT.SUCCEED,
         data: result,
       });
     } catch (error) {
@@ -77,6 +72,20 @@ export class PetsitterAuthController {
   };
 
   ReToken = async (req, res, next) => {
-    const petsitter = req.petsitter;
+    try {
+      const { petsitterId } = req.petsitter;
+
+      // 펫시터의 새로운 토큰 발급 요청 처리
+      const createToken = await this.petsitterAuthService.petsitterReToken(petsitterId);
+
+      // 클라이언트에게 새로운 토큰을 제공
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
+        message: PETSITTERMESSAGES.PETSITTER.COMMON.RETOKEN.SUCCEED,
+        createToken,
+      });
+    } catch (err) {
+      next(err); // 그 외의 경우는 에러 처리를 넘깁니다.
+    }
   };
 }

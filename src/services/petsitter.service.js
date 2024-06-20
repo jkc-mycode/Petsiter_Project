@@ -145,24 +145,62 @@ export class PetsitterService {
     return petsitters;
   };
 
-  // 펫시터 자격증 추가 API
+  // 펫시터 자격증 추가
   createCertificate = async (
     petsitterId,
     certificateName,
     certificateIssuer,
     certificateDate,
-    image,
-    petsitter
+    image
   ) => {
+    // 이미지 데이터가 없는 경우
+    console.log(image);
+    if (image === undefined) throw new HttpError.BadRequest('이미지를 넣어주세요.');
+
     const certificate = await this.petsitterRepository.createCertificate(
       petsitterId,
       certificateName,
       certificateIssuer,
       certificateDate,
-      image,
-      petsitter
+      image
     );
 
     return certificate;
+  };
+
+  // 펫시터 자격증 조회
+  getCertificates = async (petsitterId) => {
+    const certificates = await this.petsitterRepository.getCertificates(petsitterId);
+
+    return certificates;
+  };
+
+  // 펫시터 자격증 수정
+  updateCertificate = async (
+    certificateId,
+    certificateName,
+    certificateIssuer,
+    certificateDate,
+    image
+  ) => {
+    const updatedCertificate = await this.petsitterRepository.updateCertificate(
+      certificateId,
+      certificateName,
+      certificateIssuer,
+      certificateDate,
+      image
+    );
+
+    return updatedCertificate;
+  };
+
+  // 펫시터 자격증 삭제
+  deleteCertificate = async (petsitterId, certificateId) => {
+    const deletedCertificateId = await this.petsitterRepository.deleteCertificate(
+      petsitterId,
+      certificateId
+    );
+
+    return deletedCertificateId;
   };
 }

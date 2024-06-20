@@ -7,6 +7,8 @@ import petsitterAccessToken from '../middlewares/petsitter-access-token-middlewa
 import { petsitterUpdateValidator } from '../middlewares/validators/petsitter-update.validator.middleware.js';
 import { petsitterReservationStatusUpdateValidator } from '../middlewares/validators/petsitter-update-reservation-status.validator.middleware.js';
 import { uploadImage } from '../middlewares/multer-image-upload.middleware.js';
+import { petsitterCertificateCreateValidator } from '../middlewares/validators/petsitter-certificate-create.validator.middleware.js';
+import { petsitterCertificateUpdateValidator } from '../middlewares/validators/petsitter-certificate-update.validator.middleware.js';
 // import { petsitterMypageValidator } from '../middlewares/validators/petsitter-mypage-middleware.js';
 
 const petsitterRouter = express.Router();
@@ -38,22 +40,28 @@ petsitterRouter.post(
   '/certificate',
   petsitterAccessToken,
   uploadImage.single('image'),
+  petsitterCertificateCreateValidator,
   petsitterController.createCertificate
 );
 
 // 펫시터 자격증 조회 API
-petsitterRouter.get('/certificate', petsitterAccessToken, petsitterController.getCertificate);
+petsitterRouter.get('/certificate', petsitterAccessToken, petsitterController.getCertificates);
 
 // 펫시터 자격증 수정 API
 petsitterRouter.patch(
-  '/certificate',
-  uploadImage.single('image'),
+  '/certificate/:certificateId',
   petsitterAccessToken,
+  uploadImage.single('image'),
+  petsitterCertificateUpdateValidator,
   petsitterController.updateCertificate
 );
 
 // 펫시터 자격증 삭제 API
-petsitterRouter.delete('/certificate', petsitterAccessToken, petsitterController.deleteCertificate);
+petsitterRouter.delete(
+  '/certificate/:certificateId',
+  petsitterAccessToken,
+  petsitterController.deleteCertificate
+);
 
 // 펫시터 본인 예약 현황 조회 API
 petsitterRouter.get(

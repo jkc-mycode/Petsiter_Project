@@ -91,9 +91,10 @@ export class PetsitterAuthService {
     }
   };
 
+  // 펫시터 로그아웃
   petsitterSignOut = async (petsitterId) => {
     if (!petsitterId) {
-      throw new HttpError.NotFound('Petsitter not found');
+      throw new HttpError.NotFound('펫시터가 존재하지 않습니다');
     }
 
     const signout = await this.petsitterAuthRepository.SignoutPetsitter(petsitterId);
@@ -103,29 +104,25 @@ export class PetsitterAuthService {
     };
   };
 
+  // 토큰 재발급
   petsitterReToken = async (petsitterId) => {
-    try {
-      const refreshToken = await this.petsitterAuthRepository.createRefreshToken(petsitterId);
-      const accessToken = jwt.sign(
-        { petsitter: +petsitterId },
-        process.env.PETSITTER_ACCESS_TOKEN_SECRET_KEY,
-        { expiresIn: process.env.PETSITTER_ACCESS_TOKEN_EXPIRES_IN }
-      );
+    const payload = { petsitterId };
 
-      const newrefreshToken = jwt.sign(
-        { petsitterId: +petsitterId },
-        process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY,
-        { expiresIn: process.env.PETSITTER_REFRESH_TOKEN_EXPIRES_IN }
-      );
+    // 새로운 accesstoken을 발급한다.
+    const newAccessToken = jwt.sign(payload, process.env.PETSITTER_ACCESS_TOKEN_SECRET_KEY, {
+      expiresIn: process.env.PETSITTER_ACCESS_TOKEN_EXPIRES_IN,
+    });
 
-      const hashedRefreshToken = bcrypt.hashSync(newrefreshToken, 10);
+    //새로운 refreshtoken을 발급한다.
+    const newRefreshToken = jwt.sign(payload, process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY, {
+      expiresIn: process.env.PETSITTER_REFRESH_TOKEN_EXPIRES_IN,
+    });
 
-      // Refresh 토큰을 db에 저장
-      await this.petsitterAuthRepository.createRefreshToken(petsitterId, hashedRefreshToken);
+    const hashedRefreshToken = bcrypt.hashSync(newRefreshToken, 10);
 
-      return { accessToken, refreshToken };
-    } catch (err) {
-      throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
-    }
+    await this.petsitterAuthRepository.createRefreshToken(petsitterId, hashedRefreshToken);
+
+    //새로운 토큰으로 발급받습니다.
+    return { newAccessToken, newRefreshToken };
   };
 }

@@ -11,9 +11,10 @@ export class AuthService {
 
   //회원가입
   signUp = async (email, password, passwordCheck, nickname) => {
-    if (!email || !password || !passwordCheck || !nickname || password !== passwordCheck) {
-      throw new HttpError.BadRequest(AUTH_MESSAGE.AUTH.COMMON.NOT_FOUND);
-    }
+    // if (!email || !password || !passwordCheck || !nickname || password !== passwordCheck) {
+    //   // throw new HttpError.BadRequest(AUTH_MESSAGE.AUTH.COMMON.NOT_FOUND);
+    // }
+    // 왜 주석처리? joi로 이미 확인 완료
 
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
     if (!emailRegex.test(email)) {

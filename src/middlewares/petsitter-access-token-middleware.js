@@ -5,7 +5,6 @@ import { HttpError } from '../errors/http.error.js';
 import { MESSAGES } from '../constants/message.constant.js';
 const petsitterRepository = new PetsitterRepository(prisma);
 
-
 export default async function accessToken(req, res, next) {
   try {
     const authorization = req.headers['authorization'];
@@ -21,13 +20,12 @@ export default async function accessToken(req, res, next) {
     }
 
     const decodedToken = jwt.verify(accessToken, process.env.PETSITTER_ACCESS_TOKEN_SECRET_KEY);
-    if (!decodedToken) {
+
+    const petsitterId = decodedToken.petsitter;
+    if (!petsitterId) {
       throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.INVALID);
     }
- 
-    const petsitterId = decodedToken.petsitter;
 
-   
     const petsitter = await petsitterRepository.findPetsitterById(petsitterId);
 
     if (!petsitter) {
@@ -44,11 +42,9 @@ export default async function accessToken(req, res, next) {
       case 'TokenExpiredError':
         return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.EXPIRED });
       case 'JsonWebTokenError':
-        return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.MANIPULATED});
+        return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.MANIPULATED });
       default:
-        return res
-          .status(401)
-          .json({ message: err.message ?? MESSAGES.AUTH.COMMON.JWT.INVALID});
+        return res.status(401).json({ message: err.message ?? MESSAGES.AUTH.COMMON.JWT.INVALID });
     }
   }
 }

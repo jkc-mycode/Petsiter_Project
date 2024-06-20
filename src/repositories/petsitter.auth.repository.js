@@ -43,21 +43,39 @@ export class PetsitterAuthRepository {
     return petsitter;
   };
 
-  createRefreshToken = async (petsitterId, petsitterRefreshToken) => {
-    return this.prisma.petsitterRefreshToken.upsert({
+  createRefreshToken = async (petsitterId, hashedRefreshToken) => {
+    const refreshTokenUser = await this.prisma.petsitterRefreshToken.upsert({
       where: {
         petsitterId: petsitterId,
       },
       update: {
-        petsitterRefreshToken: petsitterRefreshToken,
+        petsitterRefreshToken: hashedRefreshToken,
       },
       create: {
         petsitterId: petsitterId,
-        petsitterRefreshToken: petsitterRefreshToken,
+        petsitterRefreshToken: hashedRefreshToken,
       },
     });
+    return refreshTokenUser;
   };
 
+  getRefreshToken = async (petsitterId) => {
+    try {
+      const refreshToken = await this.prisma.petsitterRefreshToken.findUnique({
+        where: {
+          petsitterId: parseInt(petsitterId),
+        },
+        select: {
+          petsitterRefreshToken: true,
+        },
+      });
+      return refreshToken;
+    } catch (error) {
+      new error();
+    }
+  };
+
+  // 펫시터 로그아웃
   SignoutPetsitter = async (petsitterId) => {
     return this.prisma.petsitterRefreshToken.update({
       where: { petsitterId },

@@ -22,7 +22,7 @@ export default async (req, res, next) => {
     const decodedToken = jwt.verify(token, USER_ACCESS_TOKEN_SECRET_KEY);
 
     // const user = await userRepository.findUserByIdMadeToken(decodedToken.id);
-    const user = await userRepository.getAccessToken(decodedToken.id);
+    const user = await userRepository.findUserById(decodedToken.id);
 
     if (!user) {
       res.status(400).json({ errorMessage: AUTH_MESSAGE.AUTH.TOKEN.NOT_MATCH_USER });

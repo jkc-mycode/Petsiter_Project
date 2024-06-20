@@ -1,3 +1,4 @@
+import { HTTP_STATUS } from '../constants/http-status.constant.js';
 import { PETSITTER_CONSTANT } from '../constants/petsitter.constant.js';
 import { PETSITTER_MESSAGE } from '../constants/petsitter.message.constant.js';
 
@@ -41,8 +42,8 @@ export class PetsitterController {
       // 펫시터 목록 조회
       const petsitters = await this.petsitterService.getPetsitterList(orderByCondition);
 
-      return res.status(200).json({
-        status: 200,
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
         message: PETSITTER_MESSAGE.PETSITTER.LIST.SUCCEED,
         data: { petsitters },
       });
@@ -58,8 +59,8 @@ export class PetsitterController {
 
       const petsitter = await this.petsitterService.getPetsitterDetail(+petsitterId);
 
-      return res.status(200).json({
-        status: 200,
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
         message: PETSITTER_MESSAGE.PETSITTER.DETAIL.SUCCEED,
         data: { petsitter },
       });
@@ -90,8 +91,8 @@ export class PetsitterController {
         petsitters = await this.petsitterService.searchPetsitter({});
       }
 
-      return res.status(200).json({
-        status: 200,
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
         message: PETSITTER_MESSAGE.PETSITTER.SEARCH.SUCCEED,
         data: { petsitters },
       });
@@ -107,8 +108,8 @@ export class PetsitterController {
 
       const petsitter = await this.petsitterService.getPetsitterById(petsitterId);
 
-      return res.status(200).json({
-        status: 200,
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
         message: PETSITTER_MESSAGE.PETSITTER.MY_INFO.SUCCEED,
         data: petsitter,
       });
@@ -149,8 +150,8 @@ export class PetsitterController {
         req.petsitter
       );
 
-      return res.status(200).json({
-        status: 200,
+      return res.status(HTTP_STATUS.CREATED).json({
+        status: HTTP_STATUS.CREATED,
         message: PETSITTER_MESSAGE.PETSITTER.UPDATE.SUCCEED,
         data: { updatedPetsitter },
       });
@@ -166,8 +167,8 @@ export class PetsitterController {
 
       const reservations = await this.petsitterService.getPetsitterReservationList(petsitterId);
 
-      return res.status(200).json({
-        status: 200,
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
         message: PETSITTER_MESSAGE.RESERVATION.LIST.SUCCEED,
         data: { reservations },
       });
@@ -188,8 +189,8 @@ export class PetsitterController {
         reservationStatus
       );
 
-      return res.status(200).json({
-        status: 200,
+      return res.status(HTTP_STATUS.CREATED).json({
+        status: HTTP_STATUS.CREATED,
         message: PETSITTER_MESSAGE.RESERVATION.UPDATE_STATUS.SUCCEED,
         data: { updatedReservation },
       });
@@ -198,26 +199,25 @@ export class PetsitterController {
     }
   };
 
-  // 펫시터 자격증 추가 API
+  // 펫시터 자격증 추가
   createCertificate = async (req, res, next) => {
     try {
-      console.log();
       const { certificateName, certificateIssuer, certificateDate } = req.body;
-      const image = req.file;
+      const image = req.file; // multer를 통해 이미지 데이터를 가져옴
       const { petsitterId } = req.petsitter;
 
+      // 펫시터 자격증 추가
       const certificate = await this.petsitterService.createCertificate(
-        +petsitterId,
+        petsitterId,
         certificateName,
         certificateIssuer,
         certificateDate,
-        image,
-        req.petsitter
+        image
       );
 
-      return res.status(200).json({
-        status: 200,
-        message: '자격증 등록에 성공했습니다.',
+      return res.status(HTTP_STATUS.CREATED).json({
+        status: HTTP_STATUS.CREATED,
+        message: PETSITTER_MESSAGE.CERTIFICATE.CREATE.SUCCEED,
         data: { certificate },
       });
     } catch (err) {
@@ -225,28 +225,67 @@ export class PetsitterController {
     }
   };
 
-  // 펫시터 자격증 조회 API
-  getCertificate = async (req, res, next) => {
+  // 펫시터 자격증 조회
+  getCertificates = async (req, res, next) => {
     try {
-      console.log();
+      const { petsitterId } = req.petsitter;
+
+      // 펫시터 자격증 조회
+      const certificates = await this.petsitterService.getCertificates(petsitterId);
+
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
+        message: PETSITTER_MESSAGE.CERTIFICATE.READ.SUCCEED,
+        data: { certificates },
+      });
     } catch (err) {
       next(err);
     }
   };
 
-  // 펫시터 자격증 수정 API
+  // 펫시터 자격증 수정
   updateCertificate = async (req, res, next) => {
     try {
-      console.log();
+      const { certificateName, certificateIssuer, certificateDate } = req.body;
+      const image = req.file; // multer를 통해 이미지 데이터를 가져옴
+      const { certificateId } = req.params;
+
+      // 펫시터 자격증 수정
+      const updatedCertificate = await this.petsitterService.updateCertificate(
+        +certificateId,
+        certificateName,
+        certificateIssuer,
+        certificateDate,
+        image
+      );
+
+      return res.status(HTTP_STATUS.CREATED).json({
+        status: HTTP_STATUS.CREATED,
+        message: PETSITTER_MESSAGE.CERTIFICATE.UPDATE.SUCCEED,
+        data: { updatedCertificate },
+      });
     } catch (err) {
       next(err);
     }
   };
 
-  // 펫시터 자격증 삭제 API
+  // 펫시터 자격증 삭제
   deleteCertificate = async (req, res, next) => {
     try {
-      console.log();
+      const { petsitterId } = req.petsitter;
+      const { certificateId } = req.params;
+
+      // 펫시터 ID와 자격증 ID가 일치하는 자격증 삭제
+      const deletedCertificateId = await this.petsitterService.deleteCertificate(
+        petsitterId,
+        +certificateId
+      );
+
+      return res.status(HTTP_STATUS.CREATED).json({
+        status: HTTP_STATUS.CREATED,
+        message: PETSITTER_MESSAGE.CERTIFICATE.DELETE.SUCCEED,
+        data: { deletedCertificateId },
+      });
     } catch (err) {
       next(err);
     }

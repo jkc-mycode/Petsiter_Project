@@ -39,7 +39,7 @@ export default async (req, res, next) => {
       return;
     }
 
-    const user = await userRepository.getRefreshToken(decodedToken.id);
+    const user = await userRepository.findUserById(decodedToken.id);
 
     if (!user) {
       res.status(400).json({ errorMessage: AUTH_MESSAGE.AUTH.TOKEN.NOT_MATCH_USER });
