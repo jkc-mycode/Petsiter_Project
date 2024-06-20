@@ -94,7 +94,7 @@ export class PetsitterAuthService {
   // 펫시터 로그아웃
   petsitterSignOut = async (petsitterId) => {
     if (!petsitterId) {
-      throw new HttpError.NotFound('Petsitter not found');
+      throw new HttpError.NotFound('펫시터가 존재하지 않습니다');
     }
 
     const signout = await this.petsitterAuthRepository.SignoutPetsitter(petsitterId);
