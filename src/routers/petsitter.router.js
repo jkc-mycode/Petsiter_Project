@@ -42,7 +42,7 @@ petsitterRouter.post(
 );
 
 // 펫시터 자격증 조회 API
-petsitterRouter.get('/certificate', petsitterAccessToken, petsitterController.getCertificate);
+petsitterRouter.get('/certificate', petsitterAccessToken, petsitterController.getCertificates);
 
 // 펫시터 자격증 수정 API
 petsitterRouter.patch(
