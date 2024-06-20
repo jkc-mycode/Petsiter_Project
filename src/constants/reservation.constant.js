@@ -1,1 +1,6 @@
-export const MIN_PASSWORD_LENGTH = 5;
+export const RESERVATION_CONSTANT = {
+  ANIMALTYPE: {
+    CAT: 'CAT',
+    DOG: 'DOG',
+  },
+};
