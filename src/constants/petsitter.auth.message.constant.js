@@ -29,6 +29,7 @@ export const PETSITTERMESSAGES = {
       },
       CAREER: {
         REQUIRED: '경력을 입력해 주세요',
+        BASE: '경력은 숫자로 입력해 주세요',
       },
       PRICE: {
         REQUIRED: '경력을 입력해 주세요',
