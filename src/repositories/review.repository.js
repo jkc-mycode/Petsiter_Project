@@ -30,6 +30,13 @@ export class ReviewRepository {
     });
     return existingReview;
   }
+  // 리뷰 ID로 리뷰테이블에 리뷰가 존재하는지 확인하는 메소드
+  reviewExistsById = async (reviewId) => {
+    const review = await this.prisma.review.findUnique({
+      where: { reviewId },
+    });
+    return review;
+  };
 
   // 리뷰 조회
   getReviewsByReservationId = async (reservationId, userId) => {
@@ -49,27 +56,17 @@ export class ReviewRepository {
   }
 
   // 리뷰 수정
-  updateReview = async (reservationId, userId, review, rate) => {
-    const existingReview = await this.reviewExists(reservationId, userId);
-    if (!existingReview) {
-      throw new Error('수정하려는 리뷰가 존재하지 않습니다.');
-
-    }
+  updateReview = async (reviewId, userId, review, rate) => {
     const updatedReview = await this.prisma.review.update({
-      where: { reservationId, userId },
+      where: { reviewId, userId },
       data: { review, rate },
     });
     return updatedReview;
   }
-
   // 리뷰 삭제
-  deleteReview = async (reservationId, userId) => {
-    const existingReview = await this.reviewExists(reservationId, userId);
-    if (!existingReview) {
-      throw new Error('삭제하려는 리뷰가 존재하지 않습니다.');
-    }
+  deleteReview = async (reviewId, userId) => {
     await this.prisma.review.delete({
-      where: { reservationId, userId },
+      where: { reviewId,userId },
     });
   }
 }

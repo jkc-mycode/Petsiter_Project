@@ -42,10 +42,16 @@ export default class ReviewService {
     return reviews;
   };
 
+  // 리뷰 ID로 리뷰테이블에 리뷰가 존재하는지 확인한다.
+  reviewExistsById = async (reviewId) => {
+    const reviewExists = await this.reviewRepository.reviewExistsById(reviewId);
+    return reviewExists; 
+  };
+
   // 리뷰 수정
   updateReview = async (reviewId, userId, review, rate) => {
     // 리뷰가 존재하는지 확인
-    const existingReview = await this.reviewRepository.getReviewsByReservationId(reviewId);
+    const existingReview = await this.reviewRepository.reviewExistsById(reviewId);
     if (!existingReview) {
       throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
     }
@@ -62,7 +68,7 @@ export default class ReviewService {
   // 리뷰 삭제
   deleteReview = async (reviewId, userId) => {
     // 리뷰가 존재하는지 확인
-    const existingReview = await this.reviewRepository.getReviewsByReservationId(reviewId);
+    const existingReview = await this.reviewRepository.reviewExistsById(reviewId);
     if (!existingReview) {
       throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
     }
