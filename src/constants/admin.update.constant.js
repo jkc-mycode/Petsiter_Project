@@ -1,0 +1,6 @@
+export const ADMIN_CONSTANT = {
+  QNA_STATUS: {
+    COMPLETE: 'COMPLETE',
+    INCOMPLETE: 'INCOMPLETE',
+  },
+};

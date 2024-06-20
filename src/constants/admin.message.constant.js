@@ -2,7 +2,7 @@ export const ADMIN = {
   COMMON: {
     TITLE: {
       BASE: '제목은 문자열입니다.',
-      REQUIRED: '제목을 입력해 주세요',
+      REQUIRED: '제목을 남겨주세요.',
     },
     QUESTION: {
       BASE: '질문은 문자열이여야 합니다.',
@@ -11,6 +11,10 @@ export const ADMIN = {
     ANSWER: {
       BASE: '답변은 문자열이여야 합니다.',
       REQUIRED: '답변을 남겨주세요.',
+    },
+    QNASTATUS: {
+      BASE: '질문 상태는 문자열이여야 합니다.',
+      ONLY: '질문 상태는 COMPLETE 또는 INCOMPLETE 여야합니다.',
     },
   },
   ERROR: {
