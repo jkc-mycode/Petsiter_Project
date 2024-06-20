@@ -18,7 +18,8 @@ adminRouter.post('/', userAccessTokenMiddleware, adminCreateValidator, adminCont
 // 관리자 문의 조회
 adminRouter.get('/', userAccessTokenMiddleware, adminController.getAllQna);
 
-adminRouter.get('/myqna', userAccessTokenMiddleware, adminController.getQnaById);
+// 본인 문의내역 조회
+adminRouter.get('/mydetail', userAccessTokenMiddleware, adminController.getQnaById);
 
 //관리자 문의 수정
 adminRouter.patch(
