@@ -20,6 +20,7 @@ export const ADMIN = {
   QNA: {
     DELETE: '문의가 삭제되었습니다.',
     CREATE: '문의가 정상적으로 등록되었습니다.',
-    UPDATE: '문의가 수정되었습니다.',
+    UPDATEONE: '수정이 완료되었습니다',
   },
+  UPDATE: '수정이 완료되었습니다',
 };

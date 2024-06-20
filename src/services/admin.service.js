@@ -40,11 +40,30 @@ export class AdminService {
     }));
   };
 
+  getQnaById = async (userId) => {
+    const qnauser = await this.adminRepository.getQnaById(userId);
+
+    qnauser.sort((a, b) => {
+      return b.createdAt - a.createdAt;
+    });
+
+    return qnauser.map((qna) => ({
+      qnaId: qna.qnaId,
+      userId: qna.userId,
+      title: qna.title,
+      qnaStatus: qna.qnaStatus,
+      question: qna.question,
+      answer: qna.answer,
+      createdAt: qna.createdAt,
+      updatedAt: qna.updatedAt,
+    }));
+  };
+
   // Qna 수정
   updateQna = async (qnaId, title, question, answer) => {
     try {
-      const resumes = await this.adminRepository.findQnaById(qnaId);
-      if (!resumes) {
+      const qnas = await this.adminRepository.findQnaById(qnaId);
+      if (!qnas) {
         throw new HttpError.NotFound(ADMIN.ERROR.NOT_FOUND);
       }
 
