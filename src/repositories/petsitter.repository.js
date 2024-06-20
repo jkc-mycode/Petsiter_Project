@@ -138,7 +138,7 @@ export class PetsitterRepository {
     return petsitters;
   };
 
-  // 펫시터 자격증 추가 API
+  // 펫시터 자격증 추가
   createCertificate = async (
     petsitterId,
     certificateName,
@@ -158,5 +158,15 @@ export class PetsitterRepository {
     });
 
     return certificate;
+  };
+
+  // 펫시터 자격증 조회
+  getCertificates = async (petsitterId) => {
+    const certificates = await this.prisma.certificate.findMany({
+      where: { petsitterId },
+      orderBy: { createdAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
+    });
+
+    return certificates;
   };
 }

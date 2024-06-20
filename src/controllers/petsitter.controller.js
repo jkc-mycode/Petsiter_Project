@@ -201,7 +201,6 @@ export class PetsitterController {
   // 펫시터 자격증 추가 API
   createCertificate = async (req, res, next) => {
     try {
-      console.log();
       const { certificateName, certificateIssuer, certificateDate } = req.body;
       const image = req.file;
       const { petsitterId } = req.petsitter;
@@ -225,16 +224,23 @@ export class PetsitterController {
     }
   };
 
-  // 펫시터 자격증 조회 API
-  getCertificate = async (req, res, next) => {
+  // 펫시터 자격증 조회
+  getCertificates = async (req, res, next) => {
     try {
-      console.log();
+      const { petsitterId } = req.petsitter;
+
+      // 펫시터 자격증 조회
+      const certificates = await this.petsitterService.getCertificates(petsitterId);
+
+      return res
+        .status(200)
+        .json({ status: 200, message: '자격증 조회에 성공했습니다.', data: { certificates } });
     } catch (err) {
       next(err);
     }
   };
 
-  // 펫시터 자격증 수정 API
+  // 펫시터 자격증 수정
   updateCertificate = async (req, res, next) => {
     try {
       console.log();
@@ -243,7 +249,7 @@ export class PetsitterController {
     }
   };
 
-  // 펫시터 자격증 삭제 API
+  // 펫시터 자격증 삭제
   deleteCertificate = async (req, res, next) => {
     try {
       console.log();

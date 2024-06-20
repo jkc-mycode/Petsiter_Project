@@ -145,7 +145,7 @@ export class PetsitterService {
     return petsitters;
   };
 
-  // 펫시터 자격증 추가 API
+  // 펫시터 자격증 추가
   createCertificate = async (
     petsitterId,
     certificateName,
@@ -164,5 +164,12 @@ export class PetsitterService {
     );
 
     return certificate;
+  };
+
+  // 펫시터 자격증 조회
+  getCertificates = async (petsitterId) => {
+    const certificates = await this.petsitterRepository.getCertificates(petsitterId);
+
+    return certificates;
   };
 }
