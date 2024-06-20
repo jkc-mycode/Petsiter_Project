@@ -17,4 +17,9 @@ export const ADMIN = {
     NOT_FOUND: 'Q&A가 존재하지 않습니다.',
     SERVER: '서버에 에러가 발생하였습니다.',
   },
+  QNA: {
+    DELETE: '문의가 삭제되었습니다.',
+    CREATE: '문의가 정상적으로 등록되었습니다.',
+    UPDATE: '문의가 수정되었습니다.',
+  },
 };

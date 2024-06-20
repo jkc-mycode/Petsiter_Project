@@ -1,3 +1,5 @@
+import { ADMIN } from '../constants/admin.message.constant.js';
+import { HTTP_STATUS } from '../constants/http-status.constant.js';
 export class AdminController {
   constructor(adminService) {
     this.adminService = adminService;
@@ -10,7 +12,9 @@ export class AdminController {
       const user = req.user;
       const qna = await this.adminService.createQna(user, title, question, answer);
 
-      return res.status(201).json({ data: qna });
+      return res
+        .status(201)
+        .json({ status: HTTP_STATUS.CREATED, message: ADMIN.QNA.CREATE, data: qna });
     } catch (err) {
       next(err);
     }
@@ -20,7 +24,7 @@ export class AdminController {
     try {
       const qnas = await this.adminService.getAllQna();
 
-      return res.status(200).json({ data: qnas });
+      return res.status(200).json({ status: HTTP_STATUS.OK, data: qnas });
     } catch (err) {
       next(err);
     }
@@ -34,7 +38,9 @@ export class AdminController {
 
       const updatedQna = await this.adminService.updateQna(qnaId, title, question, answer);
 
-      return res.status(200).json({ data: updatedQna });
+      return res
+        .status(200)
+        .json({ status: HTTP_STATUS.OK, message: ADMIN.QNA.UPDATE, data: updatedQna });
     } catch (err) {
       next(err);
     }
@@ -47,7 +53,9 @@ export class AdminController {
 
       const deletedQna = await this.adminService.deleteQna(qnaId);
 
-      return res.status(200).json({ data: deletedQna });
+      return res
+        .status(200)
+        .json({ status: HTTP_STATUS.OK, message: ADMIN.QNA.DELETE, data: deletedQna });
     } catch (err) {
       next(err);
     }

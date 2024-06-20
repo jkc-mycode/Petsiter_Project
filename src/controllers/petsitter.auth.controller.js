@@ -62,7 +62,7 @@ export class PetsitterAuthController {
     try {
       const result = await this.petsitterAuthService.petsitterSignOut(petsitter.petsitterId);
       return res.status(200).json({
-        status: 200,
+        status: HTTP_STATUS.OK,
         message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_OUT.SUCCEED,
         data: result,
       });
