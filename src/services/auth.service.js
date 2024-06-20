@@ -55,6 +55,7 @@ export class AuthService {
     // 그 암호와 foundUser.password가 일치하면 isPasswordMatched가 된다. 그리고 그 값은 true
 
     const isPasswordMatched = await bcrypt.compare(password, foundUser.password);
+    console.log(password);
 
     // isPasswordMatched가 존재하지 않다면 즉 true가 아니라면! 에러를 보낸다.
     // true가 아닐 시 즉 일치하지 않다면 비밀번호가 일치하지 않다는 것이다.

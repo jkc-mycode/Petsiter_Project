@@ -58,6 +58,20 @@ export class PetsitterAuthRepository {
     });
   };
 
+  getRefreshToken = async (petsitterId) => {
+    try {
+      const refreshToken = await this.prisma.petsitterRefreshToken.findUnique({
+        where: {
+          petsitterId: parseInt(petsitterId),
+        },
+      });
+      return refreshToken;
+    } catch (error) {
+      new error();
+    }
+  };
+
+  // 펫시터 로그아웃
   SignoutPetsitter = async (petsitterId) => {
     return this.prisma.petsitterRefreshToken.update({
       where: { petsitterId },
