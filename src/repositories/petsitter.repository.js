@@ -22,6 +22,7 @@ export class PetsitterRepository {
   getPetsitterList = async (orderByCondition) => {
     const petsitters = await this.prisma.petsitter.findMany({
       include: { houseImage: true, review: true },
+      omit: { password: true },
       orderBy: orderByCondition
         ? orderByCondition
         : { createAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
@@ -35,6 +36,7 @@ export class PetsitterRepository {
     const petsitter = await this.prisma.petsitter.findFirst({
       where: { petsitterId },
       include: { certificate: true, houseImage: true, review: true, reservation: true },
+      omit: { password: true },
     });
 
     return petsitter;
@@ -133,6 +135,7 @@ export class PetsitterRepository {
     const petsitters = await this.prisma.petsitter.findMany({
       where: whereCondition,
       orderBy: { createdAt: PETSITTER_CONSTANT.SORT_TYPE.DESC },
+      omit: { password: true },
     });
 
     return petsitters;
