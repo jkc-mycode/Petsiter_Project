@@ -69,10 +69,11 @@ export default class ReviewService {
   // 리뷰 삭제
   deleteReview = async (reviewId, userId) => {
     // 리뷰가 존재하는지 확인
-    const existingReview = await this.reviewRepository.getReviewsByReservationId(reviewId, userId);
+    const existingReview = await this.reviewRepository.reviewExistsById(reviewId, userId);
     if (!existingReview) {
       throw new HttpError.NotFound(REVIEW_MESSAGE.REVIEW_NOT_FOUND);
     }
+    console.log(existingReview, userId)
     // 리뷰 작성자와 현재 로그인한 사용자인지 확인
     if (existingReview.userId!== userId) {
       throw new HttpError.Forbidden(REVIEW_MESSAGE.UNAUTHORIZED_REVIEW_DELETE);
