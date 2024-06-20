@@ -18,24 +18,18 @@ export class AdminRepository {
     return qna;
   };
 
+  // qna 전체목록 조회
   findAllQnas = async () => {
     const qnas = await this.prisma.adminQna.findMany({
-      select: {
-        qnaId: true,
-        userId: true,
-        title: true,
-        question: true,
-        answer: true,
-        qnaStatus: true,
-        createdAt: true,
-        updatedAt: true,
+      include: {
+        user: true,
       },
     });
 
     return qnas;
   };
 
-  // qna 수정, 삭제할 때 필요한 ID를 찾는다.
+  // qna를  수정, 삭제할 경우에 필요한 ID를 찾습니다.
   findQnaById = async (qnaId) => {
     const findQna = await this.prisma.adminQna.findUnique({
       where: {
@@ -45,7 +39,7 @@ export class AdminRepository {
     return findQna;
   };
 
-  // 데이터 수정
+  // Qna 수정
   updateQna = async (qnaId, title, question, answer, qnaStatus) => {
     const Updateqna = await this.prisma.adminQna.update({
       where: {
@@ -62,7 +56,7 @@ export class AdminRepository {
     return Updateqna;
   };
 
-  // 데이터 삭제
+  // qna 삭제
   deleteQna = async (qnaId) => {
     const deletedQna = await this.prisma.adminQna.delete({
       where: {
