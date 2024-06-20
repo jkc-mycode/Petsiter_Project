@@ -82,7 +82,7 @@ model AdminQna {
   userId    Int         @map("user_id")
   title     String
   question  String      @db.Text
-  answer    String      @db.Text
+  answer    String?      @db.Text
   qnaStatus AdminStatus @default(INCOMPLETE) @map("qna_status")
   createdAt DateTime    @default(now()) @map("created_at")
   updatedAt DateTime    @updatedAt @map("updated_at")

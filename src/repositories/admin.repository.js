@@ -39,6 +39,16 @@ export class AdminRepository {
     return findQna;
   };
 
+  // 본인이 작성한 문의글을 볼 수 있도록 userId를 찾는 과정입니다.
+  getQnaById = async (userId) => {
+    const findId = await this.prisma.adminQna.findMany({
+      where: {
+        userId: +userId,
+      },
+    });
+    return findId;
+  };
+
   // Qna 수정
   updateQna = async (qnaId, title, question, answer, qnaStatus) => {
     const Updateqna = await this.prisma.adminQna.update({
