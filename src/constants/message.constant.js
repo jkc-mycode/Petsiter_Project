@@ -3,19 +3,22 @@ export const MESSAGES = {
     COMMON: {
       EMAIL: {
         REQUIRED: '이메일을 입력해 주세요.',
+        STRING: '이메일은 빈 문자열이 아니여야 합니다.',
         INVALID_FORMAT: '이메일 형식이 올바르지 않습니다.',
         DUPLICATED: '이미 가입 된 사용자입니다.',
       },
       PASSWORD: {
+        STRING: '비밀번호는 문자열이여야합니다.',
         REQUIRED: '비밀번호를 입력해 주세요.',
         MIN: '비밀번호는 5자 이상으로 입력해 주세요',
       },
       PASSWORD_CONFIRM: {
-        REQUIRED: '비밀번호 확인을 입력해 주세요.',
+        REQUIRED: '비밀번호를 확인해 주세요.',
         NOT_MATCHED_WITH_PASSWORD: '입력 한 두 비밀번호가 일치하지 않습니다.',
       },
       NAME: {
         REQUIRED: '이름을 입력해 주세요.',
+        STRING: '이름은 빈 문자열이 아니여야 합니다.',
       },
       UNAUTHORIZED: '인증 정보가 유효하지 않습니다.',
       JWT: {
