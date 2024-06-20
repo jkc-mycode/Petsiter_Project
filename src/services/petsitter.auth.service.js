@@ -91,6 +91,7 @@ export class PetsitterAuthService {
     }
   };
 
+  // 펫시터 로그아웃
   petsitterSignOut = async (petsitterId) => {
     if (!petsitterId) {
       throw new HttpError.NotFound('Petsitter not found');
@@ -103,28 +104,28 @@ export class PetsitterAuthService {
     };
   };
 
+  // 토큰 재발급
   petsitterReToken = async (petsitterId) => {
+    const payload = { petsitter: petsitterId };
     try {
-      const refreshToken = await this.petsitterAuthRepository.createRefreshToken(petsitterId);
-      const accessToken = jwt.sign(
-        { petsitter: +petsitterId },
-        process.env.PETSITTER_ACCESS_TOKEN_SECRET_KEY,
-        { expiresIn: process.env.PETSITTER_ACCESS_TOKEN_EXPIRES_IN }
-      );
+      // 새로운 accesstoken을 발급한다.
+      const newAccessToken = jwt.sign(payload, process.env.PETSITTER_ACCESS_TOKEN_SECRET_KEY, {
+        expiresIn: process.env.PETSITTER_ACCESS_TOKEN_EXPIRES_IN,
+      });
 
-      const newrefreshToken = jwt.sign(
-        { petsitterId: +petsitterId },
-        process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY,
-        { expiresIn: process.env.PETSITTER_REFRESH_TOKEN_EXPIRES_IN }
-      );
+      //새로운 refreshtoken을 발급한다.
+      const newRefreshToken = jwt.sign(payload, process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY, {
+        expiresIn: process.env.PETSITTER_REFRESH_TOKEN_EXPIRES_IN,
+      });
 
-      const hashedRefreshToken = bcrypt.hashSync(newrefreshToken, 10);
+      const hashedRefreshToken = bcrypt.hashSync(newRefreshToken, 10);
 
-      // Refresh 토큰을 db에 저장
       await this.petsitterAuthRepository.createRefreshToken(petsitterId, hashedRefreshToken);
 
-      return { accessToken, refreshToken };
+      //새로운 토큰으로 발급받습니다.
+      return { newAccessToken, newRefreshToken };
     } catch (err) {
+      console.log(err);
       throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
     }
   };

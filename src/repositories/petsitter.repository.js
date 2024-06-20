@@ -5,6 +5,8 @@ export class PetsitterRepository {
     this.prisma = prisma;
   }
 
+  // decoded 부분에서 디코디드가 있는지 없는지만 확인하고 파인드유니크로 넘어온다.
+
   // ID를 통해 펫시터 찾기(본인정보 조회 및 미들웨어)
   findPetsitterById = async (petsitterId) => {
     const petsitter = await this.prisma.petsitter.findUnique({

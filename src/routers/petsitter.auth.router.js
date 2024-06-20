@@ -25,4 +25,11 @@ petsitterAuthRouter.post(
   petsitterAuthController.SignOut
 );
 
+// 펫시터 토큰 재발급
+petsitterAuthRouter.post(
+  '/retoken',
+  petsitterRefreshTokenMiddleware,
+  petsitterAuthController.ReToken
+);
+
 export default petsitterAuthRouter;

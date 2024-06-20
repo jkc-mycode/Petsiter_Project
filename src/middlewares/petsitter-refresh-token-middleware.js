@@ -7,36 +7,38 @@ import { MESSAGES } from '../constants/message.constant.js';
 import bcrypt from 'bcrypt';
 const petsitterRepository = new PetsitterRepository(prisma);
 const petsitterAuthRepository = new PetsitterAuthRepository(prisma);
-export default async function (req, res, next) {
+export default async (req, res, next) => {
   try {
-    const authorization = req.headers['authorization'];
-    if (!authorization) {
+    const refreshToken = req.headers['authorization'];
+
+    if (!refreshToken) {
       throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.NO_TOKEN);
     }
 
-    const [tokenType, refreshToken] = authorization.split(' ');
+    const [tokenType, token] = refreshToken.split(' ');
 
     if (tokenType !== 'Bearer') {
       throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.NOT_SUPPORTED_TYPE);
     }
 
-    let decodedToken;
+    let payload;
+    try {
+      payload = jwt.verify(token, process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY);
+    } catch (err) {
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.EXPIRED });
+      }
+      throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.INVALID);
+    }
 
-    decodedToken = jwt.verify(refreshToken, process.env.PETSITTER_REFRESH_TOKEN_SECRET_KEY);
+    const { petsitterId } = payload;
 
-    // if ('TokenExpiredError') {
-    //   return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.EXPIRED });
-    // }
-
-    const petsitterId = decodedToken.petsitterId;
-
-    const storedRefreshToken = await petsitterAuthRepository.createRefreshToken(petsitterId);
+    const storedRefreshToken = await petsitterAuthRepository.getRefreshToken(petsitterId);
     const hashedToken = storedRefreshToken.petsitterRefreshToken;
-    //  해싱한 토큰을 비교하는 과정입니다.
-    const isMatch = await bcrypt.compare(refreshToken, hashedToken);
 
+    const isMatch = await bcrypt.compare(token, hashedToken);
     if (!isMatch) {
-      return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.DISCARD });
+      throw new HttpError.Unauthorized(MESSAGES.AUTH.COMMON.JWT.DISCARD);
     }
 
     const petsitter = await petsitterRepository.findPetsitterById(petsitterId);
@@ -46,7 +48,14 @@ export default async function (req, res, next) {
 
     req.petsitter = petsitter;
     next();
-  } catch (error) {
-    return res.status(401).json({ message: MESSAGES.AUTH.COMMON.JWT.INVALID });
+  } catch (err) {
+    switch (err.name) {
+      case 'TokenExpiredError':
+        return res.status(401).json({ message: '인증 정보가 만료되었습니다.' });
+      case 'JsonWebTokenError':
+        return res.status(401).json({ message: '인증 정보가 유효하지 않습니다.' });
+      default:
+        return res.status(401).json({ message: err.message ?? '인증 정보가 유효하지 않습니다.' });
+    }
   }
-}
+};

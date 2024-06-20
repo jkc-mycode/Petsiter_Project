@@ -77,6 +77,20 @@ export class PetsitterAuthController {
   };
 
   ReToken = async (req, res, next) => {
-    const petsitter = req.petsitter;
+    try {
+      const { petsitterId } = req.petsitter;
+
+      // 펫시터의 새로운 토큰 발급 요청 처리
+      const createToken = await this.petsitterAuthService.petsitterReToken(petsitterId);
+
+      // 클라이언트에게 새로운 토큰을 제공
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
+        message: PETSITTERMESSAGES.PETSITTER.COMMON.RETOKEN.SUCCEED,
+        createToken,
+      });
+    } catch (err) {
+      next(err); // 그 외의 경우는 에러 처리를 넘깁니다.
+    }
   };
 }
