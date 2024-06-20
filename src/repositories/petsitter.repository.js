@@ -144,8 +144,7 @@ export class PetsitterRepository {
     certificateName,
     certificateIssuer,
     certificateDate,
-    image,
-    petsitter
+    image
   ) => {
     const certificate = await this.prisma.certificate.create({
       data: {
@@ -168,5 +167,28 @@ export class PetsitterRepository {
     });
 
     return certificates;
+  };
+
+  // 펫시터 자격증 수정
+  updateCertificate = async (
+    certificateId,
+    certificateName,
+    certificateIssuer,
+    certificateDate,
+    image
+  ) => {
+    const imageUrl = image.location;
+    const certificate = await this.prisma.certificate.update({
+      where: { certificateId },
+      data: {
+        // 입력된 데이터가 있으면 수정하고 없으면 생략
+        ...(certificateName && { certificateName }),
+        ...(certificateIssuer && { certificateIssuer }),
+        ...(certificateDate && { certificateDate }),
+        ...(imageUrl && { imageUrl }),
+      },
+    });
+
+    return certificate;
   };
 }

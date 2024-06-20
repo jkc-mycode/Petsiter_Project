@@ -46,14 +46,18 @@ petsitterRouter.get('/certificate', petsitterAccessToken, petsitterController.ge
 
 // 펫시터 자격증 수정 API
 petsitterRouter.patch(
-  '/certificate',
-  uploadImage.single('image'),
+  '/certificate/:certificateId',
   petsitterAccessToken,
+  uploadImage.single('image'),
   petsitterController.updateCertificate
 );
 
 // 펫시터 자격증 삭제 API
-petsitterRouter.delete('/certificate', petsitterAccessToken, petsitterController.deleteCertificate);
+petsitterRouter.delete(
+  '/certificate/:certificateId',
+  petsitterAccessToken,
+  petsitterController.deleteCertificate
+);
 
 // 펫시터 본인 예약 현황 조회 API
 petsitterRouter.get(
