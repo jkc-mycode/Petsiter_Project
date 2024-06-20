@@ -42,20 +42,15 @@ export class PetsitterAuthController {
   };
 
   signIn = async (req, res, next) => {
-    const { email, password } = req.body;
-
     try {
-      const { accessToken, refreshToken } = await this.petsitterAuthService.PetsitterSignIn(
-        email,
-        password
-      );
+      const { email, password } = req.body;
 
-      res.header('authorization', accessToken, refreshToken);
+      const logInAuth = await this.petsitterAuthService.PetsitterSignIn(email, password);
+
       return res.status(200).json({
         status: HTTP_STATUS.OK,
         message: PETSITTERMESSAGES.PETSITTER.COMMON.SIGN_IN.SUCCEED,
-        accessToken,
-        refreshToken,
+        logInAuth,
       });
     } catch (err) {
       next(err);
