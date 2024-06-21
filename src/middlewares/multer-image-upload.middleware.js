@@ -2,6 +2,8 @@ import multer from 'multer';
 import multerS3 from 'multer-s3';
 import path from 'path';
 import aws from '@aws-sdk/client-s3';
+import { HttpError } from '../errors/http.error.js';
+import { PETSITTERMESSAGES } from '../constants/petsitter.auth.message.constant.js';
 
 const s3 = new aws.S3({
   region: process.env.AWS_S3_REGION,
@@ -52,3 +54,18 @@ export const uploadImage = multer({
     fileSize: 5 * 1024 * 1024,
   },
 });
+
+// S3 이미지 삭제 함수
+export const deleteImage = async (key) => {
+  try {
+    const params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: key,
+    };
+
+    await s3.deleteObject(params);
+  } catch (err) {
+    console.log(err);
+    throw new HttpError.InternalServerError(PETSITTERMESSAGES.PETSITTER.SERVICE.ERROR);
+  }
+};
