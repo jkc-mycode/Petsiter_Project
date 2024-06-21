@@ -75,6 +75,7 @@ export const PETSITTER_MESSAGE = {
         BASE: '자격증 발행일은 문자열입니다.',
         REQUIRED: '자격증 발행일을 입력해 주세요.',
       },
+      NOT_FOUND: '해당 자격증이 존재하지 않습니다.',
     },
     CREATE: {
       SUCCEED: '자격증 등록에 성공했습니다.',
