@@ -17,4 +17,7 @@ userRouter.get('/', accessToken, userController.getUserById);
 // 사용자 정보 수정 api
 userRouter.patch('/:userId', accessToken, userController.UpdateUser);
 
+// 본인 정보 수정 api
+userRouter.patch('/', accessToken, userController.updateMyPage);
+
 export default userRouter;
