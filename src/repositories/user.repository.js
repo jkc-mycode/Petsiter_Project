@@ -29,6 +29,17 @@ export class UserRepository {
     return foundUser;
   };
 
+  //회원정보 수정시 아이디찾기
+  findOneUserById = async (userId) => {
+    const foundUser = await prisma.user.findUnique({
+      where: {
+        userId: +userId,
+      },
+    });
+
+    return foundUser;
+  };
+
   //accessToken 확인용
   getAccessToken = async (userId) => {
     const foundUser = await prisma.user.findUnique({
@@ -95,16 +106,17 @@ export class UserRepository {
 
   // 회원정보 수정
 
-  UpdateUser = async (email, password, nickname) => {
+  UpdateUser = async (userId, email, password, nickname, role) => {
     const updatedUser = await prisma.user.update({
-      where: { email },
+      where: { userId: +userId },
       data: {
+        userId: parseInt(userId),
         email,
         password,
         nickname,
+        role,
       },
     });
-
     return updatedUser;
   };
 }
