@@ -802,6 +802,158 @@
 
 <br>
 
+=======================추가 사항=======================
+
+<br>
+
+### 5-31. 유저 역할 수정 API
+- **Controller 코드**
+- 사용자의 역할과 데이터를 수정하기 위한 API입니다.
+- 이 API는 USER 이상의 존재가 사용자의 역할을 수정할 수 있도록 합니다.
+- 어떤 사용자를 수정할지 알기 위해 `req.params`로 사용자 ID를 가져옵니다.
+- Access Token을 통해 생성된 `req.user`에서 사용자 데이터를 가져옵니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/controllers/user.controller.js#L9-L41
+
+<br>
+
+- **Service 코드**
+- 받아온 사용자 ID를 기반으로 존재하는 사용자인지 검사합니다.
+- 들어온 비밀번호는 `bcrypt`를 통해 암호화 합니다.
+- 수정에 필요한 데이터를 Repository에게 넘깁니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/services/user.service.js#L9-L39
+
+<br>
+
+- **Repository 코드**
+- Service로부터 받아온 데이터를 기반으로 데이터베이스의 사용자 정보를 수정합니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/repositories/user.repository.js#L109-L121
+
+![유저역할수정 API](./imgs/user/유저역할수정.png)
+
+<br>
+
+### 5-32. 관리자 문의 생성 API
+- **Controller 코드**
+- 사용자가 관리자에게 문의하기 위한 API입니다.
+- ADMIN 관리자가 이용할 경우 에러를 발생합니다.
+- 문의 제목과 내용을 `req.body`를 통해 가져옵니다.
+- Access Token을 통해 생성된 `req.user`에서 사용자 데이터를 가져옵니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/controllers/admin.controller.js#L8-L25
+
+<br>
+
+- **Service 코드**
+- Controller에서 받아온 데이터를 그대로 Repository에 넘깁니다.
+- 반환된 데이터는 양식에 맞도록 수정해서 Controller에게 반환합니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/services/admin.service.js#L9-L21
+
+<br>
+
+- **Repository 코드**
+- Service에서 받아온 데이터를 기반으로 데이터베이스에 QnA 데이터를 추가합니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/repositories/admin.repository.js#L6-L19
+
+![문의생성 API](./imgs/admin/문의생성.png)
+
+<br>
+
+### 5-33. 관리자 문의 조회 API
+- **Controller 코드**
+- 모든 문의를 조회할 수 있는 API입니다.
+- 단순하게 Service의 메서드를 호출합니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/controllers/admin.controller.js#L26-L35
+
+<br>
+
+- **Service 코드**
+- 문의 목록을 조회할 때 최신 순으로 정렬시켜서 반환합니다.
+- 필요없는 정보가 있기 때문에 양식을 변형해서 반환합니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/services/admin.service.js#L23-L41
+
+<br>
+
+- **Repository 코드**
+- 데이터베이스에 있는 문의 데이터들을 따로 조건없이 가져옵니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/repositories/admin.repository.js#L21-L30
+
+![문의전체조회 API](./imgs/admin/문의전체조회.png)
+
+<br>
+
+### 5-34. 본인 문의내역 조회 API
+- **Controller 코드**
+- 특정 문의를 조회하는 API입니다.
+- Access Token을 통해 생성된 `req.user`에서 사용자 ID를 가져옵니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/controllers/admin.controller.js#L37-L47
+
+<br>
+
+- **Service 코드**
+- 문의의 상세한 내용을 조회하기 위해서 Repository에 사용자 ID를 넘깁니다.
+- 최신 순으로 정렬 후 양식을 변경해서 반환합니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/services/admin.service.js#L43-L60
+
+<br>
+
+- **Repository 코드**
+- 받아온 사용자 ID를 기반으로 데이터베이스에서 문의 데이터를 가져옵니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/repositories/admin.repository.js#L42-L50https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/repositories/admin.repository.js#L42-L50
+
+![본인문의내역조회 API](./imgs/admin/본인문의내역조회.png)
+
+<br>
+
+### 5-35. 관리자 문의 수정 API
+- **Controller 코드**
+- 사용자 본인이 작성한 문의 내용을 수정하기 위한 API입니다.
+- Access Token을 통해 생성된 `req.user`에서 사용자 역할을 가져옵니다.
+- 변경할 문의를 알기 위해 `req.params`를 통해 가져옵니다.
+- 수정할 내용 데이터를 `req.body`를 통해 가져옵니다.
+- 역할에 따라서 보내는 매개변수를 다르게 사용합니다.
+- ADMIN 일 때는 문의 상태를 변경할 수 있는 매개변수를 추가로 보냅니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/controllers/admin.controller.js#L49-L68
+
+<br>
+
+- **Service 코드**
+- Controller에서 받아온 문의 ID를 기반으로 존재하는 문의인지 검사합니다.
+- 문의를 수정하기 위해 받아온 데이터를 Repository에 넘깁니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/services/admin.service.js#L62-L88
+
+<br>
+
+- **Repository 코드**
+- Service에서 받아온 데이터를 기반으로 데이터베이스의 문의 정보를 수정합니다.
+- 그리고 수정 시 새로 들어온 데이터만 수정하고 입력하지 않으면 수정하지 않습니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/services/admin.service.js#L62-L88
+
+![문의수정 API](./imgs/admin/문의수정.png)
+
+<br>
+
+### 5-36. 관리자 문의 삭제 API
+- **Controller 코드**
+- 사용자 또는 관리자가 문의를 삭제하기 위한 API입니다.
+- 어떤 문의를 삭제할지 알기 위해 `req.params`로 문의 ID를 가져옵니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/controllers/admin.controller.js#L70-L83
+
+<br>
+
+- **Service 코드**
+- 받아온 문의 ID를 기반으로 존재하는 문의인지 검사합니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/services/admin.service.js#L90-L107
+
+<br>
+
+- **Repository 코드**
+- Service에서 받아온 문의 ID를 기반으로 데이터베이스에서 해당 문의 정보를 삭제합니다.
+- 삭제된 데이터를 반환합니다.
+- https://github.com/jkc-mycode/Petsitter_Project/blob/fdebf1d668966a201851cee4351192f7f6374a59/src/repositories/admin.repository.js#L69-L78
+
+![문의삭제 API](./imgs/admin/문의삭제.png)
+
+<br>
+
 ## 6. 어려웠던 점 및 소감
 
 ### 6-1. jwt 인증과 계층 분리에 대한 어려움 (안지윤)
