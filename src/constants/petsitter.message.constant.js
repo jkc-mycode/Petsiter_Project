@@ -79,6 +79,7 @@ export const PETSITTER_MESSAGE = {
     },
     CREATE: {
       SUCCEED: '자격증 등록에 성공했습니다.',
+      NO_IMAGE: '이미지를 넣어주세요.'
     },
     READ: {
       SUCCEED: '자격증 조회에 성공했습니다.',
