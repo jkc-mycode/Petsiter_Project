@@ -1,4 +1,5 @@
 import { PETSITTER_CONSTANT } from '../constants/petsitter.constant.js';
+import { deleteImage } from '../middlewares/multer-image-upload.middleware.js';
 
 export class PetsitterRepository {
   constructor(prisma) {
@@ -73,11 +74,24 @@ export class PetsitterRepository {
       // 비밀번호는 제외하고 반환
       updatedData.password = undefined;
 
+      // 기존 이미지 URL을 가져옴
+      const existingImages = await tx.houseImage.findMany({
+        where: { petsitterId: petsitter.petsitterId },
+      });
+
       // 사진이 있는 펫시터 정보
       let houseImage = petsitter.houseImage;
 
       // 이미지 수정
       if (images.length !== 0) {
+        // S3에 있는 기존 이미지 삭제
+        for (const img of existingImages) {
+          const existingImageKey = extractKeyFromUrl(img.imageUrl);
+          if (existingImageKey) {
+            await deleteImage(existingImageKey);
+          }
+        }
+        // 데이터베이스에 있는 기존 이미지 삭제
         await tx.houseImage.deleteMany({ where: { petsitterId: petsitter.petsitterId } });
         houseImage = await Promise.all(
           images.map(async (image) => {
@@ -189,7 +203,19 @@ export class PetsitterRepository {
     certificateDate,
     image
   ) => {
-    const imageUrl = image.location;
+    let imageUrl;
+    if (image) {
+      // 기존 이미지 URL을 가져옴
+      const existingImages = await this.prisma.certificate.findFirst({
+        where: { certificateId },
+      });
+
+      const existingImageKey = extractKeyFromUrl(existingImages.imageUrl);
+      await deleteImage(existingImageKey);
+
+      imageUrl = image.location;
+    }
+
     const certificate = await this.prisma.certificate.update({
       where: { certificateId },
       data: {
@@ -206,11 +232,21 @@ export class PetsitterRepository {
 
   // 펫시터 자격증 삭제
   deleteCertificate = async (petsitterId, certificateId) => {
-    const deletedCertificateId = await this.prisma.certificate.delete({
+    const deletedCertificate = await this.prisma.certificate.delete({
       where: { petsitterId, certificateId },
-      select: { certificateId: true },
     });
 
-    return deletedCertificateId;
+    const existingImageKey = extractKeyFromUrl(deletedCertificate.imageUrl);
+    await deleteImage(existingImageKey);
+
+    return deletedCertificate.certificateId;
   };
 }
+
+// URL에서 S3 key 추출 함수
+const extractKeyFromUrl = (url) => {
+  const urlParts = url.split('/');
+  // URL의 마지막 부분이 key가 됩니다.
+  const key = urlParts.slice(3).join('/');
+  return key;
+};
