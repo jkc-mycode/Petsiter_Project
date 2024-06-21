@@ -38,6 +38,32 @@ export class UserService {
     }
   };
 
+  updateMypage = async (email, password, nickname) => {
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      await this.userRepository.updateMypage(email, hashedPassword, nickname);
+
+      // 변경된 데이터를 조회합니다.
+      const updateuser = await this.userRepository.updateMypage(email);
+
+      return {
+        userId: updateuser.userId,
+        email: updateuser.email,
+        nickname: updateuser.nickname,
+        profileImage: updateuser.profileImage,
+        socialId: updateuser.socialId,
+        provider: updateuser.provider,
+        role: updateuser.role,
+        createdAt: updateuser.createdAt,
+        updatedAt: updateuser.updatedAt,
+      };
+    } catch (err) {
+      console.error(err);
+      throw new HttpError.InternalServerError(MESSAGES.SERVER.ERROR);
+    }
+  };
+
   //사용자 본인정보 조회
   getUserById = async (userId) => {
     // userId 통한 본인정보 검색
