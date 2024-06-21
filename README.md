@@ -108,7 +108,7 @@
 - 사용자가 입력한 데이터를 데이터베이스에 저장합니다.
 - https://github.com/jkc-mycode/Petsitter_Project/blob/a31ae2110db26d03bc3bf5f12a7a119a332e27a5/src/repositories/user.repository.js#L8-L19
 
-![유저회원가입 API](./imgs/auth/유저회원가입.png.png)
+![유저회원가입 API](./imgs/auth/유저회원가입.png)
 
 <br>
 
