@@ -172,6 +172,15 @@ export class PetsitterRepository {
     return certificates;
   };
 
+  // 펫시터 자격증 조회
+  getCertificateById = async (certificateId) => {
+    const certificate = await this.prisma.certificate.findUnique({
+      where: { certificateId },
+    });
+
+    return certificate;
+  };
+
   // 펫시터 자격증 수정
   updateCertificate = async (
     certificateId,

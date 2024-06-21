@@ -183,6 +183,10 @@ export class PetsitterService {
     certificateDate,
     image
   ) => {
+    // 받아온 자격증 ID에 해당하는 자격증이 있는지 검사
+    const certificate = await this.petsitterRepository.getCertificateById(certificateId);
+    if (!certificate) throw new HttpError.NotFound(PETSITTER_MESSAGE.CERTIFICATE.COMMON.NOT_FOUND);
+
     const updatedCertificate = await this.petsitterRepository.updateCertificate(
       certificateId,
       certificateName,

@@ -8,7 +8,7 @@
 - 내용 : Node.js를 이용한 반려동물 집사들과 펫시터 매칭 서비스
 - 구분 : 팀 프로젝트
 - GitHub : https://github.com/jkc-mycode/Petsitter_Project
-- 시연 영상 : 
+- 시연 영상 : https://www.youtube.com/watch?v=0Agllx6hWM8
 - 배포 : 
 
 <br>
@@ -79,7 +79,7 @@
 
 ## 4. API 명세서 및 ERD, 와이어 프레임
 
-- API 명세서 : 
+- API 명세서 : https://west-territory-778.notion.site/Team-SuperNova-Node-js-2e4bd4ba9a84478ab0d6659cb0edd4b6?pvs=4
 - ERD : https://drawsql.app/teams/nodejs-express/diagrams/-3
 
 ![와이어프레임](./imgs/wireframe.jpg)
