@@ -22,14 +22,14 @@ petsitterAuthRouter.post('/sign-in', petsitterSignInValidator, petsitterAuthCont
 petsitterAuthRouter.post(
   '/sign-out',
   petsitterRefreshTokenMiddleware,
-  petsitterAuthController.SignOut
+  petsitterAuthController.signOut
 );
 
 // 펫시터 토큰 재발급
 petsitterAuthRouter.post(
   '/retoken',
   petsitterRefreshTokenMiddleware,
-  petsitterAuthController.ReToken
+  petsitterAuthController.reToken
 );
 
 export default petsitterAuthRouter;
