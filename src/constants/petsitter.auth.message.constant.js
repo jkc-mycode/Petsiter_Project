@@ -12,7 +12,7 @@ export const PETSITTERMESSAGES = {
         MIN: '비밀번호는 5자 이상으로 입력해 주세요',
       },
       ID: {
-        NOT_FOUND: '사용자가 존재하지 않습니다.',
+        NOT_FOUND: '펫시터가 존재하지 않습니다.',
       },
       PASSWORD_CONFIRM: {
         REQUIRED: '비밀번호 확인을 입력해 주세요.',

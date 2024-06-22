@@ -15,7 +15,7 @@ const userController = new UserController(userService);
 userRouter.get('/', accessToken, userController.getUserById);
 
 // 사용자 정보 수정 api
-userRouter.patch('/:userId', accessToken, userController.UpdateUser);
+userRouter.patch('/:userId', accessToken, userController.updateUser);
 
 // 본인 정보 수정 api
 userRouter.patch('/', accessToken, userController.updateMyPage);

@@ -1,5 +1,8 @@
 export const ADMIN = {
   COMMON: {
+    ACCESS: {
+      NOT_IN_ADMIN: '사용자만 이용 가능합니다.',
+    },
     TITLE: {
       BASE: '제목은 문자열입니다.',
       REQUIRED: '제목을 남겨주세요.',

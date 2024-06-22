@@ -8,7 +8,7 @@ export class UserController {
 
   // 유저정보 수정
 
-  UpdateUser = async (req, res, next) => {
+  updateUser = async (req, res, next) => {
     try {
       const { userId } = req.params;
       const roles = req.user.role;
@@ -19,7 +19,7 @@ export class UserController {
         throw HttpError.Conflict(MESSAGES.AUTH.COMMON.PASSWORD_CONFIRM.NOT_MATCHED_WITH_PASSWORD);
       }
 
-      const updatedUser = await this.userService.UpdateUser(
+      const updatedUser = await this.userService.updateUser(
         userId,
         email,
         password,
@@ -32,7 +32,7 @@ export class UserController {
 
       return res.status(200).json({
         status: HTTP_STATUS.OK,
-        message: MESSAGES.USERS.UPDATE.SUCCEED,
+        message: '회원정보 수정이 완료되었습니다',
         data: updatedUser,
       });
     } catch (err) {
