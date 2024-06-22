@@ -6,6 +6,7 @@ export class AdminService {
     this.adminRepository = adminRepository;
   }
 
+  // 관리자 QnA 등록
   createQna = async (userId, qnaId, title, question, answer) => {
     const createQna = await this.adminRepository.createQna(userId, qnaId, title, question, answer);
     return {
@@ -20,6 +21,7 @@ export class AdminService {
     };
   };
 
+  // QnA 전체조회
   getAllQna = async () => {
     const qnas = await this.adminRepository.findAllQnas();
 
@@ -40,6 +42,7 @@ export class AdminService {
     }));
   };
 
+  // 본인 Qna 글 목록 조회
   getQnaById = async (userId) => {
     const qnauser = await this.adminRepository.getQnaById(userId);
 
@@ -61,48 +64,39 @@ export class AdminService {
 
   // Qna 수정
   updateQna = async (qnaId, title, question, answer, qnaStatus) => {
-    try {
-      const qnas = await this.adminRepository.findQnaById(qnaId);
-      if (!qnas) {
-        throw new HttpError.NotFound(ADMIN.ERROR.NOT_FOUND);
-      }
-
-      await this.adminRepository.updateQna(qnaId, title, question, answer, qnaStatus);
-
-      const qna = await this.adminRepository.updateQna(qnaId);
-
-      return {
-        qnaId: qna.qnaId,
-        userId: qna.userId,
-        title: qna.title,
-        qnaStatus: qna.qnaStatus,
-        question: qna.question,
-        answer: qna.answer,
-        createdAt: qna.createdAt,
-        updatedAt: qna.updatedAt,
-      };
-    } catch (err) {
-      console.error(err);
-      throw new HttpError.InternalServerError(ADMIN.ERROR.SERVER);
+    const qnas = await this.adminRepository.findQnaById(qnaId);
+    if (!qnas) {
+      throw new HttpError.NotFound(ADMIN.ERROR.NOT_FOUND);
     }
+
+    await this.adminRepository.updateQna(qnaId, title, question, answer, qnaStatus);
+
+    const qna = await this.adminRepository.updateQna(qnaId);
+
+    return {
+      qnaId: qna.qnaId,
+      userId: qna.userId,
+      title: qna.title,
+      qnaStatus: qna.qnaStatus,
+      question: qna.question,
+      answer: qna.answer,
+      createdAt: qna.createdAt,
+      updatedAt: qna.updatedAt,
+    };
   };
 
+  // Qna 삭제
   deleteQna = async (qnaId) => {
-    try {
-      const qna = await this.adminRepository.findQnaById(qnaId);
+    const qna = await this.adminRepository.findQnaById(qnaId);
 
-      if (!qna) {
-        throw new HttpError.NotFound(ADMIN.ERROR.NOT_FOUND);
-      }
-
-      await this.adminRepository.deleteQna(qnaId);
-
-      return {
-        qnaId: qna.qnaId,
-      };
-    } catch (err) {
-      console.error(err);
-      throw new HttpError.InternalServerError(ADMIN.ERROR.SERVER);
+    if (!qna) {
+      throw new HttpError.NotFound(ADMIN.ERROR.NOT_FOUND);
     }
+
+    await this.adminRepository.deleteQna(qnaId);
+
+    return {
+      qnaId: qna.qnaId,
+    };
   };
 }

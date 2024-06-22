@@ -43,6 +43,7 @@ export class PetsitterAuthRepository {
     return petsitter;
   };
 
+  // 리프레시 토큰 생성
   createRefreshToken = async (petsitterId, hashedRefreshToken) => {
     const refreshTokenUser = await this.prisma.petsitterRefreshToken.upsert({
       where: {
@@ -59,24 +60,21 @@ export class PetsitterAuthRepository {
     return refreshTokenUser;
   };
 
+  // 토큰 재발급시 펫시터 id 조회용
   getRefreshToken = async (petsitterId) => {
-    try {
-      const refreshToken = await this.prisma.petsitterRefreshToken.findUnique({
-        where: {
-          petsitterId: parseInt(petsitterId),
-        },
-        select: {
-          petsitterRefreshToken: true,
-        },
-      });
-      return refreshToken;
-    } catch (error) {
-      new error();
-    }
+    const refreshToken = await this.prisma.petsitterRefreshToken.findUnique({
+      where: {
+        petsitterId: parseInt(petsitterId),
+      },
+      select: {
+        petsitterRefreshToken: true,
+      },
+    });
+    return refreshToken;
   };
 
   // 펫시터 로그아웃
-  SignoutPetsitter = async (petsitterId) => {
+  signoutPetsitter = async (petsitterId) => {
     return this.prisma.petsitterRefreshToken.update({
       where: { petsitterId },
       data: {

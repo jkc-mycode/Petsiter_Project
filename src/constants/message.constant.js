@@ -46,6 +46,7 @@ export const MESSAGES = {
     UPDATE: {
       SUCCEED: '본인정보 수정이 완료되었습니다.',
     },
+    NOT_FOUND: '사용자를 찾을 수 없습니다.',
   },
   RESERVATION: {
     COMMON: {

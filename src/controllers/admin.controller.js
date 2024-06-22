@@ -12,7 +12,7 @@ export class AdminController {
       const user = req.user;
 
       if (user.role === 'ADMIN') {
-        throw new Error('사용자만 이용 가능합니다');
+        throw new Error(ADMIN.COMMON.ACCESS.NOT_IN_ADMIN);
       }
       const qna = await this.adminService.createQna(user, title, question);
 

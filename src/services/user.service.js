@@ -6,62 +6,49 @@ export class UserService {
     this.userRepository = userRepository;
   }
 
-  //   사용자 본인정보 수정 API
-  UpdateUser = async (userId, email, password, nickname, role) => {
-    try {
-      const user = await this.userRepository.findOneUserById(userId);
-      if (!user) {
-        throw new HttpError.NotFound('MESSAGES.USER.NOT_FOUND');
-      }
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // 저장소(Repository)에게 데이터 수정을 요청합니다.
-      await this.userRepository.UpdateUser(userId, email, hashedPassword, nickname, role);
-
-      // 변경된 데이터를 조회합니다.
-      const updateuser = await this.userRepository.UpdateUser(userId);
-
-      return {
-        userId: updateuser.userId,
-        email: updateuser.email,
-        nickname: updateuser.nickname,
-        profileImage: updateuser.profileImage,
-        socialId: updateuser.socialId,
-        provider: updateuser.provider,
-        role: updateuser.role,
-        createdAt: updateuser.createdAt,
-        updatedAt: updateuser.updatedAt,
-      };
-    } catch (err) {
-      console.error(err);
-      throw new HttpError.InternalServerError(MESSAGES.SERVER.ERROR);
+  //   사용자 유저정보 수정 API
+  updateUser = async (userId, email, password, nickname, role) => {
+    const user = await this.userRepository.findOneUserById(userId);
+    if (!user) {
+      throw new HttpError.NotFound(MESSAGES.USERS.NOT_FOUND);
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await this.userRepository.updateUser(userId, email, hashedPassword, nickname, role);
+
+    const updateuser = await this.userRepository.updateUser(userId);
+
+    return {
+      userId: updateuser.userId,
+      email: updateuser.email,
+      nickname: updateuser.nickname,
+      profileImage: updateuser.profileImage,
+      socialId: updateuser.socialId,
+      provider: updateuser.provider,
+      role: updateuser.role,
+      createdAt: updateuser.createdAt,
+      updatedAt: updateuser.updatedAt,
+    };
   };
-
+  // 본인정보 수정 api
   updateMypage = async (email, password, nickname) => {
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      await this.userRepository.updateMypage(email, hashedPassword, nickname);
+    await this.userRepository.updateMypage(email, hashedPassword, nickname);
 
-      // 변경된 데이터를 조회합니다.
-      const updateuser = await this.userRepository.updateMypage(email);
+    const updateuser = await this.userRepository.updateMypage(email);
 
-      return {
-        userId: updateuser.userId,
-        email: updateuser.email,
-        nickname: updateuser.nickname,
-        profileImage: updateuser.profileImage,
-        socialId: updateuser.socialId,
-        provider: updateuser.provider,
-        role: updateuser.role,
-        createdAt: updateuser.createdAt,
-        updatedAt: updateuser.updatedAt,
-      };
-    } catch (err) {
-      console.error(err);
-      throw new HttpError.InternalServerError(MESSAGES.SERVER.ERROR);
-    }
+    return {
+      userId: updateuser.userId,
+      email: updateuser.email,
+      nickname: updateuser.nickname,
+      profileImage: updateuser.profileImage,
+      socialId: updateuser.socialId,
+      provider: updateuser.provider,
+      role: updateuser.role,
+      createdAt: updateuser.createdAt,
+      updatedAt: updateuser.updatedAt,
+    };
   };
 
   //사용자 본인정보 조회
