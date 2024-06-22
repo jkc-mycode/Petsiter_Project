@@ -57,7 +57,7 @@ export class PetsitterAuthController {
     }
   };
 
-  SignOut = async (req, res, next) => {
+  signOut = async (req, res, next) => {
     const petsitter = req.petsitter;
     try {
       const result = await this.petsitterAuthService.petsitterSignOut(petsitter.petsitterId);
@@ -71,7 +71,7 @@ export class PetsitterAuthController {
     }
   };
 
-  ReToken = async (req, res, next) => {
+  reToken = async (req, res, next) => {
     try {
       const { petsitterId } = req.petsitter;
 
